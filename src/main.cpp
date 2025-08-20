@@ -3,6 +3,7 @@
 #include <cstring>  // for strlen
 #include <iostream>
 
+#include "Ray.hpp"
 #include "Vector.hpp"
 #include "version.hpp"
 
@@ -23,6 +24,9 @@ int main() {
 
     Vector3D vec({1, 2, 3});
     std::cout << "Vector: " << vec << std::endl;
+
+    Ray ray;
+    std::cout << "Ray: " << ray << std::endl;
 
     ////////////////////////////////////////////////////////////////////////
     //Final terminal output
