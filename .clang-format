@@ -1,0 +1,14 @@
+BasedOnStyle: Google
+AccessModifierOffset: -4
+AllowAllConstructorInitializersOnNextLine: false
+AllowShortFunctionsOnASingleLine: Empty
+BreakConstructorInitializers: AfterColon
+ColumnLimit: 0
+DerivePointerAlignment: false
+IncludeBlocks: Preserve
+IndentWidth: 4
+ReflowComments: false
+SortIncludes: CaseSensitive
+ObjCBlockIndentWidth: 4
+InsertNewlineAtEOF: true
+InsertBraces: true

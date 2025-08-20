@@ -1,18 +1,28 @@
-[![Build Status](https://github.com/temken/template_cpp_cmake_libphysica/workflows/Build%20Status/badge.svg)](https://github.com/temken/template_cpp_cmake_libphysica/actions)
-[![codecov](https://codecov.io/gh/temken/template_cpp_cmake_libphysica/branch/main/graph/badge.svg)](https://codecov.io/gh/temken/template_cpp_cmake_libphysica)
+[![Build Status](https://github.com/temken/raytracer/workflows/Build%20Status/badge.svg)](https://github.com/temken/raytracer/actions)
+[![codecov](https://codecov.io/gh/temken/raytracer/branch/main/graph/badge.svg)](https://codecov.io/gh/temken/raytracer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-# SOFTWARETITLE
-
-<!-- <a href="https://ascl.net/xxxx.xxx"><img src="https://img.shields.io/badge/ascl-xxxx.xxx-blue.svg?colorB=262255" alt="ascl:xxxx.xxx" /></a> -->
-<!-- [![DOI](https://zenodo.org/badge/xxx.svg)](https://zenodo.org/badge/latestdoi/xxx) -->
-<!-- [![arXiv](https://img.shields.io/badge/arXiv-xxxx.xxxxx-B31B1B.svg)](https://arxiv.org/abs/xxxx.xxxxx) -->
+# RaytraCer++
 
 
-<!-- Image:
-<img width="350" src="url"> -->
+## To do
+Add the following classes
+- [x] Vector
+- [x] Ray
+- [x] Color
+- [x] Image
+- [ ] Object (abstract)
+- [ ] World
+- [ ] Rectangular
+- [ ] Sphere
+- [ ] Camera
 
-A template for C++ projects using [libphysica](https://github.com/temken/libphysica).
+To do
+- [x] Generate the first png from a code defined image
+- [ ] Create a virtual world with a few simple objects
+- [ ] Take an image of it with a very simple deterministic ray tracing algorithm
+- [ ] Implement the MC path tracing approach
+- [ ] Experiment with reflections and mirrors
 
 ## General notes
 
@@ -30,9 +40,9 @@ The included folders are:
 - *bin/*: This folder contains the executable after successful installation together with the configuration files.
 - *data/*: Contains additional data necessary for the simulations, e.g. the solar model tables.
 - *external/*: This folder will only be created and filled during the build with CMake.
-- *include/*: All header files of SOFTWARETITLE can be found here.
-- *results/*: Each run of SOFTWARETITLE generates result files in a dedicated sub-folder named after the run's simulation ID string, which is specified in the configuration file.
-- *src/*: Here you find the source code of SOFTWARETITLE.
+- *include/*: All header files of RaytraCer++ can be found here.
+- *results/*: Each run of RaytraCer++ generates result files in a dedicated sub-folder named after the run's simulation ID string, which is specified in the configuration file.
+- *src/*: Here you find the source code of RaytraCer++.
 - *tests/*: All code and executable files of the unit tests are stored here.
 
 </p>
@@ -176,9 +186,9 @@ Bibtex entry:
 <details><summary>Author & Contact</summary>
 <p>
 
-The author of SOFTWARENAME is Timon Emken.
+The author of RaytraCer++ is Timon Emken Christensen.
 
-For questions, bug reports or other suggestions please open an [issue](https://github.com/temken/SOFTWARENAME/issues).
+For questions, bug reports or other suggestions please open an [issue](https://github.com/temken/raytracer/issues).
 </p>
 </details>
 

@@ -3,10 +3,9 @@
 #include <cmath>
 #include <cstring> // for strlen
 
-#include "version.hpp"
-#include "module.hpp"
-
 #include "libphysica/Natural_Units.hpp"
+
+#include "version.hpp"
 
 using namespace libphysica::natural_units;
 
@@ -21,7 +20,6 @@ int main()
 	std::cout <<PROJECT_NAME <<"-"<<PROJECT_VERSION <<"\tgit:" <<GIT_BRANCH <<"/" <<GIT_COMMIT_HASH <<std::endl <<std::endl;
 	////////////////////////////////////////////////////////////////////////
 
-	std::cout<<fib(10)<<std::endl;
 	std::cout <<In_Units(1.0, meter/sec)<<std::endl;
 
 	////////////////////////////////////////////////////////////////////////

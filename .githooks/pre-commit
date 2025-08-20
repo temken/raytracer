@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Auto-format staged C/C++ files with clang-format before commit
+
+set -e
+
+CLANG_FORMAT=clang-format   # or absolute path if needed
+
+# Collect staged files that are C/C++ sources or headers
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(c|cc|cpp|cxx|h|hpp)$' || true)
+
+if [ -z "$FILES" ]; then
+  exit 0
+fi
+
+echo "Running clang-format on staged files..."
+
+for f in $FILES; do
+  if [ -f "$f" ]; then
+    $CLANG_FORMAT -i "$f"
+    git add "$f"
+    echo "  formatted: $f"
+  fi
+done
+
+echo "clang-format applied and files re-staged."
