@@ -3,6 +3,7 @@
 #include <cstring>  // for strlen
 #include <iostream>
 
+#include "Color.hpp"
 #include "Ray.hpp"
 #include "Vector.hpp"
 #include "version.hpp"
@@ -27,6 +28,9 @@ int main() {
 
     Ray ray;
     std::cout << "Ray: " << ray << std::endl;
+
+    Color red(1.0, 0.0, 0.0);
+    std::cout << "Color: " << red << std::endl;
 
     ////////////////////////////////////////////////////////////////////////
     //Final terminal output
