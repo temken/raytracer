@@ -11,7 +11,7 @@ Add the following classes
 - [x] Ray
 - [x] Color
 - [x] Image
-- [ ] Object (abstract)
+- [x] Object (abstract)
 - [ ] World
 - [ ] Rectangular
 - [ ] Sphere
