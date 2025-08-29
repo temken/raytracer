@@ -36,6 +36,7 @@ target_include_directories(libraytracer
 	${GENERATED_DIR}
 	PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}
-	${INCLUDE_DIR})
+	${INCLUDE_DIR}
+	${STB_DIR})
 
 install(TARGETS libraytracer DESTINATION ${LIB_DIR})
