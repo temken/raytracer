@@ -23,6 +23,19 @@ set(EXTERNAL_DIR ${PROJECT_SOURCE_DIR}/external)
 find_package(Boost 1.65 REQUIRED)
 include(FetchContent)
 
+# stb
+set(STB_DIR ${EXTERNAL_DIR}/stb)
+FetchContent_Declare(stb
+  GIT_REPOSITORY https://github.com/nothings/stb.git
+  GIT_TAG origin/master
+  SOURCE_DIR "${STB_DIR}"
+)
+FetchContent_GetProperties(stb)
+
+if(NOT stb_POPULATED)
+  FetchContent_Populate(stb)
+endif()
+
 # libphysica
 set(LIBPHYSICA_DIR ${EXTERNAL_DIR}/libphysica)
 FetchContent_Declare(libphysica

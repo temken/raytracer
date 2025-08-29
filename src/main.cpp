@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "Color.hpp"
+#include "Image.hpp"
 #include "Ray.hpp"
 #include "Vector.hpp"
 #include "version.hpp"
@@ -31,6 +32,13 @@ int main() {
 
     Color red(1.0, 0.0, 0.0);
     std::cout << "Color: " << red << std::endl;
+
+    Color blue(0.0, 0.0, 1.0);
+    std::cout << "Color: " << blue << std::endl;
+
+    Image image(800, 600, blue);
+    image.SetPixel(400, 300, red);
+    image.Save("output.png");
 
     ////////////////////////////////////////////////////////////////////////
     //Final terminal output
