@@ -9,6 +9,8 @@
 
 namespace Raytracer {
 
+struct Intersection;
+
 class Object {
 public:
     explicit Object(const Color& color) :
