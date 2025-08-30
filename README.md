@@ -12,10 +12,10 @@ Add the following classes
 - [x] Color
 - [x] Image
 - [x] Object (abstract)
-- [ ] World
-- [ ] Rectangular
+- [x] Scene
 - [ ] Sphere
 - [ ] Camera
+- [ ] Rectangular
 
 To do
 - [x] Generate the first png from a code defined image
