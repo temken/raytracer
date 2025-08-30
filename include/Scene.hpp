@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Intersection.hpp"
 #include "Object.hpp"
 #include "Ray.hpp"
 
