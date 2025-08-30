@@ -32,6 +32,8 @@ public:
 protected:
     Color mColor;
     bool mVisible = true;
+
+    static constexpr double sEpsilon = 1e-6;
 };
 
 }  // namespace Raytracer
