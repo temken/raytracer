@@ -14,9 +14,9 @@ Sphere::Sphere(const Vector3D& center, double radius, const Color& color) :
 std::optional<Intersection> Sphere::Intersect(const Ray& ray) const {
     Vector3D oc = ray.GetOrigin() - mCenter;
 
-    double a = ray.GetDirection().normSquared();
-    double b = 2.0 * oc.dot(ray.GetDirection());
-    double c = oc.normSquared() - mRadius * mRadius;
+    double a = ray.GetDirection().NormSquared();
+    double b = 2.0 * oc.Dot(ray.GetDirection());
+    double c = oc.NormSquared() - mRadius * mRadius;
 
     double discriminant = b * b - 4 * a * c;
     if (discriminant < 0.0) {
@@ -41,7 +41,7 @@ std::optional<Intersection> Sphere::Intersect(const Ray& ray) const {
     }
 
     Vector3D hitPoint = ray.GetOrigin() + t * ray.GetDirection();
-    Vector3D normal = (hitPoint - mCenter).normalized();
+    Vector3D normal = (hitPoint - mCenter).Normalized();
 
     return Intersection{t, hitPoint, normal, this};
 }

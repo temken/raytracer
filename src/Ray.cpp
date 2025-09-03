@@ -13,7 +13,7 @@ void Ray::SetOrigin(const Vector3D& newOrigin) {
     origin = newOrigin;
 }
 void Ray::SetDirection(const Vector3D& newDirection) {
-    direction = newDirection.normalized();
+    direction = newDirection.Normalized();
 }
 
 Vector3D Ray::PointAtParameter(double t) const {

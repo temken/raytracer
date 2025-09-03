@@ -64,7 +64,7 @@ public:
     }
 
     // Norms
-    T dot(const Vector& other) const {
+    T Dot(const Vector& other) const {
         T result{};
         for (std::size_t i = 0; i < N; ++i) {
             result += data[i] * other[i];
@@ -72,22 +72,30 @@ public:
         return result;
     }
 
-    T normSquared() const {
-        return dot(*this);
+    T NormSquared() const {
+        return Dot(*this);
     }
 
-    T norm() const {
-        return std::sqrt(normSquared());
+    T Norm() const {
+        return std::sqrt(NormSquared());
     }
 
-    Vector normalized() const {
-        T n = norm();
+    Vector Normalized() const {
+        T n = Norm();
         if (n == T{}) {
             throw std::runtime_error("Cannot normalize zero vector");
         }
         Vector v = *this;
         v /= n;
         return v;
+    }
+
+    // Cross product
+    Vector Cross(const Vector& other) const {
+        static_assert(N == 3, "Cross product is only defined in 3D");
+        return Vector{data[1] * other[2] - data[2] * other[1],
+                      data[2] * other[0] - data[0] * other[2],
+                      data[0] * other[1] - data[1] * other[0]};
     }
 
     // Iterators

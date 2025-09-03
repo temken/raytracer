@@ -13,13 +13,14 @@ Add the following classes
 - [x] Image
 - [x] Object (abstract)
 - [x] Scene
-- [ ] Sphere
-- [ ] Camera
+- [x] Sphere
+- [x] Renderer (simple)
+- [x] Camera
 - [ ] Rectangular
 
 To do
 - [x] Generate the first png from a code defined image
-- [ ] Create a virtual world with a few simple objects
+- [x] Create a virtual world with a few simple objects
 - [ ] Take an image of it with a very simple deterministic ray tracing algorithm
 - [ ] Implement the MC path tracing approach
 - [ ] Experiment with reflections and mirrors

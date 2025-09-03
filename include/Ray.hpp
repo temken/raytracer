@@ -9,7 +9,7 @@ public:
     Ray() = default;
     Ray(const Vector3D& origin, const Vector3D& direction) :
         origin(origin),
-        direction(direction.normalized()) {}
+        direction(direction.Normalized()) {}
 
     Vector3D GetOrigin() const;
     Vector3D GetDirection() const;
