@@ -2,10 +2,14 @@
 #include <cmath>
 #include <cstring>  // for strlen
 #include <iostream>
+#include <memory>
 
+#include "Camera.hpp"
 #include "Color.hpp"
 #include "Image.hpp"
 #include "Ray.hpp"
+#include "Scene.hpp"
+#include "Sphere.hpp"
 #include "Vector.hpp"
 #include "version.hpp"
 
@@ -24,20 +28,27 @@ int main() {
               << std::endl;
     ////////////////////////////////////////////////////////////////////////
 
-    Vector3D vec({1, 2, 3});
-    std::cout << "Vector: " << vec << std::endl;
+    //Create Scene
+    Scene scene;
 
-    Ray ray;
-    std::cout << "Ray: " << ray << std::endl;
+    // Add objects to the scene
+    scene.AddObject(std::make_unique<Sphere>(Vector3D({5, -1, 0}), 1, Color(1, 0, 0)));  // Red sphere
+    scene.AddObject(std::make_unique<Sphere>(Vector3D({7, 0, 0}), 1, Color(0, 1, 0)));   // Green sphere
+    scene.AddObject(std::make_unique<Sphere>(Vector3D({9, 1, 0}), 1, Color(0, 0, 1)));   // Blue sphere
+    scene.AddObject(std::make_unique<Sphere>(Vector3D({5, 1, 1}), 1, Color(1, 1, 0)));   // Yellow sphere
 
-    Color red(1.0, 0.0, 0.0);
-    std::cout << "Color: " << red << std::endl;
+    scene.PrintSceneInfo();
 
-    Color blue(0.0, 0.0, 1.0);
-    std::cout << "Color: " << blue << std::endl;
+    // Create Camera
+    Camera camera;
+    camera.SetPosition(Vector3D({0, 0, 0}));
+    camera.SetDirection(Vector3D({1, 0, 0}));
+    camera.SetFieldOfView(45.0);
+    camera.SetResolution(800, 600);
 
-    Image image(800, 600, blue);
-    image.SetPixel(400, 300, red);
+    camera.PrintInfo();
+
+    Image image = camera.Render(scene);
     image.Save("output.png");
 
     ////////////////////////////////////////////////////////////////////////
