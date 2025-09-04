@@ -49,6 +49,13 @@ Image Camera::Render(const Scene& scene) const {
     return image;
 }
 
+void Camera::PointToOrigin(double cameraHeight, double distance, double phi) {
+    double rho = std::sqrt(distance * distance - cameraHeight * cameraHeight);
+    Vector3D position({rho * std::cos(phi), rho * std::sin(phi), cameraHeight});
+    SetPosition(position);
+    SetDirection(-1.0 * position);
+}
+
 void Camera::PrintInfo() const {
     std::cout << "Camera Information:" << std::endl;
     std::cout << "Position: " << mPosition << std::endl;
@@ -67,7 +74,6 @@ Ray Camera::CreateRay(size_t x, size_t y) const {
     const double v = (0.5 * height - (double(y) + 0.5)) * mPixelSize;
 
     Vector3D direction = (mEz * mDistance) + (mEx * u) + (mEy * v);
-    // std::cout << "Creating ray for pixel (" << x << ", " << y << "): " << direction << std::endl;
     return Ray(mPosition, direction.Normalized());
 }
 
