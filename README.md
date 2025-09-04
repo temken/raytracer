@@ -16,6 +16,7 @@ Add the following classes
 - [x] Sphere
 - [x] Renderer (simple)
 - [x] Camera
+- [x] Video
 - [ ] Configuration file
 - [ ] Rectangular
 - [ ] Cube (composite of 6 rectangulars)
@@ -25,7 +26,7 @@ To do
 - [x] Create a virtual world with a few simple objects
 - [x] Take an image of it with a very simple deterministic ray tracing algorithm
 - [x] Fix the field of view issue.
-- [ ] Implement camera pointing to origin with the possibility to rotate.
+- [x] Implement camera pointing to origin with the possibility to rotate.
 - [ ] Add a nice color scheme.
 - [ ] Export a video of a camera flying around the z-axis.
 - [ ] Define and import scenes in json file.
