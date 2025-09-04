@@ -49,9 +49,19 @@ Image Camera::Render(const Scene& scene) const {
     return image;
 }
 
-void Camera::PointToOrigin(double cameraHeight, double distance, double phi) {
-    double rho = std::sqrt(distance * distance - cameraHeight * cameraHeight);
-    Vector3D position({rho * std::cos(phi), rho * std::sin(phi), cameraHeight});
+Video Camera::FlyAround(const Scene& scene, double distance, double height, size_t numFrames, double fps) {
+    Video video("fly_around", fps);
+    for (size_t i = 0; i < numFrames; i++) {
+        double phi = 2.0 * M_PI * i / numFrames;
+        PointToOrigin(height, distance, phi);
+        Image frame = Render(scene);
+        video.AddFrame(frame);
+    }
+    return video;
+}
+
+void Camera::PointToOrigin(double height, double rho, double phi) {
+    Vector3D position({rho * std::cos(phi), rho * std::sin(phi), height});
     SetPosition(position);
     SetDirection(-1.0 * position);
 }

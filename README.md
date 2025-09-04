@@ -19,7 +19,7 @@ Add the following classes
 - [x] Video
 - [ ] Configuration file
 - [ ] Rectangular
-- [ ] Cube (composite of 6 rectangulars)
+- [ ] Cube/box (composite of 6 rectangulars)
 
 To do
 - [x] Generate the first png from a code defined image
@@ -27,12 +27,13 @@ To do
 - [x] Take an image of it with a very simple deterministic ray tracing algorithm
 - [x] Fix the field of view issue.
 - [x] Implement camera pointing to origin with the possibility to rotate.
+- [x] Export a video of a camera flying around the z-axis.
 - [ ] Add a nice color scheme.
-- [ ] Export a video of a camera flying around the z-axis.
+- [ ] Add rectangular to create some walls
 - [ ] Define and import scenes in json file.
+- [ ] Experiment with reflections and mirrors
 - [ ] Add configuration json file that also defines the destination of the generated images/videos
 - [ ] Implement the MC path tracing approach
-- [ ] Experiment with reflections and mirrors
 
 Other ideas:
 

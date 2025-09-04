@@ -34,7 +34,7 @@ void Video::AddFrame(const Image& image) {
     mFrames.push_back(image);
 }
 
-void Video::Save(bool deleteFrameFiles) {
+void Video::Save(bool showTerminalOutput, bool deleteFrameFiles) {
     if (mFrames.empty()) {
         std::cerr << "No frames to save." << std::endl;
         return;
@@ -54,8 +54,9 @@ void Video::Save(bool deleteFrameFiles) {
     // Generate video from frame files
     std::string videoFilename = dir / (name + ".mp4");
     std::string ffmpegCommand = std::format(
-        "{} -framerate {} -i {}/frame_%04d.png -c:v libx264 -pix_fmt yuv420p {}",
+        "{} -y {} -framerate {} -i {}/frame_%04d.png -c:v libx264 -pix_fmt yuv420p {}",
         FFMPEG_PATH,
+        showTerminalOutput ? "" : "-v warning",
         mFPS,
         dir.string(),
         videoFilename);
