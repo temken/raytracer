@@ -29,13 +29,11 @@ std::optional<Intersection> Sphere::Intersect(const Ray& ray) const {
         (-b + sqrtD) / (2.0 * a)};
 
     double t = std::numeric_limits<double>::infinity();
-
     for (double r : roots) {
         if (r > sEpsilon && r < t) {
             t = r;
         }
     }
-
     if (t == std::numeric_limits<double>::infinity()) {
         return std::nullopt;  // no valid root
     }
@@ -44,6 +42,10 @@ std::optional<Intersection> Sphere::Intersect(const Ray& ray) const {
     Vector3D normal = (hitPoint - mCenter).Normalized();
 
     return Intersection{t, hitPoint, normal, this};
+}
+
+void Sphere::PrintInfo() const {
+    std::cout << "Sphere: Center=" << mCenter << ", Radius=" << mRadius << ", Color=" << mColor << std::endl;
 }
 
 }  // namespace Raytracer

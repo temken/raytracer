@@ -13,6 +13,8 @@ public:
 
     std::optional<Intersection> Intersect(const Ray& ray) const override;
 
+    void PrintInfo() const override;
+
 private:
     Vector3D mCenter;
     double mRadius;

@@ -17,6 +17,8 @@ public:
     const std::vector<std::unique_ptr<Object>>& GetObjects() const;
     Color GetBackgroundColor() const;
 
+    void PrintSceneInfo() const;
+
 private:
     std::vector<std::unique_ptr<Object>> mObjects;
     Color mBackgroundColor;
