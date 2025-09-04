@@ -16,14 +16,29 @@ Add the following classes
 - [x] Sphere
 - [x] Renderer (simple)
 - [x] Camera
+- [ ] Configuration file
 - [ ] Rectangular
+- [ ] Cube (composite of 6 rectangulars)
 
 To do
 - [x] Generate the first png from a code defined image
 - [x] Create a virtual world with a few simple objects
-- [ ] Take an image of it with a very simple deterministic ray tracing algorithm
+- [x] Take an image of it with a very simple deterministic ray tracing algorithm
+- [x] Fix the field of view issue.
+- [ ] Implement camera pointing to origin with the possibility to rotate.
+- [ ] Add a nice color scheme.
+- [ ] Export a video of a camera flying around the z-axis.
+- [ ] Define and import scenes in json file.
+- [ ] Add configuration json file that also defines the destination of the generated images/videos
 - [ ] Implement the MC path tracing approach
 - [ ] Experiment with reflections and mirrors
+
+Other ideas:
+
+- Define trajectories that the camera can follow (time dependence). For a give speed, fps we can generate neat videos flying through the scene.
+- We could also make the scene itself time-dependent (e.g. moving light sources, objects, etc). Planets passing around the sun would be fun.
+- Enable background gradients/images.
+
 
 ## General notes
 

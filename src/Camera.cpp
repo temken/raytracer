@@ -25,6 +25,7 @@ void Camera::SetDirection(const Vector3D& direction) {
 
 void Camera::SetFieldOfView(double fov) {
     mFieldOfView = fov;
+    ConfigureCamera();
 }
 
 void Camera::SetResolution(size_t width, size_t height) {
@@ -78,7 +79,7 @@ void Camera::ConfigureCamera() {
     mEy = mEz.Cross(mEx).Normalized();
 
     // 2. Compute pixel size
-    mPixelSize = 2.0 * mDistance * std::tan(mFieldOfView * 0.5 * M_PI / 180.0) / mResolution[1];
+    mPixelSize = 2.0 * mDistance * std::tan(mFieldOfView * 0.5 * M_PI / 180.0) / mResolution[0];
 }
 
 }  // namespace Raytracer
