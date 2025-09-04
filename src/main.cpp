@@ -34,16 +34,19 @@ int main() {
 
     // Add objects to the scene
     scene.AddObject(std::make_unique<Sphere>(Vector3D({0, 0, 0.25}), 1, Color(1, 0, 0)));   // Red sphere
-    scene.AddObject(std::make_unique<Sphere>(Vector3D({2, 0, -0.25}), 1, Color(0, 1, 0)));  // Green sphere
+    scene.AddObject(std::make_unique<Sphere>(Vector3D({3, 0, -0.25}), 1, Color(0, 1, 0)));  // Green sphere
     scene.AddObject(std::make_unique<Sphere>(Vector3D({0, 2, 0.5}), 1, Color(0, 0, 1)));    // Blue sphere
     scene.AddObject(std::make_unique<Sphere>(Vector3D({0, -2, 0}), 1, Color(1, 1, 0)));     // Yellow sphere
+    scene.AddObject(std::make_unique<Sphere>(Vector3D({-2, 0, 0}), 1, Color(1, 0, 1)));     // Magenta sphere
+    scene.AddObject(std::make_unique<Sphere>(Vector3D({2, 2, 0}), 1, Color(0, 1, 1)));      // Cyan sphere
+    scene.AddObject(std::make_unique<Sphere>(Vector3D({0, 0, -2}), 1, Color(1, 1, 1)));     // White sphere
 
     scene.PrintSceneInfo();
 
     // Create Camera
     Camera camera;
     camera.SetFieldOfView(90.0);
-    camera.SetResolution(800, 600);
+    camera.SetResolution(400, 300);
 
     camera.SetPosition(Vector3D({10, 0, 0}));
     camera.SetDirection(Vector3D({-1, 0, 0}));
@@ -54,7 +57,11 @@ int main() {
 
     Image image = camera.Render(scene);
     image.Save(PROJECT_DIR "images/output.png");
-    std::system("open images/output.png");
+    // std::system("open images/output.png");
+
+    Video video = camera.FlyAround(scene, 6.0, 6.0, 60, 30.0);
+    video.Save();
+    std::system("open videos/fly_around/fly_around.mp4");
 
     ////////////////////////////////////////////////////////////////////////
     //Final terminal output

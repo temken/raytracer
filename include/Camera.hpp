@@ -5,6 +5,7 @@
 #include "Renderer.hpp"
 #include "Scene.hpp"
 #include "Vector.hpp"
+#include "Video.hpp"
 
 namespace Raytracer {
 
@@ -19,8 +20,9 @@ public:
     void SetResolution(size_t width, size_t height);
 
     Image Render(const Scene& scene) const;
+    Video FlyAround(const Scene& scene, double distance, double height, size_t numFrames, double fps = 30.0);
 
-    void PointToOrigin(double cameraHeight, double distance, double phi);
+    void PointToOrigin(double height, double rho, double phi);
 
     void PrintInfo() const;
 
