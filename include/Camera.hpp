@@ -20,6 +20,8 @@ public:
 
     Image Render(const Scene& scene) const;
 
+    void PointToOrigin(double cameraHeight, double distance, double phi);
+
     void PrintInfo() const;
 
 private:
