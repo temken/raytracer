@@ -29,6 +29,8 @@ public:
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) const = 0;
 
+    virtual void PrintInfo() const = 0;
+
 protected:
     Color mColor;
     bool mVisible = true;

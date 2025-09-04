@@ -18,4 +18,14 @@ Color Scene::GetBackgroundColor() const {
     return mBackgroundColor;
 }
 
+void Scene::PrintSceneInfo() const {
+    std::cout << "Scene Information:" << std::endl;
+    std::cout << "Background Color: " << mBackgroundColor << std::endl;
+    std::cout << "Objects in Scene: " << mObjects.size() << std::endl;
+    for (const auto& object : mObjects) {
+        object->PrintInfo();
+    }
+    std::cout << std::endl;
+}
+
 }  // namespace Raytracer
