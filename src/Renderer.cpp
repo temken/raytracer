@@ -18,7 +18,7 @@ std::optional<Intersection> Renderer::Intersect(const Ray& ray, const Scene& sce
         }
 
         if (auto intersection = object->Intersect(ray)) {
-            if (!closestIntersection && intersection->t < closestIntersection->t && intersection->t > epsilon) {
+            if (intersection->t > epsilon && (!closestIntersection || intersection->t < closestIntersection->t)) {
                 closestIntersection.emplace(*intersection);
             }
         }

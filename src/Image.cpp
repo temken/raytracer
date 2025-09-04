@@ -70,7 +70,7 @@ bool Image::Save(const std::string& filename) const {
     const int comp = 4;
     const int stride = w * comp;
 
-    stbi_flip_vertically_on_write(0);
+    stbi_flip_vertically_on_write(1);
 
     std::filesystem::create_directories(std::string(PROJECT_DIR) + "images");
     std::string fullPath = std::string(PROJECT_DIR) + "images/" + filename;
