@@ -23,6 +23,16 @@ set(EXTERNAL_DIR ${PROJECT_SOURCE_DIR}/external)
 find_package(Boost 1.65 REQUIRED)
 include(FetchContent)
 
+# ffmpeg
+find_program(FFMPEG_EXECUTABLE ffmpeg)
+
+if(NOT FFMPEG_EXECUTABLE)
+  message(FATAL_ERROR "ffmpeg not found. Please install ffmpeg and make sure it's in your PATH.")
+endif()
+
+# Optionally, make it visible to your code
+add_compile_definitions(FFMPEG_PATH="${FFMPEG_EXECUTABLE}")
+
 # stb
 set(STB_DIR ${EXTERNAL_DIR}/stb)
 FetchContent_Declare(stb

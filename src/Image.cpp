@@ -42,7 +42,7 @@ void Image::Clear(const Color& color) {
     std::fill(mPixels.begin(), mPixels.end(), color);
 }
 
-bool Image::Save(const std::string& filename) const {
+bool Image::Save(const std::string& filepath) const {
     if (mWidth == 0 || mHeight == 0 || mPixels.empty()) {
         return false;
     }
@@ -72,9 +72,12 @@ bool Image::Save(const std::string& filename) const {
 
     stbi_flip_vertically_on_write(1);
 
-    std::filesystem::create_directories(std::string(PROJECT_DIR) + "images");
-    std::string fullPath = std::string(PROJECT_DIR) + "images/" + filename;
-    int ok = stbi_write_png(fullPath.c_str(), w, h, comp, rgba.data(), stride);
+    std::filesystem::path filename = filepath;
+    std::filesystem::path dirPath = filename.parent_path();
+    if (!dirPath.empty()) {
+        std::filesystem::create_directories(dirPath);
+    }
+    int ok = stbi_write_png(filename.c_str(), w, h, comp, rgba.data(), stride);
     return ok != 0;
 }
 

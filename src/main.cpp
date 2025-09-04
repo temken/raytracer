@@ -53,7 +53,7 @@ int main() {
     camera.PrintInfo();
 
     Image image = camera.Render(scene);
-    image.Save("output.png");
+    image.Save(PROJECT_DIR "images/output.png");
     std::system("open images/output.png");
 
     ////////////////////////////////////////////////////////////////////////
