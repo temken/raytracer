@@ -15,10 +15,12 @@ public:
 
     void SetPosition(const Vector3D& position);
     void SetDirection(const Vector3D& direction);
-    void SetFieldOfView(float fov);
+    void SetFieldOfView(double fov);
     void SetResolution(size_t width, size_t height);
 
     Image Render(const Scene& scene) const;
+
+    void PrintInfo() const;
 
 private:
     Vector3D mPosition;
@@ -27,14 +29,16 @@ private:
     Vector3D mEy = Vector3D({0, 1, 0});
     Vector3D mEz = Vector3D({0, 0, 1});
 
-    float mFieldOfView = 45.0f;
+    double mFieldOfView = 90.0;  // in degrees
+    double mDistance = 1.0;      // Distance from the camera to the image plane
+    double mPixelSize;           // at distance 1 from camera
     std::array<size_t, 2> mResolution = {800, 600};
 
     std::unique_ptr<Renderer> mRenderer;
 
     Ray CreateRay(size_t x, size_t y) const;
 
-    void CreateOrthogonalBasis();
+    void ConfigureCamera();
 };
 
 }  // namespace Raytracer
