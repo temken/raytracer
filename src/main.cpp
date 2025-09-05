@@ -46,7 +46,8 @@ int main() {
     // Create Camera
     Camera camera;
     camera.SetFieldOfView(90.0);
-    camera.SetResolution(400, 300);
+    camera.SetResolution(800, 600);
+    camera.SetUseAntiAliasing(true);
 
     camera.SetPosition(Vector3D({10, 0, 0}));
     camera.SetDirection(Vector3D({-1, 0, 0}));
@@ -55,13 +56,13 @@ int main() {
 
     camera.PrintInfo();
 
-    Image image = camera.Render(scene);
-    image.Save(PROJECT_DIR "images/output.png");
-    // std::system("open images/output.png");
+    Image image = camera.Render(scene, 200);
+    image.Save(PROJECT_DIR "images/output2.png");
+    std::system("open " PROJECT_DIR "images/output2.png");
 
-    Video video = camera.FlyAround(scene, 6.0, 6.0, 60, 30.0);
-    video.Save();
-    std::system("open videos/fly_around/fly_around.mp4");
+    // Video video = camera.FlyAround(scene, 6.0, 2.0, 60, 30.0);
+    // video.Save();
+    // std::system("open videos/fly_around/fly_around.mp4");
 
     ////////////////////////////////////////////////////////////////////////
     //Final terminal output

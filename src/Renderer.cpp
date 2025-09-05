@@ -10,6 +10,10 @@ Color Renderer::TraceRay(const Ray& ray, const Scene& scene) {
     return scene.GetBackgroundColor();
 }
 
+bool Renderer::IsDeterministic() const {
+    return mIsDeterministic;
+}
+
 std::optional<Intersection> Renderer::Intersect(const Ray& ray, const Scene& scene, double epsilon) {
     std::optional<Intersection> closestIntersection;
     for (const auto& object : scene.GetObjects()) {

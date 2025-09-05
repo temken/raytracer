@@ -11,7 +11,11 @@ class Renderer {
 public:
     static Color TraceRay(const Ray& ray, const Scene& scene);
 
+    bool IsDeterministic() const;
+
 private:
+    const bool mIsDeterministic = true;
+
     static std::optional<Intersection> Intersect(const Ray& ray, const Scene& scene, double epsilon = 1e-6);
 };
 
