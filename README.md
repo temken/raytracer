@@ -17,7 +17,7 @@ Add the following classes
 - [x] Renderer (simple)
 - [x] Camera
 - [x] Video
-- [ ] Configuration file
+- [ ] Configuration singleton from imported file
 - [ ] Rectangular
 - [ ] Cube/box (composite of 6 rectangulars)
 
@@ -32,14 +32,18 @@ To do
 - [ ] Add rectangular to create some walls
 - [ ] Define and import scenes in json file.
 - [ ] Experiment with reflections and mirrors
-- [ ] Add configuration json file that also defines the destination of the generated images/videos
+- [ ] Add configuration json file that also defines the destination of the generated images/videos (<ID>/images/image_01.png, <ID>/videos/video_01.mp4)
+- [x] Anti-aliasing
+- [x] Sample N pixel and take the average.
 - [ ] Implement the MC path tracing approach
+- [ ] Add progress bar for rendering images/videos (colored icons to "show" the image as it gets rendered would be cool)
 
 Other ideas:
 
 - Define trajectories that the camera can follow (time dependence). For a give speed, fps we can generate neat videos flying through the scene.
 - We could also make the scene itself time-dependent (e.g. moving light sources, objects, etc). Planets passing around the sun would be fun.
 - Enable background gradients/images.
+- Add textures to objects. At least rectangles should not be too hard. (store an image file with the object, promote mColor to Color(), and just return the color of the image at the hit point)
 
 
 ## General notes

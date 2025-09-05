@@ -18,8 +18,9 @@ public:
     void SetDirection(const Vector3D& direction);
     void SetFieldOfView(double fov);
     void SetResolution(size_t width, size_t height);
+    void SetUseAntiAliasing(bool useAA);
 
-    Image Render(const Scene& scene) const;
+    Image Render(const Scene& scene, size_t samples = 1) const;
     Video FlyAround(const Scene& scene, double distance, double height, size_t numFrames, double fps = 30.0);
 
     void PointToOrigin(double height, double rho, double phi);
@@ -38,7 +39,8 @@ private:
     double mPixelSize;           // at distance 1 from camera
     std::array<size_t, 2> mResolution = {800, 600};
 
-    std::unique_ptr<Renderer> mRenderer;
+    Renderer mRenderer;
+    bool mUseAntiAliasing = false;
 
     Ray CreateRay(size_t x, size_t y) const;
 

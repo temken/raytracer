@@ -23,6 +23,35 @@ public:
 
     std::string GetHexColor() const;
 
+    // Operators
+    bool operator==(const Color& other) const {
+        return (r == other.r) && (g == other.g) && (b == other.b) && (a == other.a);
+    }
+
+    Color operator+(const Color& other) const {
+        return Color(r + other.r, g + other.g, b + other.b, a + other.a);
+    }
+
+    Color& operator+=(const Color& other) {
+        r += other.r;
+        g += other.g;
+        b += other.b;
+        a += other.a;
+        return *this;
+    }
+
+    Color operator/(double scalar) const {
+        return Color(r / scalar, g / scalar, b / scalar, a / scalar);
+    }
+
+    Color& operator/=(double scalar) {
+        r /= scalar;
+        g /= scalar;
+        b /= scalar;
+        a /= scalar;
+        return *this;
+    }
+
     friend std::ostream& operator<<(std::ostream& os, const Color& color) {
         os << "RGBA(" << color.r << ", " << color.g << ", " << color.b << ", " << color.a << ")";
         return os;
