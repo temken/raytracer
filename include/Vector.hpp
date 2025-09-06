@@ -12,6 +12,8 @@ namespace Raytracer {
 template <std::size_t N, typename T = double>
 class Vector {
 public:
+    Vector() = default;
+
     explicit Vector(const std::array<T, N>& values) :
         data(values) {}
 
