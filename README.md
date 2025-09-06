@@ -28,7 +28,7 @@ Add the following classes
 - [x] Add progress bar for rendering images
 - [x] Rectangular
 - [x] Disk
-- [ ] Cube/box (composite of 6 rectangulars, each with their own color)
+- [x] Cube/box (composite of 6 rectangulars, each with their own color)
 - [x] Add a nice color scheme.
 - [ ] Configuration singleton from imported file
 - [ ] Add configuration json file that also defines the destination of the generated images/videos (<ID>/images/image_01.png, <ID>/videos/video_01.mp4)
