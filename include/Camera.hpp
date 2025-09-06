@@ -20,8 +20,8 @@ public:
     void SetResolution(size_t width, size_t height);
     void SetUseAntiAliasing(bool useAA);
 
-    Image Render(const Scene& scene, size_t samples = 1) const;
-    Video FlyAround(const Scene& scene, double distance, double height, size_t numFrames, double fps = 30.0);
+    Image Render(const Scene& scene, size_t samples = 1, bool printProgressBar = false) const;
+    Video FlyAround(const Scene& scene, double distance, double height, size_t numFrames, size_t samplesPerFrame = 1, double fps = 30.0);
 
     void PointToOrigin(double height, double rho, double phi);
 
