@@ -7,6 +7,7 @@
 
 #include "Camera.hpp"
 #include "Color.hpp"
+#include "Disk.hpp"
 #include "Image.hpp"
 #include "Ray.hpp"
 #include "Rectangle.hpp"
@@ -35,11 +36,16 @@ int main() {
 
     // Add objects to the scene
     scene.AddObject(std::make_unique<Sphere>(Vector3D({0, 0, 0.25}), 1, RED));
-    scene.AddObject(std::make_unique<Sphere>(Vector3D({3, 0, -0.25}), 1, CYAN));
-    scene.AddObject(std::make_unique<Sphere>(Vector3D({0, 2, 0.5}), 1, BLUE));
-    scene.AddObject(std::make_unique<Sphere>(Vector3D({0, -2, 0}), 1, YELLOW));
-    scene.AddObject(std::make_unique<Sphere>(Vector3D({-2, 0, 1}), 1, GREEN));
+    scene.AddObject(std::make_unique<Sphere>(Vector3D({4, 0, -0.25}), 1, CYAN));
+    scene.AddObject(std::make_unique<Sphere>(Vector3D({0, 3, 0.5}), 1, BLUE));
+    scene.AddObject(std::make_unique<Sphere>(Vector3D({0, -3, 0}), 1, YELLOW));
+    scene.AddObject(std::make_unique<Sphere>(Vector3D({-3, 0, 1}), 1, GREEN));
 
+    // Disk
+    scene.AddObject(std::make_unique<Disk>(Vector3D({0, 9.9, 0}), Vector3D({0, 1, 0}), 3, WHITE));
+    scene.AddObject(std::make_unique<Disk>(Vector3D({0, 0, 4.9}), Vector3D({0, 0, -1}), 1.5, YELLOW));
+
+    // Stage box
     scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, 0, -5}), Vector3D({0, 0, 1}), 10, 20, GRAY));
     scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, 0, +5}), Vector3D({0, 0, 1}), 10, 20, GRAY));
     scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, +10, 0}), Vector3D({0, 1, 0}), 10, 10, BLUE));
@@ -73,7 +79,7 @@ int main() {
     image.Save(PROJECT_DIR "images/output2.png");
     std::system("open " PROJECT_DIR "images/output2.png");
 
-    // Video video = camera.FlyAround(scene, 6.0, 0.0, 60);
+    // Video video = camera.FlyAround(scene, 15.0, 4.0, 60);
     // video.Save();
     // std::system("open videos/fly_around/fly_around.mp4");
 
