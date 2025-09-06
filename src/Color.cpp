@@ -6,25 +6,25 @@
 namespace Raytracer {
 
 Color::Color(double red, double green, double blue, double alpha) :
-    r(red),
-    g(green),
-    b(blue),
-    a(alpha) {
+    r(std::clamp(red, 0.0, 1.0)),
+    g(std::clamp(green, 0.0, 1.0)),
+    b(std::clamp(blue, 0.0, 1.0)),
+    a(std::clamp(alpha, 0.0, 1.0)) {
 }
 
-double Color::R() {
+double Color::R() const {
     return r;
 }
 
-double Color::G() {
+double Color::G() const {
     return g;
 }
 
-double Color::B() {
+double Color::B() const {
     return b;
 }
 
-double Color::A() {
+double Color::A() const {
     return a;
 }
 
