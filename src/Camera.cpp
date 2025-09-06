@@ -44,7 +44,7 @@ void Camera::SetUseAntiAliasing(bool useAA) {
     mUseAntiAliasing = useAA;
 }
 
-Image Camera::Render(const Scene& scene, size_t samples) const {
+Image Camera::Render(const Scene& scene, size_t samples, bool printProgressBar) const {
     Image image(mResolution[0], mResolution[1]);
 
     if (mRenderer.IsDeterministic() && !mUseAntiAliasing && samples > 1) {
@@ -71,7 +71,7 @@ Image Camera::Render(const Scene& scene, size_t samples) const {
             }
             Color finalColor((redAccumulated / samples), (greenAccumulated / samples), (blueAccumulated / samples), (alphaAccumulated / samples));
             image.SetPixel(x, y, finalColor);
-            if (pixelsRendered++ % 1000 == 0) {
+            if (printProgressBar && pixelsRendered++ % 1000 == 0) {
                 libphysica::Print_Progress_Bar(double(pixelsRendered) / totalPixels);
             }
         }
@@ -79,13 +79,14 @@ Image Camera::Render(const Scene& scene, size_t samples) const {
     return image;
 }
 
-Video Camera::FlyAround(const Scene& scene, double distance, double height, size_t numFrames, double fps) {
+Video Camera::FlyAround(const Scene& scene, double distance, double height, size_t numFrames, size_t samplesPerFrame, double fps) {
     Video video("fly_around", fps);
     for (size_t i = 0; i < numFrames; i++) {
         double phi = 2.0 * M_PI * i / numFrames;
         PointToOrigin(height, distance, phi);
-        Image frame = Render(scene);
+        Image frame = Render(scene, samplesPerFrame);
         video.AddFrame(frame);
+        libphysica::Print_Progress_Bar(double(i + 1) / numFrames);
     }
     return video;
 }

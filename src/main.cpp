@@ -9,6 +9,7 @@
 #include "Color.hpp"
 #include "Image.hpp"
 #include "Ray.hpp"
+#include "Rectangle.hpp"
 #include "Scene.hpp"
 #include "Sphere.hpp"
 #include "Vector.hpp"
@@ -37,7 +38,21 @@ int main() {
     scene.AddObject(std::make_unique<Sphere>(Vector3D({3, 0, -0.25}), 1, CYAN));
     scene.AddObject(std::make_unique<Sphere>(Vector3D({0, 2, 0.5}), 1, BLUE));
     scene.AddObject(std::make_unique<Sphere>(Vector3D({0, -2, 0}), 1, YELLOW));
-    scene.AddObject(std::make_unique<Sphere>(Vector3D({-2, 0, 0}), 1, GREEN));
+    scene.AddObject(std::make_unique<Sphere>(Vector3D({-2, 0, 1}), 1, GREEN));
+
+    scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, 0, -5}), Vector3D({0, 0, 1}), 10, 20, GRAY));
+    scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, 0, +5}), Vector3D({0, 0, 1}), 10, 20, GRAY));
+    scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, +10, 0}), Vector3D({0, 1, 0}), 10, 10, BLUE));
+    scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, -10, 0}), Vector3D({0, 1, 0}), 10, 10, RED));
+    // Background
+    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, -8.75, 0}), Vector3D({1, 0, 0}), 10, 2.5, BLACK));
+    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, -6.25, 0}), Vector3D({1, 0, 0}), 10, 2.5, WHITE));
+    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, -3.75, 0}), Vector3D({1, 0, 0}), 10, 2.5, BLACK));
+    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, -1.25, 0}), Vector3D({1, 0, 0}), 10, 2.5, WHITE));
+    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, 1.25, 0}), Vector3D({1, 0, 0}), 10, 2.5, BLACK));
+    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, 3.75, 0}), Vector3D({1, 0, 0}), 10, 2.5, WHITE));
+    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, 6.25, 0}), Vector3D({1, 0, 0}), 10, 2.5, BLACK));
+    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, 8.75, 0}), Vector3D({1, 0, 0}), 10, 2.5, WHITE));
 
     scene.PrintSceneInfo();
 
@@ -47,18 +62,18 @@ int main() {
     camera.SetResolution(800, 600);
     camera.SetUseAntiAliasing(false);
 
-    camera.SetPosition(Vector3D({10, 0, 0}));
+    camera.SetPosition(Vector3D({15, 0, 0}));
     camera.SetDirection(Vector3D({-1, 0, 0}));
 
-    camera.PointToOrigin(3, 6.0, 3.5 * M_PI / 2.0);
+    // camera.PointToOrigin(0, 15.0, 0);
 
     camera.PrintInfo();
 
-    Image image = camera.Render(scene, 100);
+    Image image = camera.Render(scene, 100, true);
     image.Save(PROJECT_DIR "images/output2.png");
     std::system("open " PROJECT_DIR "images/output2.png");
 
-    // Video video = camera.FlyAround(scene, 6.0, 2.0, 60, 30.0);
+    // Video video = camera.FlyAround(scene, 6.0, 0.0, 60);
     // video.Save();
     // std::system("open videos/fly_around/fly_around.mp4");
 
