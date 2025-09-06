@@ -11,10 +11,10 @@ public:
     Color() = default;
     Color(double r, double g, double b, double a = 1.0);
 
-    double R();
-    double G();
-    double B();
-    double A();
+    double R() const;
+    double G() const;
+    double B() const;
+    double A() const;
 
     std::array<double, 4> GetRGBA() const;
     std::array<double, 3> GetRGB() const;
@@ -29,26 +29,14 @@ public:
     }
 
     Color operator+(const Color& other) const {
-        return Color(r + other.r, g + other.g, b + other.b, a + other.a);
+        return Color(0.5 * (r + other.r), 0.5 * (g + other.g), 0.5 * (b + other.b), 0.5 * (a + other.a));
     }
 
     Color& operator+=(const Color& other) {
-        r += other.r;
-        g += other.g;
-        b += other.b;
-        a += other.a;
-        return *this;
-    }
-
-    Color operator/(double scalar) const {
-        return Color(r / scalar, g / scalar, b / scalar, a / scalar);
-    }
-
-    Color& operator/=(double scalar) {
-        r /= scalar;
-        g /= scalar;
-        b /= scalar;
-        a /= scalar;
+        r = 0.5 * (r + other.r);
+        g = 0.5 * (g + other.g);
+        b = 0.5 * (b + other.b);
+        a = 0.5 * (a + other.a);
         return *this;
     }
 
@@ -63,5 +51,16 @@ private:
     double b = 0.0;
     double a = 1.0;
 };
+
+// Predefined colors
+const Color BLACK = Color(0, 0, 0);
+const Color WHITE = Color(1, 1, 1);
+const Color GRAY = Color(0.5, 0.5, 0.5);
+const Color RED = Color(255.0 / 255, 62.0 / 255, 65.0 / 255);
+const Color ORANGE = Color(255.0 / 255, 138.0 / 255, 67.0 / 255);
+const Color YELLOW = Color(255.0 / 255, 235.0 / 255, 127.0 / 255);
+const Color CYAN = Color(0.0 / 255, 201.0 / 255, 167.0 / 255);
+const Color BLUE = Color(0.0 / 255, 126.0 / 255, 167.0 / 255);
+const Color GREEN = Color(0.0 / 255, 179.0 / 255, 111.0 / 255);
 
 }  // namespace Raytracer

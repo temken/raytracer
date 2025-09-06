@@ -56,14 +56,20 @@ Image Camera::Render(const Scene& scene, size_t samples) const {
     auto totalPixels = mResolution[0] * mResolution[1];
     for (size_t y = 0; y < mResolution[1]; y++) {
         for (size_t x = 0; x < mResolution[0]; x++) {
-            Color accumulatedColor(0, 0, 0, 0);
+            double redAccumulated = 0.0;
+            double greenAccumulated = 0.0;
+            double blueAccumulated = 0.0;
+            double alphaAccumulated = 0.0;
             for (size_t s = 0; s < samples; s++) {
                 // Sample the pixel
                 Ray ray = CreateRay(x, y);
                 Color color = mRenderer.TraceRay(ray, scene);
-                accumulatedColor = accumulatedColor + color;
+                redAccumulated += color.R();
+                greenAccumulated += color.G();
+                blueAccumulated += color.B();
+                alphaAccumulated += color.A();
             }
-            Color finalColor = accumulatedColor / samples;
+            Color finalColor((redAccumulated / samples), (greenAccumulated / samples), (blueAccumulated / samples), (alphaAccumulated / samples));
             image.SetPixel(x, y, finalColor);
             if (pixelsRendered++ % 1000 == 0) {
                 libphysica::Print_Progress_Bar(double(pixelsRendered) / totalPixels);

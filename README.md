@@ -17,26 +17,25 @@ Add the following classes
 - [x] Renderer (simple)
 - [x] Camera
 - [x] Video
-- [ ] Configuration singleton from imported file
-- [ ] Rectangular
-- [ ] Cube/box (composite of 6 rectangulars)
-
-To do
 - [x] Generate the first png from a code defined image
 - [x] Create a virtual world with a few simple objects
 - [x] Take an image of it with a very simple deterministic ray tracing algorithm
 - [x] Fix the field of view issue.
 - [x] Implement camera pointing to origin with the possibility to rotate.
 - [x] Export a video of a camera flying around the z-axis.
-- [ ] Add a nice color scheme.
-- [ ] Add rectangular to create some walls
-- [ ] Define and import scenes in json file.
-- [ ] Experiment with reflections and mirrors
-- [ ] Add configuration json file that also defines the destination of the generated images/videos (<ID>/images/image_01.png, <ID>/videos/video_01.mp4)
 - [x] Anti-aliasing
 - [x] Sample N pixel and take the average.
+- [x] Add progress bar for rendering images
+- [ ] Rectangular
+- [ ] Cube/box (composite of 6 rectangulars)
+- [ ] Add a nice color scheme.
+- [ ] Configuration singleton from imported file
+- [ ] Add configuration json file that also defines the destination of the generated images/videos (<ID>/images/image_01.png, <ID>/videos/video_01.mp4)
+- [ ] Define and import a scene in json file.
+- [ ] Simulate a perfect mirror
 - [ ] Implement the MC path tracing approach
-- [ ] Add progress bar for rendering images/videos (colored icons to "show" the image as it gets rendered would be cool)
+- [ ] Progressbar for videos
+- [ ] Preview images in the terminal
 
 Other ideas:
 
