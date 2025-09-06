@@ -26,9 +26,10 @@ Add the following classes
 - [x] Anti-aliasing
 - [x] Sample N pixel and take the average.
 - [x] Add progress bar for rendering images
-- [ ] Rectangular
-- [ ] Cube/box (composite of 6 rectangulars)
-- [ ] Add a nice color scheme.
+- [x] Rectangular
+- [x] Disk
+- [ ] Cube/box (composite of 6 rectangulars, each with their own color)
+- [x] Add a nice color scheme.
 - [ ] Configuration singleton from imported file
 - [ ] Add configuration json file that also defines the destination of the generated images/videos (<ID>/images/image_01.png, <ID>/videos/video_01.mp4)
 - [ ] Define and import a scene in json file.
