@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 
+#include "Box.hpp"
 #include "Camera.hpp"
 #include "Color.hpp"
 #include "Disk.hpp"
@@ -45,6 +46,9 @@ int main() {
     scene.AddObject(std::make_unique<Disk>(Vector3D({0, 9.9, 0}), Vector3D({0, 1, 0}), 3, WHITE));
     scene.AddObject(std::make_unique<Disk>(Vector3D({0, 0, 4.9}), Vector3D({0, 0, -1}), 1.5, YELLOW));
 
+    // Box
+    scene.AddObject(std::make_unique<Box>(Vector3D({3, -4, -4}), 2, 2, 2, std::array<Color, 6>{RED, GREEN, BLUE, CYAN, YELLOW, GREEN}));
+
     // Stage box
     scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, 0, -5}), Vector3D({0, 0, 1}), 10, 20, GRAY));
     scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, 0, +5}), Vector3D({0, 0, 1}), 10, 20, GRAY));
@@ -79,7 +83,7 @@ int main() {
     image.Save(PROJECT_DIR "images/output2.png");
     std::system("open " PROJECT_DIR "images/output2.png");
 
-    // Video video = camera.FlyAround(scene, 15.0, 4.0, 60);
+    // Video video = camera.FlyAround(scene, 15.0, 2.0, 60);
     // video.Save();
     // std::system("open videos/fly_around/fly_around.mp4");
 
