@@ -1,11 +1,17 @@
-#include "Renderer.hpp"
+#include "Rendering/Renderer.hpp"
 
 namespace Raytracer {
 
 Color Renderer::TraceRay(const Ray& ray, const Scene& scene) {
     auto intersection = Intersect(ray, scene);
     if (intersection) {
-        return intersection->object->GetColor();
+        if (intersection->object && intersection->object->IsReflective()) {
+            Vector3D reflectDir = ray.GetDirection() - 2 * ray.GetDirection().Dot(intersection->normal) * intersection->normal;
+            Ray reflectRay(intersection->point, reflectDir);
+            return TraceRay(reflectRay, scene);
+        } else {
+            return intersection->object->GetColor();
+        }
     }
     return scene.GetBackgroundColor();
 }

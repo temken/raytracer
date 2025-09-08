@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Color.hpp"
-#include "Object.hpp"
+#include "Scene/Object.hpp"
+#include "Utilities/Color.hpp"
 
 #include <optional>
 
@@ -9,7 +9,7 @@ namespace Raytracer {
 
 class Sphere : public Object {
 public:
-    Sphere(const Vector3D& center, double radius, const Color& color);
+    Sphere(const std::string& name, const Vector3D& center, double radius, const Color& color);
 
     std::optional<Intersection> Intersect(const Ray& ray) const override;
 

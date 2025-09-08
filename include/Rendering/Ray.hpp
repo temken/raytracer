@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vector.hpp"
+#include "Utilities/Vector.hpp"
 
 namespace Raytracer {
 

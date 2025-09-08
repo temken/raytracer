@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
-#include "Ray.hpp"
-#include "Vector.hpp"
+#include "Rendering/Ray.hpp"
+#include "Utilities/Vector.hpp"
 
 using namespace Raytracer;
 

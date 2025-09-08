@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
-#include "Color.hpp"
+#include "Utilities/Color.hpp"
 
 using namespace Raytracer;
 

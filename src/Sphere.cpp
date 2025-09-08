@@ -1,12 +1,12 @@
-#include "Sphere.hpp"
+#include "Scene/Sphere.hpp"
 
 #include <cmath>
 #include <limits>
 
 namespace Raytracer {
 
-Sphere::Sphere(const Vector3D& center, double radius, const Color& color) :
-    Object(color),
+Sphere::Sphere(const std::string& name, const Vector3D& center, double radius, const Color& color) :
+    Object(name, color),
     mCenter(center),
     mRadius(radius) {}
 
@@ -45,7 +45,9 @@ std::optional<Intersection> Sphere::Intersect(const Ray& ray) const {
 }
 
 void Sphere::PrintInfo() const {
-    std::cout << "Sphere: Center=" << mCenter << ", Radius=" << mRadius << ", Color=" << mColor << std::endl;
+    std::cout << "Sphere:" << std::endl
+              << "  Center: " << mCenter << std::endl
+              << "  Radius: " << mRadius << std::endl;
 }
 
 }  // namespace Raytracer

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Image.hpp"
-#include "Ray.hpp"
-#include "Renderer.hpp"
-#include "Scene.hpp"
-#include "Vector.hpp"
-#include "Video.hpp"
+#include "Rendering/Image.hpp"
+#include "Rendering/Ray.hpp"
+#include "Rendering/Renderer.hpp"
+#include "Rendering/Video.hpp"
+#include "Scene/Scene.hpp"
+#include "Utilities/Vector.hpp"
 
 namespace Raytracer {
 
