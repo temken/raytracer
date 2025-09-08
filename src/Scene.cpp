@@ -18,7 +18,7 @@ Color Scene::GetBackgroundColor() const {
     return mBackgroundColor;
 }
 
-void Scene::PrintSceneInfo() const {
+void Scene::PrintInfo() const {
     std::cout << "Scene Information:" << std::endl;
     std::cout << "Background Color: " << mBackgroundColor << std::endl;
     std::cout << "Objects in Scene: " << mObjects.size() << std::endl;
