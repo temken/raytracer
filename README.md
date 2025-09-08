@@ -30,12 +30,12 @@ Add the following classes
 - [x] Disk
 - [x] Cube/box (composite of 6 rectangulars, each with their own color)
 - [x] Add a nice color scheme.
+- [x] Progressbar for videos
+- [ ] Simulate a perfect mirror
 - [ ] Configuration singleton from imported file
 - [ ] Add configuration json file that also defines the destination of the generated images/videos (<ID>/images/image_01.png, <ID>/videos/video_01.mp4)
 - [ ] Define and import a scene in json file.
-- [ ] Simulate a perfect mirror
 - [ ] Implement the MC path tracing approach
-- [ ] Progressbar for videos
 - [ ] Preview images in the terminal
 
 Other ideas:

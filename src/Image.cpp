@@ -1,7 +1,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-#include "Image.hpp"
+#include "Rendering/Image.hpp"
 #include "version.hpp"
 
 #include <algorithm>

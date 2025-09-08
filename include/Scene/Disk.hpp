@@ -11,7 +11,7 @@ namespace Raytracer {
 
 class Disk : public Object {
 public:
-    Disk(const Vector3D& center, const Vector3D& normal, double radius, const Color& color);
+    Disk(const std::string& name, const Vector3D& center, const Vector3D& normal, double radius, const Color& color);
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) const override;
 

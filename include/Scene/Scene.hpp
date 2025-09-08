@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Intersection.hpp"
-#include "Object.hpp"
-#include "Ray.hpp"
+#include "Rendering/Ray.hpp"
+#include "Scene/Object.hpp"
+#include "Utilities/Intersection.hpp"
 
 #include <memory>
 #include <vector>

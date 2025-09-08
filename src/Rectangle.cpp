@@ -1,9 +1,9 @@
-#include "Rectangle.hpp"
+#include "Scene/Rectangle.hpp"
 
 namespace Raytracer {
 
-Rectangle::Rectangle(const Vector3D& center, const Vector3D& normal, double width, double height, const Color& color) :
-    Object(color),
+Rectangle::Rectangle(const std::string& name, const Vector3D& center, const Vector3D& normal, double width, double height, const Color& color) :
+    Object(name, color),
     mCenter(center),
     mNormal(normal.Normalized()),
     mWidth(width),

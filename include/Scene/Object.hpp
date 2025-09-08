@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Color.hpp"
-#include "Intersection.hpp"
-#include "Ray.hpp"
-#include "Vector.hpp"
+#include "Rendering/Ray.hpp"
+#include "Utilities/Color.hpp"
+#include "Utilities/Intersection.hpp"
+#include "Utilities/Vector.hpp"
 
 #include <optional>
+#include <string>
 
 namespace Raytracer {
 
@@ -13,16 +14,31 @@ struct Intersection;
 
 class Object {
 public:
-    explicit Object(const Color& color) :
+    explicit Object(const std::string& name, const Color& color) :
+        mName(name),
         mColor(color) {}
     virtual ~Object() = default;
 
     Color GetColor() const {
         return mColor;
     }
+
+    std::string GetName() const {
+        return mName;
+    }
+
+    bool IsReflective() const {
+        return mIsReflective;
+    }
+
+    void SetReflective(bool isReflective) {
+        mIsReflective = isReflective;
+    }
+
     bool IsVisible() const {
         return mVisible;
     }
+
     void SetVisible(bool visible) {
         mVisible = visible;
     }
@@ -32,8 +48,11 @@ public:
     virtual void PrintInfo() const = 0;
 
 protected:
-    Color mColor;
+    std::string mName;
     bool mVisible = true;
+
+    Color mColor;
+    bool mIsReflective = false;
 
     static constexpr double sEpsilon = 1e-6;
 };

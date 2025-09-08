@@ -1,11 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Renderer.hpp"
+#include "Rendering/Renderer.hpp"
 
 using namespace Raytracer;
 
-TEST(TestRenderer, Test1)
-{
+TEST(TestRenderer, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

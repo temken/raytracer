@@ -1,11 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Rectangle.hpp"
+#include "Scene/Rectangle.hpp"
 
 using namespace Raytracer;
 
-TEST(TestRectangle, Test1)
-{
+TEST(TestRectangle, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

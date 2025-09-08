@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Object.hpp"
-#include "Vector.hpp"
+#include "Scene/Object.hpp"
+#include "Utilities/Vector.hpp"
 
 namespace Raytracer {
 

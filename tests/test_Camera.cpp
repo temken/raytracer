@@ -1,11 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Camera.hpp"
+#include "Rendering/Camera.hpp"
 
 using namespace Raytracer;
 
-TEST(TestCamera, Test1)
-{
+TEST(TestCamera, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

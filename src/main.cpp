@@ -5,16 +5,16 @@
 #include <iostream>
 #include <memory>
 
-#include "Box.hpp"
-#include "Camera.hpp"
-#include "Color.hpp"
-#include "Disk.hpp"
-#include "Image.hpp"
-#include "Ray.hpp"
-#include "Rectangle.hpp"
-#include "Scene.hpp"
-#include "Sphere.hpp"
-#include "Vector.hpp"
+#include "Rendering/Camera.hpp"
+#include "Rendering/Image.hpp"
+#include "Rendering/Ray.hpp"
+#include "Scene/Box.hpp"
+#include "Scene/Disk.hpp"
+#include "Scene/Rectangle.hpp"
+#include "Scene/Scene.hpp"
+#include "Scene/Sphere.hpp"
+#include "Utilities/Color.hpp"
+#include "Utilities/Vector.hpp"
 #include "version.hpp"
 
 using namespace Raytracer;
@@ -36,40 +36,50 @@ int main() {
     Scene scene;
 
     // Add objects to the scene
-    scene.AddObject(std::make_unique<Sphere>(Vector3D({0, 0, 0.25}), 1, RED));
-    scene.AddObject(std::make_unique<Sphere>(Vector3D({4, 0, -0.25}), 1, CYAN));
-    scene.AddObject(std::make_unique<Sphere>(Vector3D({0, 3, 0.5}), 1, BLUE));
-    scene.AddObject(std::make_unique<Sphere>(Vector3D({0, -3, 0}), 1, YELLOW));
-    scene.AddObject(std::make_unique<Sphere>(Vector3D({-3, 0, 1}), 1, GREEN));
 
-    // Disk
-    scene.AddObject(std::make_unique<Disk>(Vector3D({0, 9.9, 0}), Vector3D({0, 1, 0}), 3, WHITE));
-    scene.AddObject(std::make_unique<Disk>(Vector3D({0, 0, 4.9}), Vector3D({0, 0, -1}), 1.5, YELLOW));
+    // Spheres
+    // Sphere reflectiveSphere(Vector3D({0, 3, 0.5}), 1, WHITE);
+    // reflectiveSphere.SetReflective(true);
+    // scene.AddObject(std::make_unique<Sphere>(reflectiveSphere));
+    // scene.AddObject(std::make_unique<Sphere>(Vector3D({0, 0, 0.25}), 1, RED));
+    // scene.AddObject(std::make_unique<Sphere>(Vector3D({4, 0, -0.25}), 1, CYAN));
+    // // scene.AddObject(std::make_unique<Sphere>(Vector3D({0, 3, 0.5}), 1, BLUE));
+    // scene.AddObject(std::make_unique<Sphere>(Vector3D({0, -3, 0}), 1, YELLOW));
+    // scene.AddObject(std::make_unique<Sphere>(Vector3D({-3, 0, 1}), 1, GREEN));
 
-    // Box
-    scene.AddObject(std::make_unique<Box>(Vector3D({3, -4, -4}), 2, 2, 2, std::array<Color, 6>{RED, GREEN, BLUE, CYAN, YELLOW, GREEN}));
+    // // Disk
+    // Disk mirror(Vector3D({0, -9.9, 0}), Vector3D({0, 1, 0}), 3, WHITE);
+    // mirror.SetReflective(true);
+    // Disk mirror2(Vector3D({0, 9.9, 0}), Vector3D({0, -1, 0}), 3, WHITE);
+    // mirror2.SetReflective(true);
+    // scene.AddObject(std::make_unique<Disk>(mirror));
+    // scene.AddObject(std::make_unique<Disk>(mirror2));
+    // scene.AddObject(std::make_unique<Disk>(Vector3D({0, 0, 4.9}), Vector3D({0, 0, -1}), 1.5, YELLOW));
 
-    // Stage box
-    scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, 0, -5}), Vector3D({0, 0, 1}), 10, 20, GRAY));
-    scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, 0, +5}), Vector3D({0, 0, 1}), 10, 20, GRAY));
-    scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, +10, 0}), Vector3D({0, 1, 0}), 10, 10, BLUE));
-    scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, -10, 0}), Vector3D({0, 1, 0}), 10, 10, RED));
-    // Background
-    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, -8.75, 0}), Vector3D({1, 0, 0}), 10, 2.5, BLACK));
-    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, -6.25, 0}), Vector3D({1, 0, 0}), 10, 2.5, WHITE));
-    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, -3.75, 0}), Vector3D({1, 0, 0}), 10, 2.5, BLACK));
-    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, -1.25, 0}), Vector3D({1, 0, 0}), 10, 2.5, WHITE));
-    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, 1.25, 0}), Vector3D({1, 0, 0}), 10, 2.5, BLACK));
-    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, 3.75, 0}), Vector3D({1, 0, 0}), 10, 2.5, WHITE));
-    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, 6.25, 0}), Vector3D({1, 0, 0}), 10, 2.5, BLACK));
-    scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, 8.75, 0}), Vector3D({1, 0, 0}), 10, 2.5, WHITE));
+    // // Box
+    // scene.AddObject(std::make_unique<Box>(Vector3D({3, -4, -4}), 2, 2, 2, std::array<Color, 6>{RED, GREEN, BLUE, CYAN, YELLOW, GREEN}));
 
-    scene.PrintSceneInfo();
+    // // Stage box
+    // scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, 0, -5}), Vector3D({0, 0, 1}), 10, 20, GRAY));
+    // scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, 0, +5}), Vector3D({0, 0, 1}), 10, 20, GRAY));
+    // scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, +10, 0}), Vector3D({0, 1, 0}), 10, 10, BLUE));
+    // scene.AddObject(std::make_unique<Rectangle>(Vector3D({0, -10, 0}), Vector3D({0, 1, 0}), 10, 10, RED));
+    // // Background
+    // scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, -8.75, 0}), Vector3D({1, 0, 0}), 10, 2.5, BLACK));
+    // scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, -6.25, 0}), Vector3D({1, 0, 0}), 10, 2.5, WHITE));
+    // scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, -3.75, 0}), Vector3D({1, 0, 0}), 10, 2.5, BLACK));
+    // scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, -1.25, 0}), Vector3D({1, 0, 0}), 10, 2.5, WHITE));
+    // scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, 1.25, 0}), Vector3D({1, 0, 0}), 10, 2.5, BLACK));
+    // scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, 3.75, 0}), Vector3D({1, 0, 0}), 10, 2.5, WHITE));
+    // scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, 6.25, 0}), Vector3D({1, 0, 0}), 10, 2.5, BLACK));
+    // scene.AddObject(std::make_unique<Rectangle>(Vector3D({-5, 8.75, 0}), Vector3D({1, 0, 0}), 10, 2.5, WHITE));
+
+    // scene.PrintSceneInfo();
 
     // Create Camera
     Camera camera;
     camera.SetFieldOfView(90.0);
-    camera.SetResolution(800, 600);
+    camera.SetResolution(1600, 1200);
     camera.SetUseAntiAliasing(false);
 
     camera.SetPosition(Vector3D({15, 0, 0}));
@@ -83,9 +93,9 @@ int main() {
     image.Save(PROJECT_DIR "images/output2.png");
     std::system("open " PROJECT_DIR "images/output2.png");
 
-    // Video video = camera.FlyAround(scene, 15.0, 2.0, 60);
-    // video.Save();
-    // std::system("open videos/fly_around/fly_around.mp4");
+    Video video = camera.FlyAround(scene, 10.0, 0.0, 60);
+    video.Save();
+    std::system("open " PROJECT_DIR "videos/fly_around/fly_around.mp4");
 
     ////////////////////////////////////////////////////////////////////////
     //Final terminal output

@@ -1,11 +1,11 @@
-#include "Disk.hpp"
+#include "Scene/Disk.hpp"
 
 #include <iostream>
 
 namespace Raytracer {
 
-Disk::Disk(const Vector3D& center, const Vector3D& normal, double radius, const Color& color) :
-    Object(color),
+Disk::Disk(const std::string& name, const Vector3D& center, const Vector3D& normal, double radius, const Color& color) :
+    Object(name, color),
     mCenter(center),
     mNormal(normal.Normalized()),
     mRadius(radius) {}

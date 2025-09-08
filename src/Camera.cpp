@@ -1,4 +1,4 @@
-#include "Camera.hpp"
+#include "Rendering/Camera.hpp"
 
 #include "libphysica/Utilities.hpp"
 

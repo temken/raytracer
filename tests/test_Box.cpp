@@ -1,11 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Box.hpp"
+#include "Scene/Box.hpp"
 
 using namespace Raytracer;
 
-TEST(TestBox, Test1)
-{
+TEST(TestBox, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

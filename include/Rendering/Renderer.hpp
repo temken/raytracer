@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Color.hpp"
-#include "Intersection.hpp"
-#include "Ray.hpp"
-#include "Scene.hpp"
+#include "Rendering/Ray.hpp"
+#include "Scene/Scene.hpp"
+#include "Utilities/Color.hpp"
+#include "Utilities/Intersection.hpp"
 
 namespace Raytracer {
 
