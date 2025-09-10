@@ -23,6 +23,21 @@ set(EXTERNAL_DIR ${PROJECT_SOURCE_DIR}/external)
 find_package(Boost 1.65 REQUIRED)
 include(FetchContent)
 
+# yaml-cpp
+set(YAMLCPPDIR ${EXTERNAL_DIR}/yaml-cpp)
+FetchContent_Declare(
+  yaml-cpp
+  GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+  GIT_TA origin/master
+  SOURCE_DIR "${YAMLCPPDIR}"
+)
+FetchContent_GetProperties(yaml-cpp)
+
+if(NOT yaml-cpp_POPULATED)
+  FetchContent_Populate(yaml-cpp)
+  add_subdirectory(${YAMLCPPDIR})
+endif()
+
 # ffmpeg
 find_program(FFMPEG_EXECUTABLE ffmpeg)
 

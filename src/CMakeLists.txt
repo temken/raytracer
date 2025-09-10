@@ -29,7 +29,8 @@ target_compile_options(libraytracer PUBLIC -Wall -pedantic)
 target_link_libraries(libraytracer
 	PUBLIC
 	coverage_config
-	libphysica)
+	libphysica
+	yaml-cpp)
 
 target_include_directories(libraytracer
 	PRIVATE
@@ -37,6 +38,7 @@ target_include_directories(libraytracer
 	PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}
 	${INCLUDE_DIR}
-	${STB_DIR})
+	${STB_DIR}
+	${YAMLCPPDIR})
 
 install(TARGETS libraytracer DESTINATION ${LIB_DIR})
