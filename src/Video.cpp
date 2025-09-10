@@ -1,5 +1,6 @@
 #include "Rendering/Video.hpp"
 
+#include "Utilities/Configuration.hpp"
 #include "version.hpp"
 
 #include <filesystem>
@@ -8,8 +9,7 @@
 
 namespace Raytracer {
 
-Video::Video(const std::string& name, double fps) :
-    name(name),
+Video::Video(double fps) :
     mFPS(fps) {
 }
 
@@ -34,37 +34,41 @@ void Video::AddFrame(const Image& image) {
     mFrames.push_back(image);
 }
 
-void Video::Save(bool showTerminalOutput, bool deleteFrameFiles) {
+void Video::Save(bool showTerminalOutput, bool deleteFrameFiles, std::string filepath) {
     if (mFrames.empty()) {
         std::cerr << "No frames to save." << std::endl;
         return;
     }
 
-    // Create a folder in /output/
-    std::filesystem::path dir = PROJECT_DIR "videos/" + name + "/";
-    std::filesystem::create_directories(dir);
+    if (filepath.empty()) {
+        std::string outputDirectory = Configuration::GetInstance().GetOutputDirectory();
+        // Create /videos/ folder if it does not exist
+        std::filesystem::create_directories(outputDirectory + "/videos/");
+        filepath = outputDirectory + "/videos/video_" + std::to_string(std::time(nullptr)) + ".mp4";
+    }
+    std::filesystem::path outputDirectoryPath = filepath;
 
     // Save video frames to individual files
     for (std::size_t i = 0; i < mFrames.size(); i++) {
         const std::string frameFilename = std::format("frame_{:04}.png", static_cast<int>(i + 1));
 
-        mFrames[i].Save((dir / frameFilename).string());
+        mFrames[i].Save((outputDirectoryPath / frameFilename).string());
     }
 
     // Generate video from frame files
-    std::string videoFilename = dir / (name + ".mp4");
+    std::string videoFilename = outputDirectoryPath.string() + "video_" + std::to_string(std::time(nullptr)) + ".mp4";
     std::string ffmpegCommand = std::format(
         "{} -y {} -framerate {} -i {}/frame_%04d.png -c:v libx264 -pix_fmt yuv420p {}",
         FFMPEG_PATH,
         showTerminalOutput ? "" : "-v warning",
         mFPS,
-        dir.string(),
+        outputDirectoryPath.string(),
         videoFilename);
     std::system(ffmpegCommand.c_str());
 
     if (deleteFrameFiles) {
         for (std::size_t i = 0; i < mFrames.size(); i++) {
-            std::filesystem::remove((dir / std::format("frame_{:04}.png", static_cast<int>(i + 1))).string());
+            std::filesystem::remove((outputDirectoryPath / std::format("frame_{:04}.png", static_cast<int>(i + 1))).string());
         }
     }
 }

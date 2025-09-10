@@ -17,8 +17,7 @@ public:
     Camera ConstructCamera() const;
     Scene ConstructScene() const;
 
-    std::string GetImagesDirectory() const;
-    std::string GetVideosDirectory() const;
+    std::string GetOutputDirectory() const;
 
     // non-copyable
     Configuration(const Configuration&) = delete;

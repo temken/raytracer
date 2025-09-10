@@ -2,6 +2,7 @@
 #include "stb_image_write.h"
 
 #include "Rendering/Image.hpp"
+#include "Utilities/Configuration.hpp"
 #include "version.hpp"
 
 #include <algorithm>
@@ -42,9 +43,16 @@ void Image::Clear(const Color& color) {
     std::fill(mPixels.begin(), mPixels.end(), color);
 }
 
-bool Image::Save(const std::string& filepath) const {
+bool Image::Save(std::string filepath) const {
     if (mWidth == 0 || mHeight == 0 || mPixels.empty()) {
         return false;
+    }
+
+    if (filepath.empty()) {
+        std::string directory = Configuration::GetInstance().GetOutputDirectory();
+        // Create /images/ folder if it does not exist
+        std::filesystem::create_directories(directory + "/images/");
+        filepath = directory + "/images/image_" + std::to_string(std::time(nullptr)) + ".png";
     }
 
     std::vector<std::uint8_t> rgba;
