@@ -3,6 +3,8 @@
 #include "Rendering/Camera.hpp"
 #include "Scene/Scene.hpp"
 
+#include <yaml-cpp/yaml.h>
+
 namespace Raytracer {
 
 class Configuration {
@@ -12,8 +14,8 @@ public:
     void ParseYamlFile(const std::string& path);
 
     std::string GetID() const;
-    Camera GetCamera() const;
-    Scene GetScene() const;
+    Camera ConstructCamera() const;
+    Scene ConstructScene() const;
 
     std::string GetImagesDirectory() const;
     std::string GetVideosDirectory() const;
@@ -29,8 +31,7 @@ private:
     ~Configuration() = default;
 
     std::string mID;
-    Camera mCamera;
-    Scene mScene;
+    YAML::Node mRoot;
 
     void CreateOutputDirectory() const;
 };

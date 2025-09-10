@@ -40,12 +40,16 @@ void Camera::SetResolution(size_t width, size_t height) {
     mResolution = {width, height};
 }
 
+void Camera::SetSamplesPerPixel(size_t samples) {
+    mSamplesPerPixel = samples;
+}
+
 void Camera::SetUseAntiAliasing(bool useAA) {
     mUseAntiAliasing = useAA;
 }
 
 Image Camera::Render(const Scene& scene, size_t samples, bool printProgressBar) const {
-    Image image(mResolution[0], mResolution[1]);
+    Image image(mResolution.width, mResolution.height);
 
     if (mRenderer.IsDeterministic() && !mUseAntiAliasing && samples > 1) {
         std::cerr << "Warning: Renderer is deterministic, and anti-aliasing is disabled. Setting samples to 1." << std::endl;
@@ -53,9 +57,9 @@ Image Camera::Render(const Scene& scene, size_t samples, bool printProgressBar) 
     }
 
     size_t pixelsRendered = 0;
-    auto totalPixels = mResolution[0] * mResolution[1];
-    for (size_t y = 0; y < mResolution[1]; y++) {
-        for (size_t x = 0; x < mResolution[0]; x++) {
+    auto totalPixels = mResolution.width * mResolution.height;
+    for (size_t y = 0; y < mResolution.height; y++) {
+        for (size_t x = 0; x < mResolution.width; x++) {
             double redAccumulated = 0.0;
             double greenAccumulated = 0.0;
             double blueAccumulated = 0.0;
@@ -80,7 +84,7 @@ Image Camera::Render(const Scene& scene, size_t samples, bool printProgressBar) 
 }
 
 Video Camera::FlyAround(const Scene& scene, double distance, double height, size_t numFrames, size_t samplesPerFrame, double fps) {
-    Video video("fly_around", fps);
+    Video video(fps);
     for (size_t i = 0; i < numFrames; i++) {
         double phi = 2.0 * M_PI * i / numFrames;
         PointToOrigin(height, distance, phi);
@@ -102,14 +106,15 @@ void Camera::PrintInfo() const {
     std::cout << "Position:\t" << mPosition << std::endl;
     std::cout << "Direction:\t" << mEz << std::endl;
     std::cout << "Field of View:\t" << mFieldOfView << std::endl;
-    std::cout << "Resolution:\t" << mResolution[0] << "x" << mResolution[1] << std::endl;
+    std::cout << "Resolution:\t" << mResolution.width << "x" << mResolution.height << std::endl;
+    std::cout << "Samples/Pixel:\t" << mSamplesPerPixel << std::endl;
     std::cout << "Anti-Aliasing:\t" << (mUseAntiAliasing ? "[x]" : "[ ]") << std::endl
               << std::endl;
 }
 
 Ray Camera::CreateRay(size_t x, size_t y) const {
-    const double width = double(mResolution[0]);
-    const double height = double(mResolution[1]);
+    const double width = double(mResolution.width);
+    const double height = double(mResolution.height);
 
     // Left-positive, up-positive pixel-center offsets on the image plane
     double dx = 0.0;
@@ -135,7 +140,7 @@ void Camera::ConfigureCamera() {
     mEy = mEz.Cross(mEx).Normalized();
 
     // 2. Compute pixel size
-    mPixelSize = 2.0 * mDistance * std::tan(mFieldOfView * 0.5 * M_PI / 180.0) / mResolution[0];
+    mPixelSize = 2.0 * mDistance * std::tan(mFieldOfView * 0.5 * M_PI / 180.0) / mResolution.width;
 }
 
 }  // namespace Raytracer
