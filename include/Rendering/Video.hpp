@@ -16,7 +16,7 @@ public:
     double GetFrameRate() const;
 
     void AddFrame(const Image& image);
-    void Save(bool showTerminalOutput = false, bool deleteFrameFiles = true, std::string filepath = "");
+    void Save(bool openFile = false, bool showTerminalOutput = false, bool deleteFrameFiles = true, std::string filepath = "");
 
     void PrintInfo() const;
 
