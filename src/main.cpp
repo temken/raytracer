@@ -53,7 +53,9 @@ int main(int argc, char** argv) {
     camera.PrintInfo();
     scene.PrintInfo();
 
-    camera.Render(scene);
+    bool openOutputFiles = true;
+    Image image = camera.Render(scene);
+    image.Save(openOutputFiles);
 
     ////////////////////////////////////////////////////////////////////////
     //Final terminal output

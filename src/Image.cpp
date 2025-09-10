@@ -43,7 +43,7 @@ void Image::Clear(const Color& color) {
     std::fill(mPixels.begin(), mPixels.end(), color);
 }
 
-bool Image::Save(std::string filepath) const {
+bool Image::Save(bool openFile, std::string filepath) const {
     if (mWidth == 0 || mHeight == 0 || mPixels.empty()) {
         return false;
     }
@@ -86,6 +86,19 @@ bool Image::Save(std::string filepath) const {
         std::filesystem::create_directories(dirPath);
     }
     int ok = stbi_write_png(filename.c_str(), w, h, comp, rgba.data(), stride);
+
+    if (openFile) {
+        std::string command;
+#ifdef __APPLE__
+        command = "open " + filepath;
+#elif __linux__
+        command = "xdg-open " + filepath;
+#elif _WIN32
+        command = "start " + filepath;
+#endif
+        std::system(command.c_str());
+    }
+
     return ok != 0;
 }
 

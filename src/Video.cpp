@@ -34,7 +34,7 @@ void Video::AddFrame(const Image& image) {
     mFrames.push_back(image);
 }
 
-void Video::Save(bool showTerminalOutput, bool deleteFrameFiles, std::string filepath) {
+void Video::Save(bool openFile, bool showTerminalOutput, bool deleteFrameFiles, std::string filepath) {
     if (mFrames.empty()) {
         std::cerr << "No frames to save." << std::endl;
         return;
@@ -52,7 +52,7 @@ void Video::Save(bool showTerminalOutput, bool deleteFrameFiles, std::string fil
     for (std::size_t i = 0; i < mFrames.size(); i++) {
         const std::string frameFilename = std::format("frame_{:04}.png", static_cast<int>(i + 1));
 
-        mFrames[i].Save((outputDirectoryPath / frameFilename).string());
+        mFrames[i].Save(false, (outputDirectoryPath / frameFilename).string());
     }
 
     // Generate video from frame files
@@ -70,6 +70,18 @@ void Video::Save(bool showTerminalOutput, bool deleteFrameFiles, std::string fil
         for (std::size_t i = 0; i < mFrames.size(); i++) {
             std::filesystem::remove((outputDirectoryPath / std::format("frame_{:04}.png", static_cast<int>(i + 1))).string());
         }
+    }
+
+    if (openFile) {
+        std::string command;
+#ifdef __APPLE__
+        command = "open " + filepath;
+#elif __linux__
+        command = "xdg-open " + filepath;
+#elif _WIN32
+        command = "start " + filepath;
+#endif
+        std::system(command.c_str());
     }
 }
 

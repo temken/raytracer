@@ -19,7 +19,7 @@ public:
     void SetPixel(std::size_t x, std::size_t y, const Color& color);
     Color GetPixel(std::size_t x, std::size_t y) const;
 
-    bool Save(std::string filepath = "") const;
+    bool Save(bool openFile = false, std::string filepath = "") const;
 
     void Clear(const Color& color = Color(0, 0, 0));
 
