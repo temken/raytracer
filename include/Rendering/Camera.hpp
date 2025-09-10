@@ -14,10 +14,16 @@ public:
     Camera();
     Camera(const Vector3D& position, const Vector3D& direction);
 
+    struct Resolution {
+        size_t width{800};
+        size_t height{600};
+    };
+
     void SetPosition(const Vector3D& position);
     void SetDirection(const Vector3D& direction);
     void SetFieldOfView(double fov);
     void SetResolution(size_t width, size_t height);
+    void SetSamplesPerPixel(size_t samples);
     void SetUseAntiAliasing(bool useAA);
 
     Image Render(const Scene& scene, size_t samples = 1, bool printProgressBar = false) const;
@@ -37,9 +43,10 @@ private:
     double mFieldOfView = 90.0;  // in degrees
     double mDistance = 1.0;      // Distance from the camera to the image plane
     double mPixelSize;           // at distance 1 from camera
-    std::array<size_t, 2> mResolution = {800, 600};
+    Camera::Resolution mResolution;
 
     Renderer mRenderer;
+    size_t mSamplesPerPixel = 1;
     bool mUseAntiAliasing = false;
 
     Ray CreateRay(size_t x, size_t y) const;

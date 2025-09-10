@@ -46,28 +46,14 @@ int main(int argc, char** argv) {
     }
     ////////////////////////////////////////////////////////////////////////
 
-    //Create Scene
-
-    // Create Camera
-    Camera camera;
-    camera.SetFieldOfView(90.0);
-    camera.SetResolution(1600, 1200);
-    camera.SetUseAntiAliasing(false);
-
-    camera.SetPosition(Vector3D({15, 0, 0}));
-    camera.SetDirection(Vector3D({-1, 0, 0}));
-
-    // camera.PointToOrigin(0, 15.0, 0);
+    Configuration::GetInstance().PrintInfo();
+    Camera camera = Configuration::GetInstance().ConstructCamera();
+    Scene scene = Configuration::GetInstance().ConstructScene();
 
     camera.PrintInfo();
+    scene.PrintInfo();
 
-    Image image = camera.Render(scene, 100, true);
-    image.Save(PROJECT_DIR "images/output2.png");
-    std::system("open " PROJECT_DIR "images/output2.png");
-
-    Video video = camera.FlyAround(scene, 10.0, 0.0, 60);
-    video.Save();
-    std::system("open " PROJECT_DIR "videos/fly_around/fly_around.mp4");
+    camera.Render(scene);
 
     ////////////////////////////////////////////////////////////////////////
     //Final terminal output
