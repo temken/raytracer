@@ -75,12 +75,8 @@ Scene Configuration::ConstructScene() const {
     return Scene();
 }
 
-std::string Configuration::GetImagesDirectory() const {
-    return PROJECT_DIR "output/" + mID + "/images/";
-}
-
-std::string Configuration::GetVideosDirectory() const {
-    return PROJECT_DIR "output/" + mID + "/videos/";
+std::string Configuration::GetOutputDirectory() const {
+    return PROJECT_DIR "output/" + mID;
 }
 
 void Configuration::PrintInfo() const {
@@ -89,8 +85,7 @@ void Configuration::PrintInfo() const {
 }
 
 void Configuration::CreateOutputDirectory() const {
-    std::filesystem::create_directories(GetImagesDirectory());
-    std::filesystem::create_directories(GetVideosDirectory());
+    std::filesystem::create_directories(GetOutputDirectory());
 }
 
 }  // namespace Raytracer

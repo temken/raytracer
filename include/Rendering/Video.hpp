@@ -8,7 +8,7 @@ namespace Raytracer {
 
 class Video {
 public:
-    Video(const std::string& name, double fps = 30.0);
+    Video(double fps = 30.0);
 
     double GetDuration() const;  // in seconds
 
@@ -16,12 +16,11 @@ public:
     double GetFrameRate() const;
 
     void AddFrame(const Image& image);
-    void Save(bool showTerminalOutput = false, bool deleteFrameFiles = true);
+    void Save(bool showTerminalOutput = false, bool deleteFrameFiles = true, std::string filepath = "");
 
     void PrintInfo() const;
 
 private:
-    std::string name;
     size_t mWidth = 0;
     size_t mHeight = 0;
     double mFPS = 30.0;
