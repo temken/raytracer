@@ -40,6 +40,10 @@ void Camera::SetResolution(size_t width, size_t height) {
     mResolution = {width, height};
 }
 
+void Camera::SetFramesPerSecond(double fps) {
+    mFramesPerSecond = fps;
+}
+
 void Camera::SetSamplesPerPixel(size_t samples) {
     mSamplesPerPixel = samples;
 }
@@ -48,10 +52,11 @@ void Camera::SetUseAntiAliasing(bool useAA) {
     mUseAntiAliasing = useAA;
 }
 
-Image Camera::Render(const Scene& scene, size_t samples, bool printProgressBar) const {
+Image Camera::Render(const Scene& scene, bool printProgressBar) const {
     Image image(mResolution.width, mResolution.height);
 
-    if (mRenderer.IsDeterministic() && !mUseAntiAliasing && samples > 1) {
+    size_t samples = mSamplesPerPixel;
+    if (mRenderer.IsDeterministic() && !mUseAntiAliasing && mSamplesPerPixel > 1) {
         std::cerr << "Warning: Renderer is deterministic, and anti-aliasing is disabled. Setting samples to 1." << std::endl;
         samples = 1;
     }
@@ -83,12 +88,15 @@ Image Camera::Render(const Scene& scene, size_t samples, bool printProgressBar) 
     return image;
 }
 
-Video Camera::FlyAround(const Scene& scene, double distance, double height, size_t numFrames, size_t samplesPerFrame, double fps) {
-    Video video(fps);
+Video Camera::FlyAround(const Scene& scene, size_t numFrames) {
+    Video video(mFramesPerSecond);
+    double rho = std::sqrt(mPosition.NormSquared() - mPosition[2] * mPosition[2]);
+    double z = mPosition[2];
+
     for (size_t i = 0; i < numFrames; i++) {
         double phi = 2.0 * M_PI * i / numFrames;
-        PointToOrigin(height, distance, phi);
-        Image frame = Render(scene, samplesPerFrame);
+        PointToOrigin(z, rho, phi);
+        Image frame = Render(scene);
         video.AddFrame(frame);
         libphysica::Print_Progress_Bar(double(i + 1) / numFrames);
     }
@@ -102,13 +110,14 @@ void Camera::PointToOrigin(double height, double rho, double phi) {
 }
 
 void Camera::PrintInfo() const {
-    std::cout << "Camera Information:" << std::endl;
-    std::cout << "Position:\t" << mPosition << std::endl;
-    std::cout << "Direction:\t" << mEz << std::endl;
-    std::cout << "Field of View:\t" << mFieldOfView << std::endl;
-    std::cout << "Resolution:\t" << mResolution.width << "x" << mResolution.height << std::endl;
-    std::cout << "Samples/Pixel:\t" << mSamplesPerPixel << std::endl;
-    std::cout << "Anti-Aliasing:\t" << (mUseAntiAliasing ? "[x]" : "[ ]") << std::endl
+    std::cout << "Camera Information:" << std::endl
+              << "Position:\t" << mPosition << std::endl
+              << "Direction:\t" << mEz << std::endl
+              << "Field of View:\t" << mFieldOfView << std::endl
+              << "Resolution:\t" << mResolution.width << "x" << mResolution.height << std::endl
+              << "FPS:\t\t" << mFramesPerSecond << std::endl
+              << "Samples/Pixel:\t" << mSamplesPerPixel << std::endl
+              << "Anti-Aliasing:\t" << (mUseAntiAliasing ? "[x]" : "[ ]") << std::endl
               << std::endl;
 }
 

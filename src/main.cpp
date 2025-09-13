@@ -57,6 +57,9 @@ int main(int argc, char** argv) {
     Image image = camera.Render(scene);
     image.Save(openOutputFiles);
 
+    Video video = camera.FlyAround(scene, 60);
+    video.Save(openOutputFiles);
+
     ////////////////////////////////////////////////////////////////////////
     //Final terminal output
     auto time_end = std::chrono::system_clock::now();
