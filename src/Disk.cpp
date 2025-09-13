@@ -31,7 +31,11 @@ std::optional<Intersection> Disk::Intersect(const Ray& ray) const {
 }
 
 void Disk::PrintInfo() const {
-    std::cout << "Disk: Center = " << mCenter << ", Normal = " << mNormal << ", Radius = " << mRadius << std::endl;
+    std::cout << "Disk: " << mName << std::endl
+              << "\tCenter = " << mCenter << std::endl
+              << "\tNormal = " << mNormal << std::endl
+              << "\tRadius = " << mRadius << std::endl
+              << "\tColor = " << mColor << std::endl;
 }
 
 }  // namespace Raytracer
