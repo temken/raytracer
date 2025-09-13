@@ -41,12 +41,12 @@ std::optional<Intersection> Rectangle::Intersect(const Ray& ray) const {
 }
 
 void Rectangle::PrintInfo() const {
-    std::cout << "Rectangle: " << std::endl;
-    std::cout << "  Center: " << mCenter << std::endl;
-    std::cout << "  Normal: " << mNormal << std::endl;
-    std::cout << "  Width: " << mWidth << std::endl;
-    std::cout << "  Height: " << mHeight << std::endl;
-    std::cout << "  Color: " << GetColor() << std::endl;
+    std::cout << "Rectangle: " << std::endl
+              << "\tCenter: " << mCenter << std::endl
+              << "\tNormal: " << mNormal << std::endl
+              << "\tWidth: " << mWidth << std::endl
+              << "\tHeight: " << mHeight << std::endl
+              << "\tColor: " << GetColor() << std::endl;
 }
 
 }  // namespace Raytracer

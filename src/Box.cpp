@@ -55,10 +55,11 @@ std::optional<Intersection> Box::Intersect(const Ray& ray) const {
 
 void Box::PrintInfo() const {
     std::cout << "Box: " << std::endl;
-    std::cout << "  Center: " << mCenter << std::endl;
-    std::cout << "  Dimensions: (" << mLength << "x" << mWidth << "x" << mHeight << ")" << std::endl;
+    std::cout << "\tCenter: " << mCenter << std::endl;
+    std::cout << "\tDimensions: (" << mLength << "x" << mWidth << "x" << mHeight << ")" << std::endl;
     for (size_t i = 0; i < mFaces.size(); ++i) {
-        std::cout << "  Face " << i + 1 << ":" << std::endl;
+        std::cout << "\tFace " << i + 1 << ":" << std::endl
+                  << "\t";
         mFaces[i].PrintInfo();
     }
 }

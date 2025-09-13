@@ -46,8 +46,9 @@ std::optional<Intersection> Sphere::Intersect(const Ray& ray) const {
 
 void Sphere::PrintInfo() const {
     std::cout << "Sphere:" << std::endl
-              << "  Center: " << mCenter << std::endl
-              << "  Radius: " << mRadius << std::endl;
+              << "\tCenter: " << mCenter << std::endl
+              << "\tRadius: " << mRadius << std::endl
+              << "\tColor: " << mColor << std::endl;
 }
 
 }  // namespace Raytracer
