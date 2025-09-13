@@ -1,7 +1,11 @@
 #pragma once
 
 #include "Rendering/Camera.hpp"
+#include "Scene/Box.hpp"
+#include "Scene/Disk.hpp"
+#include "Scene/Rectangle.hpp"
 #include "Scene/Scene.hpp"
+#include "Scene/Sphere.hpp"
 
 #include <yaml-cpp/yaml.h>
 
@@ -31,6 +35,14 @@ private:
 
     std::string mID;
     YAML::Node mRoot;
+
+    static Vector3D ParseVector3D(const YAML::Node& n);
+    static Color ParseColor(const YAML::Node& n);
+
+    Sphere ParseSphere(const YAML::Node& obj) const;
+    Disk ParseDisk(const YAML::Node& obj) const;
+    Rectangle ParseRectangle(const YAML::Node& obj) const;
+    Box ParseBox(const YAML::Node& obj) const;
 
     void CreateOutputDirectory() const;
 };
