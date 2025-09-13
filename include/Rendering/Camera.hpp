@@ -23,11 +23,12 @@ public:
     void SetDirection(const Vector3D& direction);
     void SetFieldOfView(double fov);
     void SetResolution(size_t width, size_t height);
+    void SetFramesPerSecond(double fps);
     void SetSamplesPerPixel(size_t samples);
     void SetUseAntiAliasing(bool useAA);
 
-    Image Render(const Scene& scene, size_t samples = 1, bool printProgressBar = false) const;
-    Video FlyAround(const Scene& scene, double distance, double height, size_t numFrames, size_t samplesPerFrame = 1, double fps = 30.0);
+    Image Render(const Scene& scene, bool printProgressBar = false) const;
+    Video FlyAround(const Scene& scene, size_t numFrames);
 
     void PointToOrigin(double height, double rho, double phi);
 
@@ -44,6 +45,7 @@ private:
     double mDistance = 1.0;      // Distance from the camera to the image plane
     double mPixelSize;           // at distance 1 from camera
     Camera::Resolution mResolution;
+    double mFramesPerSecond = 30.0;
 
     Renderer mRenderer;
     size_t mSamplesPerPixel = 1;

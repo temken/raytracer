@@ -46,29 +46,29 @@ void Video::Save(bool openFile, bool showTerminalOutput, bool deleteFrameFiles, 
         std::filesystem::create_directories(outputDirectory + "/videos/");
         filepath = outputDirectory + "/videos/video_" + std::to_string(std::time(nullptr)) + ".mp4";
     }
-    std::filesystem::path outputDirectoryPath = filepath;
+    std::filesystem::path outputFilepath = filepath;
+    std::filesystem::path outputDirectory = outputFilepath.parent_path();
 
     // Save video frames to individual files
     for (std::size_t i = 0; i < mFrames.size(); i++) {
         const std::string frameFilename = std::format("frame_{:04}.png", static_cast<int>(i + 1));
 
-        mFrames[i].Save(false, (outputDirectoryPath / frameFilename).string());
+        mFrames[i].Save(false, (outputDirectory / frameFilename).string());
     }
 
     // Generate video from frame files
-    std::string videoFilename = outputDirectoryPath.string() + "video_" + std::to_string(std::time(nullptr)) + ".mp4";
     std::string ffmpegCommand = std::format(
         "{} -y {} -framerate {} -i {}/frame_%04d.png -c:v libx264 -pix_fmt yuv420p {}",
         FFMPEG_PATH,
         showTerminalOutput ? "" : "-v warning",
         mFPS,
-        outputDirectoryPath.string(),
-        videoFilename);
+        outputDirectory.string(),
+        filepath);
     std::system(ffmpegCommand.c_str());
 
     if (deleteFrameFiles) {
         for (std::size_t i = 0; i < mFrames.size(); i++) {
-            std::filesystem::remove((outputDirectoryPath / std::format("frame_{:04}.png", static_cast<int>(i + 1))).string());
+            std::filesystem::remove((outputDirectory / std::format("frame_{:04}.png", static_cast<int>(i + 1))).string());
         }
     }
 

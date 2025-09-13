@@ -60,6 +60,7 @@ Camera Configuration::ConstructCamera() const {
     size_t height = res["height"].as<int>();
     bool useAntiAliasing = node["antialiasing"].as<bool>();
     size_t samplesPerPixel = node["samples_per_pixel"].as<int>();
+    double framesPerSecond = node["framesPerSecond"] ? node["framesPerSecond"].as<double>() : 30.0;
 
     // Configure the camera
     Camera camera(position, direction);
@@ -67,6 +68,7 @@ Camera Configuration::ConstructCamera() const {
     camera.SetResolution(width, height);
     camera.SetSamplesPerPixel(samplesPerPixel);
     camera.SetUseAntiAliasing(useAntiAliasing);
+    camera.SetFramesPerSecond(framesPerSecond);
 
     return camera;
 }
@@ -112,6 +114,8 @@ std::string Configuration::GetOutputDirectory() const {
 void Configuration::PrintInfo() const {
     std::cout << "Configuration Information:" << std::endl;
     std::cout << "ID: " << mID << std::endl;
+    std::cout << "Output Directory: " << GetOutputDirectory() << std::endl
+              << std::endl;
 }
 
 Vector3D Configuration::ParseVector3D(const YAML::Node& n) {
