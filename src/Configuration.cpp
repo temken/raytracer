@@ -98,6 +98,8 @@ Scene Configuration::ConstructScene() const {
                 scene.AddObject(std::make_unique<Rectangle>(ParseRectangle(obj)));
             } else if (type == "Box") {
                 scene.AddObject(std::make_unique<Box>(ParseBox(obj)));
+            } else if (type == "Cylinder") {
+                scene.AddObject(std::make_unique<Cylinder>(ParseCylinder(obj)));
             } else {
                 throw std::runtime_error("Unknown object type: " + type);
             }
@@ -250,6 +252,25 @@ Box Configuration::ParseBox(const YAML::Node& obj) const {
     Box box(id, center, length, width, height, colors, reflectives);
     box.SetVisible(visible);
     return box;
+}
+
+Cylinder Configuration::ParseCylinder(const YAML::Node& obj) const {
+    std::string id = obj["id"].as<std::string>();
+    bool visible = obj["visible"] ? obj["visible"].as<bool>() : true;
+    Vector3D center = ParseVector3D(obj["position"]);
+    Vector3D normal = ParseVector3D(obj["normal"]);
+    double radius = obj["radius"].as<double>();
+    double height = obj["height"].as<double>();
+
+    auto m = obj["material"];
+    Color mantleColor = ParseColor(m["mantle_color"]);
+    Color capColor = ParseColor(m["cap_color"]);
+    bool reflective = m["reflective"].as<bool>();
+
+    Cylinder cylinder(id, center, normal, radius, height, mantleColor, capColor);
+    cylinder.SetVisible(visible);
+    cylinder.SetReflective(reflective);
+    return cylinder;
 }
 
 void Configuration::CreateOutputDirectory() const {
