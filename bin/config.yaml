@@ -1,0 +1,187 @@
+id: scene-001
+
+camera:
+  fov_deg: 120.0
+  position: [9.0, 0.0, 0.0]
+  direction: [-1.0, 0.0, 0.0]
+  resolution:
+    width: 800
+    height: 600
+  framesPerSecond: 30
+  antialiasing: false
+  samples_per_pixel: 1
+
+scene:
+  background_color: [0.0, 0.0, 0.0]
+  objects:
+    - type: Rectangle
+      id: floor
+      visible: true
+      position: [0.0, 0.0, -5.0]
+      normal: [0.0, 0.0, 1.0]
+      dimensions:
+        width: 20.0
+        height: 20.0
+      material:
+        color: blue
+        reflective: false
+
+    - type: Rectangle
+      id: right-wall
+      visible: true
+      position: [0.0, 10.0, 0.0]
+      normal: [0.0, -1.0, 0.0]
+      dimensions:
+        width: 10.0
+        height: 20.0
+      material:
+        color: green
+        reflective: false
+
+    - type: Rectangle
+      id: left-wall
+      visible: true
+      position: [0.0, -10.0, 0.0]
+      normal: [0.0, 1.0, 0.0]
+      dimensions:
+        width: 10.0
+        height: 20.0
+      material:
+        color: red
+        reflective: false
+
+    - type: Rectangle
+      id: ceiling
+      visible: true
+      position: [0.0, 0.0, 5.0]
+      normal: [0.0, 0.0, -1.0]
+      dimensions:
+        width: 20.0
+        height: 20.0
+      material:
+        color: orange
+        reflective: false
+
+    - type: Rectangle
+      id: back-wall
+      visible: true
+      position: [-10, 0.0, 0.0]
+      normal: [1.0, 0.0, 0.0]
+      dimensions:
+        width: 10.0
+        height: 20.0
+      material:
+        color: yellow
+        reflective: false
+
+    - type: Rectangle
+      id: front-wall
+      visible: true
+      position: [10, 0.0, 0.0]
+      normal: [-1.0, 0.0, 0.0]
+      dimensions:
+        width: 10.0
+        height: 20.0
+      material:
+        color: cyan
+        reflective: false
+
+    - type: Disk
+      id: ceiling-disk
+      visible: true
+      position: [0.0, 0.0, 4.99]
+      normal: [0.0, 0.0, -1.0]
+      radius: 1.0
+      material:
+        color: yellow
+        reflective: false
+
+    - type: Disk
+      id: mirror-left
+      visible: true
+      position: [0.0, -9.99, 0]
+      normal: [0.0, 1.0, 0.0]
+      radius: 2.5
+      material:
+        color: white
+        reflective: true
+
+    - type: Sphere
+      id: mirror-ball
+      visible: true
+      position: [0.0, 0.0, 0]
+      radius: 2.0
+      material:
+        color: [1.0, 1.0, 1.0]
+        reflective: true
+
+    - type: Sphere
+      id: blue-ball
+      visible: true
+      position: [3.0, 4.0, 2.0]
+      radius: 2.0
+      material:
+        color: blue
+        reflective: false
+
+    - type: Sphere
+      id: red-ball
+      visible: true
+      position: [-3.0, -4.0, -2.0]
+      radius: 1.0
+      material:
+        color: red
+        reflective: false
+
+    - type: Cylinder
+      id: corner-cylinder
+      visible: true
+      position: [-9.0, -9.0, 0.0]
+      normal: [0.0, 0.0, 1.0]
+      radius: 1.0
+      height: 10.0
+      material:
+        mantle_color: green
+        cap_color: black
+        reflective: false
+
+    - type: Cylinder
+      id: small-cylinder
+      visible: true
+      position: [-6.0, 5.0, -3.0]
+      normal: [1.0, 1.0, 1.0]
+      radius: 1.0
+      height: 2.0
+      material:
+        mantle_color: cyan
+        cap_color: yellow
+        reflective: false
+
+    - type: Box
+      id: room
+      visible: true
+      position: [0, 7.5, -3.75]
+      dimensions:
+        length: 2.5
+        width: 2.5
+        height: 2.5
+      material:
+        face_colors:
+          "+x":
+            color: red
+            reflective: false
+          "-x":
+            color: green
+            reflective: false
+          "+y":
+            color: blue
+            reflective: false
+          "-y":
+            color: yellow
+            reflective: false
+          "+z":
+            color: cyan
+            reflective: false
+          "-z":
+            color: blue
+            reflective: false
