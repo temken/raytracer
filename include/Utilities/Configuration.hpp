@@ -2,6 +2,7 @@
 
 #include "Rendering/Camera.hpp"
 #include "Scene/Box.hpp"
+#include "Scene/Cylinder.hpp"
 #include "Scene/Disk.hpp"
 #include "Scene/Rectangle.hpp"
 #include "Scene/Scene.hpp"
@@ -43,6 +44,7 @@ private:
     Disk ParseDisk(const YAML::Node& obj) const;
     Rectangle ParseRectangle(const YAML::Node& obj) const;
     Box ParseBox(const YAML::Node& obj) const;
+    Cylinder ParseCylinder(const YAML::Node& obj) const;
 
     void CreateOutputDirectory() const;
 };
