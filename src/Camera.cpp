@@ -144,7 +144,7 @@ Ray Camera::CreateRay(size_t x, size_t y) const {
 void Camera::ConfigureCamera() {
     // 1. Create orthogonal basis
     // The eX vector points horizontally to the left of eZ
-    mEx = mEz.Cross(Vector3D({0, 0, 1})).Normalized();
+    mEx = -1.0 * mEz.Cross(Vector3D({0, 0, 1})).Normalized();
     // The eY vector points vertically up
     mEy = mEz.Cross(mEx).Normalized();
 

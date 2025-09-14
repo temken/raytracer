@@ -78,8 +78,6 @@ bool Image::Save(bool openFile, std::string filepath) const {
     const int comp = 4;
     const int stride = w * comp;
 
-    stbi_flip_vertically_on_write(1);
-
     std::filesystem::path filename = filepath;
     std::filesystem::path dirPath = filename.parent_path();
     if (!dirPath.empty()) {
