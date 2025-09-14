@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
     Image image = camera.Render(scene);
     image.Save(openOutputFiles);
 
-    Video video = camera.FlyAround(scene, 60);
+    Video video = camera.RenderOrbitVideo(scene, 120);
     video.Save(openOutputFiles);
 
     ////////////////////////////////////////////////////////////////////////
