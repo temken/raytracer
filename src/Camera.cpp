@@ -88,7 +88,7 @@ Image Camera::Render(const Scene& scene, bool printProgressBar) const {
     return image;
 }
 
-Video Camera::FlyAround(const Scene& scene, size_t numFrames) {
+Video Camera::RenderOrbitVideo(const Scene& scene, size_t numFrames) {
     Video video(mFramesPerSecond);
     double rho = std::sqrt(mPosition.NormSquared() - mPosition[2] * mPosition[2]);
     double z = mPosition[2];

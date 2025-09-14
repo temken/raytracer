@@ -28,7 +28,7 @@ public:
     void SetUseAntiAliasing(bool useAA);
 
     Image Render(const Scene& scene, bool printProgressBar = false) const;
-    Video FlyAround(const Scene& scene, size_t numFrames);
+    Video RenderOrbitVideo(const Scene& scene, size_t numFrames);
 
     void PointToOrigin(double height, double rho, double phi);
 
