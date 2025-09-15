@@ -51,6 +51,8 @@ Camera Configuration::ConstructCamera() const {
     Renderer::Type rendererType;
     if (renderingEngineStr == "SIMPLE") {
         rendererType = Renderer::Type::SIMPLE;
+    } else if (renderingEngineStr == "MONTE_CARLO") {
+        rendererType = Renderer::Type::MONTE_CARLO;
     } else {
         throw std::invalid_argument("Unknown rendering type: " + renderingEngineStr);
     }
@@ -186,6 +188,7 @@ Color Configuration::ParseColor(const YAML::Node& n) {
 Disk Configuration::ParseDisk(const YAML::Node& obj) const {
     std::string id = obj["id"].as<std::string>();
     bool visible = obj["visible"] ? obj["visible"].as<bool>() : true;
+    bool emitsLight = obj["emits_light"] ? obj["emits_light"].as<bool>() : false;
     Vector3D position = ParseVector3D(obj["position"]);
     Vector3D normal = ParseVector3D(obj["normal"]);
     double radius = obj["radius"].as<double>();
@@ -196,6 +199,7 @@ Disk Configuration::ParseDisk(const YAML::Node& obj) const {
 
     Disk disk(id, position, normal, radius, color);
     disk.SetVisible(visible);
+    disk.SetEmitsLight(emitsLight);
     disk.SetReflective(reflective);
     return disk;
 }
@@ -203,6 +207,7 @@ Disk Configuration::ParseDisk(const YAML::Node& obj) const {
 Sphere Configuration::ParseSphere(const YAML::Node& obj) const {
     std::string id = obj["id"].as<std::string>();
     bool visible = obj["visible"] ? obj["visible"].as<bool>() : true;
+    bool emitsLight = obj["emits_light"] ? obj["emits_light"].as<bool>() : false;
     Vector3D center = ParseVector3D(obj["position"]);
     double radius = obj["radius"].as<double>();
 
@@ -212,6 +217,7 @@ Sphere Configuration::ParseSphere(const YAML::Node& obj) const {
 
     Sphere sphere(id, center, radius, color);
     sphere.SetVisible(visible);
+    sphere.SetEmitsLight(emitsLight);
     sphere.SetReflective(reflective);
     return sphere;
 }
@@ -219,6 +225,7 @@ Sphere Configuration::ParseSphere(const YAML::Node& obj) const {
 Rectangle Configuration::ParseRectangle(const YAML::Node& obj) const {
     std::string id = obj["id"].as<std::string>();
     bool visible = obj["visible"] ? obj["visible"].as<bool>() : true;
+    bool emitsLight = obj["emits_light"] ? obj["emits_light"].as<bool>() : false;
     Vector3D center = ParseVector3D(obj["position"]);
     Vector3D normal = ParseVector3D(obj["normal"]);
 
@@ -232,6 +239,7 @@ Rectangle Configuration::ParseRectangle(const YAML::Node& obj) const {
 
     Rectangle rectangle(id, center, normal, width, height, color);
     rectangle.SetVisible(visible);
+    rectangle.SetEmitsLight(emitsLight);
     rectangle.SetReflective(reflective);
     return rectangle;
 }
@@ -239,7 +247,7 @@ Rectangle Configuration::ParseRectangle(const YAML::Node& obj) const {
 Box Configuration::ParseBox(const YAML::Node& obj) const {
     std::string id = obj["id"].as<std::string>();
     bool visible = obj["visible"] ? obj["visible"].as<bool>() : true;
-
+    bool emitsLight = obj["emits_light"] ? obj["emits_light"].as<bool>() : false;
     Vector3D center = ParseVector3D(obj["position"]);
 
     auto dim = obj["dimensions"];
@@ -260,12 +268,14 @@ Box Configuration::ParseBox(const YAML::Node& obj) const {
 
     Box box(id, center, length, width, height, colors, reflectives);
     box.SetVisible(visible);
+    box.SetEmitsLight(emitsLight);
     return box;
 }
 
 Cylinder Configuration::ParseCylinder(const YAML::Node& obj) const {
     std::string id = obj["id"].as<std::string>();
     bool visible = obj["visible"] ? obj["visible"].as<bool>() : true;
+    bool emitsLight = obj["emits_light"] ? obj["emits_light"].as<bool>() : false;
     Vector3D center = ParseVector3D(obj["position"]);
     Vector3D normal = ParseVector3D(obj["normal"]);
     double radius = obj["radius"].as<double>();
@@ -278,6 +288,7 @@ Cylinder Configuration::ParseCylinder(const YAML::Node& obj) const {
 
     Cylinder cylinder(id, center, normal, radius, height, mantleColor, capColor);
     cylinder.SetVisible(visible);
+    cylinder.SetEmitsLight(emitsLight);
     cylinder.SetReflective(reflective);
     return cylinder;
 }

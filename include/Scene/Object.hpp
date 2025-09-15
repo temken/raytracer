@@ -27,6 +27,14 @@ public:
         return mName;
     }
 
+    bool EmitsLight() const {
+        return mEmitsLight;
+    }
+
+    void SetEmitsLight(bool emitsLight) {
+        mEmitsLight = emitsLight;
+    }
+
     bool IsReflective() const {
         return mIsReflective;
     }
@@ -51,7 +59,9 @@ protected:
     std::string mName;
     bool mVisible = true;
 
+    // Material properties
     Color mColor;
+    bool mEmitsLight = false;
     bool mIsReflective = false;
 
     static constexpr double sEpsilon = 1e-6;

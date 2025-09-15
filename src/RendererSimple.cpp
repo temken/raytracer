@@ -2,7 +2,7 @@
 
 namespace Raytracer {
 
-Color RendererSimple::TraceRay(const Ray& ray, const Scene& scene) {
+Color RendererSimple::TraceRay(Ray ray, const Scene& scene) {
     auto intersection = Intersect(ray, scene);
     if (intersection) {
         if (intersection->object && intersection->object->IsReflective()) {

@@ -1,5 +1,6 @@
 #include "Rendering/Camera.hpp"
 
+#include "Rendering/RendererMC.hpp"
 #include "Rendering/RendererSimple.hpp"
 
 #include "libphysica/Utilities.hpp"
@@ -161,7 +162,8 @@ std::unique_ptr<Renderer> Camera::CreateRenderer(Renderer::Type type) {
     switch (type) {
         case Renderer::Type::SIMPLE:
             return std::make_unique<RendererSimple>();
-        // Future renderers can be added here
+        case Renderer::Type::MONTE_CARLO:
+            return std::make_unique<RendererMC>();
         default:
             throw std::invalid_argument("Unknown renderer type");
     }
