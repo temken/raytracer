@@ -3,21 +3,25 @@
 namespace Raytracer {
 
 Vector3D Ray::GetOrigin() const {
-    return origin;
+    return mOrigin;
 }
 Vector3D Ray::GetDirection() const {
-    return direction;
+    return mDirection;
+}
+
+Color Ray::GetColor() const {
+    return mColor;
 }
 
 void Ray::SetOrigin(const Vector3D& newOrigin) {
-    origin = newOrigin;
+    mOrigin = newOrigin;
 }
 void Ray::SetDirection(const Vector3D& newDirection) {
-    direction = newDirection.Normalized();
+    mDirection = newDirection.Normalized();
 }
 
 Vector3D Ray::PointAtParameter(double t) const {
-    return origin + t * direction;
+    return mOrigin + t * mDirection;
 }
 
 }  // namespace Raytracer

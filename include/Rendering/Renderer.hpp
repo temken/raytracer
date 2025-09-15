@@ -11,12 +11,13 @@ class Renderer {
 public:
     enum class Type {
         SIMPLE,
+        MONTE_CARLO,
         // Future renderers can be added here
     };
 
     explicit Renderer(Type type, bool deterministic);
 
-    virtual Color TraceRay(const Ray& ray, const Scene& scene) = 0;
+    virtual Color TraceRay(Ray ray, const Scene& scene) = 0;
 
     bool IsDeterministic() const;
 

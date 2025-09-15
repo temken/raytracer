@@ -11,7 +11,7 @@ namespace Raytracer {
 
 class Scene {
 public:
-    Scene(const Color& backgroundColor = Color(0, 0, 0));
+    Scene(const Color& backgroundColor = BLACK);
 
     void AddObject(std::unique_ptr<Object> object);
     const std::vector<std::unique_ptr<Object>>& GetObjects() const;

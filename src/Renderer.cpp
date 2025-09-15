@@ -18,7 +18,8 @@ std::string Renderer::GetTypeString() const {
     switch (mType) {
         case Type::SIMPLE:
             return "Simple";
-        // Future renderers can be added here
+        case Type::MONTE_CARLO:
+            return "Monte Carlo";
         default:
             return "Unknown";
     }

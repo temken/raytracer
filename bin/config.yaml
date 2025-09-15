@@ -1,7 +1,7 @@
 id: scene-001
 
 camera:
-  renderer_type: SIMPLE
+  renderer_type: MONTE_CARLO # Options: SIMPLE, MONTE_CARLO
   fov_deg: 120.0
   position: [9.0, 0.0, 0.0]
   direction: [-1.0, 0.0, 0.0]
@@ -13,8 +13,19 @@ camera:
   samples_per_pixel: 1
 
 scene:
-  background_color: [0.0, 0.0, 0.0]
+  background_color: black
   objects:
+    - type: Disk
+      id: ceiling-lamp
+      visible: true
+      emits_light: true
+      position: [0.0, 0.0, 4.99]
+      normal: [0.0, 0.0, -1.0]
+      radius: 2.0
+      material:
+        color: white
+        reflective: false
+
     - type: Rectangle
       id: floor
       visible: true
@@ -85,16 +96,6 @@ scene:
         height: 20.0
       material:
         color: cyan
-        reflective: false
-
-    - type: Disk
-      id: ceiling-disk
-      visible: true
-      position: [0.0, 0.0, 4.99]
-      normal: [0.0, 0.0, -1.0]
-      radius: 1.0
-      material:
-        color: yellow
         reflective: false
 
     - type: Disk

@@ -28,6 +28,14 @@ public:
         return (r == other.r) && (g == other.g) && (b == other.b) && (a == other.a);
     }
 
+    Color operator*(double scalar) const {
+        return Color(r * scalar, g * scalar, b * scalar, a * scalar);
+    }
+
+    Color operator*(const Color& other) const {
+        return Color(r * other.r, g * other.g, b * other.b, a * other.a);
+    }
+
     Color operator+(const Color& other) const {
         return Color(0.5 * (r + other.r), 0.5 * (g + other.g), 0.5 * (b + other.b), 0.5 * (a + other.a));
     }

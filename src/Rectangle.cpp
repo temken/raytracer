@@ -35,7 +35,7 @@ std::optional<Intersection> Rectangle::Intersect(const Ray& ray) const {
     double vCoord = localPoint.Dot(mV);
 
     if (std::fabs(uCoord) <= 0.5 * mWidth && std::fabs(vCoord) <= 0.5 * mHeight) {
-        return Intersection{t, hitPoint, (denom < 0) ? -1.0 * mNormal : mNormal, this};
+        return Intersection{t, hitPoint, (denom < 0) ? mNormal : -1.0 * mNormal, this};
     }
     return std::nullopt;
 }

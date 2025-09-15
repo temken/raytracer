@@ -54,11 +54,11 @@ int main(int argc, char** argv) {
     scene.PrintInfo();
 
     bool openOutputFiles = true;
-    Image image = camera.Render(scene);
+    Image image = camera.Render(scene, true);
     image.Save(openOutputFiles);
 
-    Video video = camera.RenderOrbitVideo(scene, 120);
-    video.Save(openOutputFiles);
+    // Video video = camera.RenderOrbitVideo(scene, 60);
+    // video.Save(openOutputFiles);
 
     ////////////////////////////////////////////////////////////////////////
     //Final terminal output
