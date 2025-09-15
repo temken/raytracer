@@ -1,20 +1,24 @@
 #include "Rendering/Camera.hpp"
 
+#include "Rendering/RendererSimple.hpp"
+
 #include "libphysica/Utilities.hpp"
 
 #include <random>
 
 namespace Raytracer {
 
-Camera::Camera() :
+Camera::Camera(Renderer::Type rendererType) :
     mPosition({0, 0, 0}),
-    mEz({1, 0, 0}) {
+    mEz({1, 0, 0}),
+    mRenderer(CreateRenderer(rendererType)) {
     ConfigureCamera();
 }
 
-Camera::Camera(const Vector3D& position, const Vector3D& direction) :
+Camera::Camera(const Vector3D& position, const Vector3D& direction, Renderer::Type rendererType) :
     mPosition(position),
-    mEz(direction) {
+    mEz(direction),
+    mRenderer(CreateRenderer(rendererType)) {
     ConfigureCamera();
 }
 
@@ -56,7 +60,7 @@ Image Camera::Render(const Scene& scene, bool printProgressBar) const {
     Image image(mResolution.width, mResolution.height);
 
     size_t samples = mSamplesPerPixel;
-    if (mRenderer.IsDeterministic() && !mUseAntiAliasing && mSamplesPerPixel > 1) {
+    if (mRenderer->IsDeterministic() && !mUseAntiAliasing && mSamplesPerPixel > 1) {
         std::cerr << "Warning: Renderer is deterministic, and anti-aliasing is disabled. Setting samples to 1." << std::endl;
         samples = 1;
     }
@@ -72,7 +76,7 @@ Image Camera::Render(const Scene& scene, bool printProgressBar) const {
             for (size_t s = 0; s < samples; s++) {
                 // Sample the pixel
                 Ray ray = CreateRay(x, y);
-                Color color = mRenderer.TraceRay(ray, scene);
+                Color color = mRenderer->TraceRay(ray, scene);
                 redAccumulated += color.R();
                 greenAccumulated += color.G();
                 blueAccumulated += color.B();
@@ -111,6 +115,7 @@ void Camera::PointToOrigin(double height, double rho, double phi) {
 
 void Camera::PrintInfo() const {
     std::cout << "Camera Information:" << std::endl
+              << "Renderer:\t" << mRenderer->GetTypeString() << std::endl
               << "Position:\t" << mPosition << std::endl
               << "Direction:\t" << mEz << std::endl
               << "Field of View:\t" << mFieldOfView << std::endl
@@ -150,6 +155,16 @@ void Camera::ConfigureCamera() {
 
     // 2. Compute pixel size
     mPixelSize = 2.0 * mDistance * std::tan(mFieldOfView * 0.5 * M_PI / 180.0) / mResolution.width;
+}
+
+std::unique_ptr<Renderer> Camera::CreateRenderer(Renderer::Type type) {
+    switch (type) {
+        case Renderer::Type::SIMPLE:
+            return std::make_unique<RendererSimple>();
+        // Future renderers can be added here
+        default:
+            throw std::invalid_argument("Unknown renderer type");
+    }
 }
 
 }  // namespace Raytracer

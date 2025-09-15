@@ -2,22 +2,26 @@
 
 namespace Raytracer {
 
-Color Renderer::TraceRay(const Ray& ray, const Scene& scene) {
-    auto intersection = Intersect(ray, scene);
-    if (intersection) {
-        if (intersection->object && intersection->object->IsReflective()) {
-            Vector3D reflectDir = ray.GetDirection() - 2 * ray.GetDirection().Dot(intersection->normal) * intersection->normal;
-            Ray reflectRay(intersection->point, reflectDir);
-            return TraceRay(reflectRay, scene);
-        } else {
-            return intersection->object->GetColor();
-        }
-    }
-    return scene.GetBackgroundColor();
-}
+Renderer::Renderer(Type type, bool deterministic) :
+    mType(type),
+    mIsDeterministic(deterministic) {}
 
 bool Renderer::IsDeterministic() const {
     return mIsDeterministic;
+}
+
+Renderer::Type Renderer::GetType() const {
+    return mType;
+}
+
+std::string Renderer::GetTypeString() const {
+    switch (mType) {
+        case Type::SIMPLE:
+            return "Simple";
+        // Future renderers can be added here
+        default:
+            return "Unknown";
+    }
 }
 
 std::optional<Intersection> Renderer::Intersect(const Ray& ray, const Scene& scene, double epsilon) {
