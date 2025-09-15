@@ -46,6 +46,15 @@ Camera Configuration::ConstructCamera() const {
     }
 
     // Parse camera parameters
+
+    std::string renderingEngineStr = node["renderer_type"] ? node["renderer_type"].as<std::string>() : "SIMPLE";
+    Renderer::Type rendererType;
+    if (renderingEngineStr == "SIMPLE") {
+        rendererType = Renderer::Type::SIMPLE;
+    } else {
+        throw std::invalid_argument("Unknown rendering type: " + renderingEngineStr);
+    }
+
     double fieldOfView = node["fov_deg"].as<double>();
     Vector3D position = {
         node["position"][0].as<double>(),
@@ -63,7 +72,7 @@ Camera Configuration::ConstructCamera() const {
     double framesPerSecond = node["framesPerSecond"] ? node["framesPerSecond"].as<double>() : 30.0;
 
     // Configure the camera
-    Camera camera(position, direction);
+    Camera camera(position, direction, rendererType);
     camera.SetFieldOfView(fieldOfView);
     camera.SetResolution(width, height);
     camera.SetSamplesPerPixel(samplesPerPixel);

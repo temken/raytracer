@@ -1,6 +1,7 @@
 id: scene-001
 
 camera:
+  renderer_type: SIMPLE
   fov_deg: 120.0
   position: [9.0, 0.0, 0.0]
   direction: [-1.0, 0.0, 0.0]

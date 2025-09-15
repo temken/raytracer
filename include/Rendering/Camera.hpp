@@ -11,8 +11,8 @@ namespace Raytracer {
 
 class Camera {
 public:
-    Camera();
-    Camera(const Vector3D& position, const Vector3D& direction);
+    Camera(Renderer::Type rendererType);
+    Camera(const Vector3D& position, const Vector3D& direction, Renderer::Type rendererType);
 
     struct Resolution {
         size_t width{800};
@@ -47,13 +47,14 @@ private:
     Camera::Resolution mResolution;
     double mFramesPerSecond = 30.0;
 
-    Renderer mRenderer;
+    std::unique_ptr<Renderer> mRenderer;
     size_t mSamplesPerPixel = 1;
     bool mUseAntiAliasing = false;
 
     Ray CreateRay(size_t x, size_t y) const;
 
     void ConfigureCamera();
+    static std::unique_ptr<Renderer> CreateRenderer(Renderer::Type type);
 };
 
 }  // namespace Raytracer

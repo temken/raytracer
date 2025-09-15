@@ -9,14 +9,24 @@ namespace Raytracer {
 
 class Renderer {
 public:
-    static Color TraceRay(const Ray& ray, const Scene& scene);
+    enum class Type {
+        SIMPLE,
+        // Future renderers can be added here
+    };
+
+    explicit Renderer(Type type, bool deterministic);
+
+    virtual Color TraceRay(const Ray& ray, const Scene& scene) = 0;
 
     bool IsDeterministic() const;
 
-private:
-    const bool mIsDeterministic = true;
+    Type GetType() const;
+    std::string GetTypeString() const;
 
-    static std::optional<Intersection> Intersect(const Ray& ray, const Scene& scene, double epsilon = 1e-6);
+protected:
+    Type mType;
+    bool mIsDeterministic = false;
+    virtual std::optional<Intersection> Intersect(const Ray& ray, const Scene& scene, double epsilon = 1e-6);
 };
 
 }  // namespace Raytracer
