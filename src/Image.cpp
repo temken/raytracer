@@ -43,6 +43,20 @@ void Image::Clear(const Color& color) {
     std::fill(mPixels.begin(), mPixels.end(), color);
 }
 
+double Image::CalculateBlackPixelRatio() const {
+    if (mPixels.empty()) {
+        return 0.0;
+    }
+    size_t blackPixelCount = CountBlackPixels();
+    return static_cast<double>(blackPixelCount) / static_cast<double>(mPixels.size());
+}
+
+size_t Image::CountBlackPixels() const {
+    return std::count_if(mPixels.begin(), mPixels.end(), [](const Color& c) {
+        return c == BLACK;
+    });
+}
+
 bool Image::Save(bool openFile, std::string filepath) const {
     if (mWidth == 0 || mHeight == 0 || mPixels.empty()) {
         return false;
