@@ -23,12 +23,15 @@ public:
 
     void Clear(const Color& color = Color(0, 0, 0));
 
+    double CalculateBlackPixelRatio() const;
+
 private:
     std::size_t mWidth = 100;
     std::size_t mHeight = 100;
     std::vector<Color> mPixels;
 
     void CheckBounds(std::size_t x, std::size_t y) const;
+    size_t CountBlackPixels() const;
 };
 
 }  // namespace Raytracer

@@ -15,13 +15,12 @@ camera:
 scene:
   background_color: black
   objects:
-    - type: Disk
+    - type: Sphere
       id: ceiling-lamp
       visible: true
       emits_light: true
-      position: [0.0, 0.0, 4.99]
-      normal: [0.0, 0.0, -1.0]
-      radius: 2.0
+      position: [0.0, 0.0, 5.0]
+      radius: 1.0
       material:
         color: white
         reflective: false
