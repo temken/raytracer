@@ -70,21 +70,33 @@ Image Camera::Render(const Scene& scene, bool printProgressBar) const {
     auto totalPixels = mResolution.width * mResolution.height;
     for (size_t y = 0; y < mResolution.height; y++) {
         for (size_t x = 0; x < mResolution.width; x++) {
-            double redAccumulated = 0.0;
-            double greenAccumulated = 0.0;
-            double blueAccumulated = 0.0;
-            double alphaAccumulated = 0.0;
+            Color accumulatedColor(0.0, 0.0, 0.0);
             for (size_t s = 0; s < samples; s++) {
                 // Sample the pixel
                 Ray ray = CreateRay(x, y);
                 Color color = mRenderer->TraceRay(ray, scene);
-                redAccumulated += color.R();
-                greenAccumulated += color.G();
-                blueAccumulated += color.B();
-                alphaAccumulated += color.A();
+                accumulatedColor += color;
             }
-            Color finalColor((redAccumulated / samples), (greenAccumulated / samples), (blueAccumulated / samples), (alphaAccumulated / samples));
-            image.SetPixel(x, y, finalColor);
+            Color colorAverage((accumulatedColor.R() / samples), (accumulatedColor.G() / samples), (accumulatedColor.B() / samples));
+
+            double exposureEV = 1.5;
+            double gain = std::pow(2.0, exposureEV);
+            colorAverage = colorAverage * gain;
+
+            // Reinhard tone mapping
+            double R = colorAverage.R() / (1.0 + colorAverage.R());
+            double G = colorAverage.G() / (1.0 + colorAverage.G());
+            double B = colorAverage.B() / (1.0 + colorAverage.B());
+            colorAverage = Color(R, G, B);
+
+            // To sRGB
+            auto to_srgb = [](double x) {
+                x = std::min(1.0, std::max(0.0, x));
+                return (x <= 0.0031308) ? 12.92 * x : 1.055 * std::pow(x, 1.0 / 2.4) - 0.055;
+            };
+            colorAverage = Color(to_srgb(colorAverage.R()), to_srgb(colorAverage.G()), to_srgb(colorAverage.B()));
+
+            image.SetPixel(x, y, colorAverage);
             if (printProgressBar && pixelsRendered++ % 1000 == 0) {
                 libphysica::Print_Progress_Bar(double(pixelsRendered) / totalPixels);
             }
