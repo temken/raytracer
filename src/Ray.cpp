@@ -9,10 +9,6 @@ Vector3D Ray::GetDirection() const {
     return mDirection;
 }
 
-Color Ray::GetColor() const {
-    return mColor;
-}
-
 void Ray::SetOrigin(const Vector3D& newOrigin) {
     mOrigin = newOrigin;
 }

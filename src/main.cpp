@@ -59,8 +59,8 @@ int main(int argc, char** argv) {
 
     std::cout << "\n\nBlack pixel ratio: " << image.CalculateBlackPixelRatio() * 100.0 << "%" << std::endl;
 
-    // Video video = camera.RenderOrbitVideo(scene, 60);
-    // video.Save(openOutputFiles);
+    Video video = camera.RenderOrbitVideo(scene, 60);
+    video.Save(openOutputFiles);
 
     ////////////////////////////////////////////////////////////////////////
     //Final terminal output

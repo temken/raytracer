@@ -74,11 +74,11 @@ bool Image::Save(bool openFile, std::string filepath) const {
 
     std::size_t idx = 0;
     for (const auto& c : mPixels) {
-        auto rgba255 = c.GetRGBA255();
-        rgba[idx + 0] = static_cast<std::uint8_t>(rgba255[0]);
-        rgba[idx + 1] = static_cast<std::uint8_t>(rgba255[1]);
-        rgba[idx + 2] = static_cast<std::uint8_t>(rgba255[2]);
-        rgba[idx + 3] = static_cast<std::uint8_t>(rgba255[3]);
+        auto rgb255 = c.GetRGB255();
+        rgba[idx + 0] = static_cast<std::uint8_t>(rgb255[0]);
+        rgba[idx + 1] = static_cast<std::uint8_t>(rgb255[1]);
+        rgba[idx + 2] = static_cast<std::uint8_t>(rgb255[2]);
+        rgba[idx + 3] = 255;  // Set alpha to 255 (opaque)
         idx += 4;
     }
 

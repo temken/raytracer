@@ -8,14 +8,12 @@ namespace Raytracer {
 class Ray {
 public:
     Ray() = default;
-    Ray(const Vector3D& origin, const Vector3D& direction, const Color& color = Color(1.0, 1.0, 1.0, 1.0)) :
+    Ray(const Vector3D& origin, const Vector3D& direction) :
         mOrigin(origin),
-        mDirection(direction.Normalized()),
-        mColor(color) {}
+        mDirection(direction.Normalized()) {}
 
     Vector3D GetOrigin() const;
     Vector3D GetDirection() const;
-    Color GetColor() const;
 
     void SetOrigin(const Vector3D& newOrigin);
     void SetDirection(const Vector3D& newDirection);
@@ -39,7 +37,6 @@ public:
 private:
     Vector3D mOrigin = Vector3D({0.0, 0.0, 0.0});
     Vector3D mDirection = Vector3D({1.0, 0.0, 0.0});
-    Color mColor = Color(1.0, 1.0, 1.0, 1.0);
 };
 
 }  // namespace Raytracer
