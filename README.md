@@ -6,17 +6,17 @@
 
 
 ## To do
-Add the following classes
-- [x] Vector
-- [x] Ray
-- [x] Color
-- [x] Image
-- [x] Object (abstract)
-- [x] Scene
-- [x] Sphere
-- [x] Renderer (simple)
-- [x] Camera
-- [x] Video
+
+- [x] Vector class
+- [x] Ray class
+- [x] Color class
+- [x] Image class
+- [x] Object (abstract) class
+- [x] Scene class
+- [x] Sphere class
+- [x] Renderer (simple) class
+- [x] Camera class
+- [x] Video class
 - [x] Generate the first png from a code defined image
 - [x] Create a virtual world with a few simple objects
 - [x] Take an image of it with a very simple deterministic ray tracing algorithm
@@ -37,24 +37,40 @@ Add the following classes
 - [x] Define and import a scene in json file.
 - [x] Implement the MC path tracing approach
 - [x] Add textures to objects. At least rectangles should not be too hard. (store an image file with the object, promote mColor to Color(), and just return the color of the image at the hit point)
-- [ ] Smooth final images and reduce noise
-- [ ] Optimize the rendering process
-- [ ] Add refractive/transparent media. This could be a good time to introduce the material class.
+- [x] Smooth final images and reduce noise
+- [ ] Improve the texture logic in the rectangle class
 - [ ] Move image/video to utilities
+- [ ] Image bluring should be a config parameter of the camera
+- [ ] Introduce a material class
+- [ ] Semi-reflective/shiny objects
+- [ ] Implement metallic surfaces
+- [ ] Add refractive/transparent media. This could be a good time to introduce the material class.
+- [ ] Optimize the rendering process with openmp
+- [ ] Improve the block blur algorithm to not smudge edges. -> Bilateral filter
+- [ ] Implement depth of field capability
+- [ ] Create camera based on aspect ratio and one pixel dimension
+- [ ] New objects: Cones, Rings
+- [ ] Code clean up
+  - [ ] Move the headers into src/
+
+
+Image ideas:
+- [ ] Light lanterns along a road in the night with nice ambient
 
 Known bugs and issues:
 - [ ] Increasing the resolution sometimes seems to widen the field of view
 - [ ] Test and debug the image class, import/export a file. Ensure that the image has the same orientation.
 - [ ] Debug the rectangle/ box classes. There is something off with the dimensions. This is related to the previous point potentially.
-
+- [ ] LIght source are either on/off. Should be possible to dim them. Maybe this has something to do with luminance?
 
 Other ideas:
 
-- Define trajectories that the camera can follow (time dependence). For a give speed, fps we can generate neat videos flying through the scene.
+- Define trajectories that the camera can follow (time dependence). For a give speed, fps we can generate neat videos flying through the scene. velocity and rot
 - We could also make the scene itself time-dependent (e.g. moving light sources, objects, etc). Planets passing around the sun would be fun.
 - Objects just need their own velocity, rate-of-turn and angular momentum around the z axis
 - Enable background gradients/images.
 - Preview images in the terminal
+- Make a UI with qt to show the scene and camera, move stuff, render quick images. Simple UI to have some interactive fun.
 
 ## General notes
 
