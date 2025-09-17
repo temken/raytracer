@@ -30,12 +30,12 @@ Box::Box(const std::string& name, const Vector3D& center, double length, double 
     mFaces.push_back(backFace);
     // Left face
     Vector3D leftCenter = mCenter - Vector3D({mLength / 2, 0, 0});
-    Rectangle leftFace("left", leftCenter, Vector3D({-1, 0, 0}), mWidth, mHeight, colors[4]);
+    Rectangle leftFace("left", leftCenter, Vector3D({-1, 0, 0}), mHeight, mWidth, colors[4]);
     leftFace.SetReflective(reflectives[4]);
     mFaces.push_back(leftFace);
     // Right face
     Vector3D rightCenter = mCenter + Vector3D({mLength / 2, 0, 0});
-    Rectangle rightFace("right", rightCenter, Vector3D({1, 0, 0}), mWidth, mHeight, colors[5]);
+    Rectangle rightFace("right", rightCenter, Vector3D({1, 0, 0}), mHeight, mWidth, colors[5]);
     rightFace.SetReflective(reflectives[5]);
     mFaces.push_back(rightFace);
 }
@@ -56,9 +56,9 @@ Box::Box(const std::string& name, const Vector3D& center, double size, const std
     Box(name, center, size, size, size, colors) {
 }
 
-std::optional<Intersection> Box::Intersect(const Ray& ray) const {
+std::optional<Intersection> Box::Intersect(const Ray& ray) {
     std::optional<Intersection> closestIntersection;
-    for (const auto& face : mFaces) {
+    for (auto& face : mFaces) {
         auto intersection = face.Intersect(ray);
         if (intersection) {
             if (!closestIntersection || intersection->t < closestIntersection->t) {

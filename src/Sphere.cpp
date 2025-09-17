@@ -11,7 +11,7 @@ Sphere::Sphere(const std::string& name, const Vector3D& center, double radius, c
     mRadius(radius) {}
 
 // Ray-sphere intersection
-std::optional<Intersection> Sphere::Intersect(const Ray& ray) const {
+std::optional<Intersection> Sphere::Intersect(const Ray& ray) {
     Vector3D oc = ray.GetOrigin() - mCenter;
 
     double a = ray.GetDirection().NormSquared();

@@ -19,7 +19,7 @@ public:
         mColor(color) {}
     virtual ~Object() = default;
 
-    Color GetColor() const {
+    Color GetColor(double x = 0.0, double y = 0.0) const {
         return mColor;
     }
 
@@ -29,6 +29,10 @@ public:
 
     bool EmitsLight() const {
         return mEmitsLight;
+    }
+
+    void SetColor(const Color& color) {
+        mColor = color;
     }
 
     void SetEmitsLight(bool emitsLight) {
@@ -51,7 +55,7 @@ public:
         mVisible = visible;
     }
 
-    virtual std::optional<Intersection> Intersect(const Ray& ray) const = 0;
+    virtual std::optional<Intersection> Intersect(const Ray& ray) = 0;
 
     virtual void PrintInfo() const = 0;
 

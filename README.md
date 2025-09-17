@@ -31,20 +31,22 @@ Add the following classes
 - [x] Cube/box (composite of 6 rectangulars, each with their own color)
 - [x] Add a nice color scheme.
 - [x] Progressbar for videos
-- [ ] Simulate a perfect mirror
-- [ ] Configuration singleton from imported file
-- [ ] Add configuration json file that also defines the destination of the generated images/videos (<ID>/images/image_01.png, <ID>/videos/video_01.mp4)
-- [ ] Define and import a scene in json file.
-- [ ] Implement the MC path tracing approach
+- [x] Simulate a perfect mirror
+- [x] Configuration singleton from imported file
+- [x] Add configuration json file that also defines the destination of the generated images/videos (<ID>/images/image_01.png, <ID>/videos/video_01.mp4)
+- [x] Define and import a scene in json file.
+- [x] Implement the MC path tracing approach
+- [x] Add textures to objects. At least rectangles should not be too hard. (store an image file with the object, promote mColor to Color(), and just return the color of the image at the hit point)
+- [ ] Smooth final images and reduce noise
+- [ ] Optimize the rendering process
 - [ ] Preview images in the terminal
 
 Other ideas:
 
 - Define trajectories that the camera can follow (time dependence). For a give speed, fps we can generate neat videos flying through the scene.
 - We could also make the scene itself time-dependent (e.g. moving light sources, objects, etc). Planets passing around the sun would be fun.
+- Objects just need their own velocity, rate-of-turn and angular momentum around the z axis
 - Enable background gradients/images.
-- Add textures to objects. At least rectangles should not be too hard. (store an image file with the object, promote mColor to Color(), and just return the color of the image at the hit point)
-
 
 ## General notes
 
