@@ -79,22 +79,26 @@ Image Camera::Render(const Scene& scene, bool printProgressBar) const {
             }
             Color colorAverage((accumulatedColor.R() / samples), (accumulatedColor.G() / samples), (accumulatedColor.B() / samples));
 
-            double exposureEV = 1.5;
-            double gain = std::pow(2.0, exposureEV);
-            colorAverage = colorAverage * gain;
+            if (mRenderer->GetType() == Renderer::Type::MONTE_CARLO && samples > 1) {
+                // Gamma correction for MC renderer
+                // Apply exposure (EV = 1.5) and gain (2^(EV))
+                double exposureEV = 1.5;
+                double gain = std::pow(2.0, exposureEV);
+                colorAverage = colorAverage * gain;
 
-            // Reinhard tone mapping
-            double R = colorAverage.R() / (1.0 + colorAverage.R());
-            double G = colorAverage.G() / (1.0 + colorAverage.G());
-            double B = colorAverage.B() / (1.0 + colorAverage.B());
-            colorAverage = Color(R, G, B);
+                // Reinhard tone mapping
+                double R = colorAverage.R() / (1.0 + colorAverage.R());
+                double G = colorAverage.G() / (1.0 + colorAverage.G());
+                double B = colorAverage.B() / (1.0 + colorAverage.B());
+                colorAverage = Color(R, G, B);
 
-            // To sRGB
-            auto to_srgb = [](double x) {
-                x = std::min(1.0, std::max(0.0, x));
-                return (x <= 0.0031308) ? 12.92 * x : 1.055 * std::pow(x, 1.0 / 2.4) - 0.055;
-            };
-            colorAverage = Color(to_srgb(colorAverage.R()), to_srgb(colorAverage.G()), to_srgb(colorAverage.B()));
+                // To sRGB
+                auto to_srgb = [](double x) {
+                    x = std::min(1.0, std::max(0.0, x));
+                    return (x <= 0.0031308) ? 12.92 * x : 1.055 * std::pow(x, 1.0 / 2.4) - 0.055;
+                };
+                colorAverage = Color(to_srgb(colorAverage.R()), to_srgb(colorAverage.G()), to_srgb(colorAverage.B()));
+            }
 
             image.SetPixel(x, y, colorAverage);
             if (printProgressBar && pixelsRendered++ % 5000 == 0) {
