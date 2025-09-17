@@ -1,4 +1,5 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image.h"
 #include "stb_image_write.h"
 
 #include "Rendering/Image.hpp"
@@ -20,6 +21,42 @@ Image::Image(std::size_t width, std::size_t height, const Color& backgroundColor
         throw std::invalid_argument("Image dimensions must be positive (non-zero).");
     }
     mPixels.assign(mWidth * mHeight, backgroundColor);
+}
+
+inline float srgb_to_linear(float x) {
+    if (x <= 0.04045f) {
+        return x / 12.92f;
+    }
+    return std::pow((x + 0.055f) / 1.055f, 2.4f);
+}
+
+Image::Image(std::string filepath, bool assume_srgb) {
+    int w, h, n;
+    unsigned char* data = stbi_load(filepath.c_str(), &w, &h, &n, 3);  // force 3 channels (RGB)
+    if (!data) {
+        throw std::runtime_error("Failed to load image: " + filepath);
+    }
+
+    mWidth = static_cast<std::size_t>(w);
+    mHeight = static_cast<std::size_t>(h);
+    mPixels.resize(mWidth * mHeight);
+
+    for (std::size_t y = 0; y < mHeight; ++y) {
+        for (std::size_t x = 0; x < mWidth; ++x) {
+            size_t idx = (y * mWidth + x) * 3;
+            float r = data[idx + 0] / 255.0f;
+            float g = data[idx + 1] / 255.0f;
+            float b = data[idx + 2] / 255.0f;
+            if (assume_srgb) {
+                r = srgb_to_linear(r);
+                g = srgb_to_linear(g);
+                b = srgb_to_linear(b);
+            }
+            mPixels[y * mWidth + x] = Color(r, g, b);
+        }
+    }
+
+    stbi_image_free(data);
 }
 
 std::size_t Image::GetWidth() const {
