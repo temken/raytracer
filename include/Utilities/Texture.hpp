@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Rendering/Image.hpp"
 #include "Utilities/Color.hpp"
+#include "Utilities/Image.hpp"
 
 namespace Raytracer {
 

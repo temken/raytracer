@@ -2,8 +2,8 @@
 #include "stb_image.h"
 #include "stb_image_write.h"
 
-#include "Rendering/Image.hpp"
 #include "Utilities/Configuration.hpp"
+#include "Utilities/Image.hpp"
 #include "version.hpp"
 
 #include <algorithm>

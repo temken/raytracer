@@ -6,7 +6,6 @@
 #include <memory>
 
 #include "Rendering/Camera.hpp"
-#include "Rendering/Image.hpp"
 #include "Rendering/Ray.hpp"
 #include "Scene/Box.hpp"
 #include "Scene/Disk.hpp"
@@ -15,6 +14,7 @@
 #include "Scene/Sphere.hpp"
 #include "Utilities/Color.hpp"
 #include "Utilities/Configuration.hpp"
+#include "Utilities/Image.hpp"
 #include "Utilities/Vector.hpp"
 #include "version.hpp"
 
