@@ -19,7 +19,7 @@ public:
         mColor(color) {}
     virtual ~Object() = default;
 
-    Color GetColor(double x = 0.0, double y = 0.0) const {
+    virtual Color GetColor() const {
         return mColor;
     }
 

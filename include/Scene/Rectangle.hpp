@@ -16,6 +16,8 @@ public:
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) override;
 
+    virtual Color GetColor() const override;
+
     void SetTexture(std::string filename);
 
     virtual void PrintInfo() const override;
@@ -27,7 +29,11 @@ private:
     Vector3D mV;  // Local y-axis in the rectangle plane
     double mWidth;
     double mHeight;
+
+    // Optional texture
     std::optional<Texture> mTexture = std::nullopt;
+    double mULastInteraction = 0.0;
+    double mVLastInteraction = 0.0;
 };
 
 }  // namespace Raytracer
