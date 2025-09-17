@@ -97,11 +97,12 @@ Image Camera::Render(const Scene& scene, bool printProgressBar) const {
             colorAverage = Color(to_srgb(colorAverage.R()), to_srgb(colorAverage.G()), to_srgb(colorAverage.B()));
 
             image.SetPixel(x, y, colorAverage);
-            if (printProgressBar && pixelsRendered++ % 1000 == 0) {
+            if (printProgressBar && pixelsRendered++ % 5000 == 0) {
                 libphysica::Print_Progress_Bar(double(pixelsRendered) / totalPixels);
             }
         }
     }
+    image.Blur();
     return image;
 }
 
