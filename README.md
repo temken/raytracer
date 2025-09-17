@@ -41,24 +41,26 @@
 - [x] Improve the texture logic in the rectangle class
 - [x] Move image/video to utilities
 - [x] Image bluring should be a config parameter of the camera
+- [ ] Timedependence of scene/object and camera. Automatically used by video recording. Should also cover the fly around
 - [ ] Introduce a material class
 - [ ] Semi-reflective/shiny objects
 - [ ] Implement metallic surfaces
-- [ ] Add refractive/transparent media. This could be a good time to introduce the material class.
-- [ ] Optimize the rendering process with openmp
+- [ ] Add refractive/transparent media.
+- [ ] Add more pre-defined colors
+- [ ] Optimize the rendering process with openmp or cuda
 - [ ] Improve the block blur algorithm to not smudge edges. -> Bilateral filter
 - [ ] Implement depth of field capability
 - [ ] Create camera based on aspect ratio and one pixel dimension
 - [ ] New objects: Cones, Rings
 - [ ] Code clean up
-  - [ ] Move the headers into src/
+  - [ ] Move the headers into src/??
 
 
 Image ideas:
 - [ ] Light lanterns along a road in the night with nice ambient
 
 Known bugs and issues:
-- [ ] Increasing the resolution sometimes seems to widen the field of view
+- [ ] Increasing the resolution sometimes seems to widen the field of view and vice versa
 - [ ] Test and debug the image class, import/export a file. Ensure that the image has the same orientation.
 - [ ] Debug the rectangle/ box classes. There is something off with the dimensions. This is related to the previous point potentially.
 - [ ] LIght source are either on/off. Should be possible to dim them. Maybe this has something to do with luminance?
