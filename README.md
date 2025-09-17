@@ -39,7 +39,14 @@ Add the following classes
 - [x] Add textures to objects. At least rectangles should not be too hard. (store an image file with the object, promote mColor to Color(), and just return the color of the image at the hit point)
 - [ ] Smooth final images and reduce noise
 - [ ] Optimize the rendering process
-- [ ] Preview images in the terminal
+- [ ] Add refractive/transparent media. This could be a good time to introduce the material class.
+- [ ] Move image/video to utilities
+
+Known bugs and issues:
+- [ ] Increasing the resolution sometimes seems to widen the field of view
+- [ ] Test and debug the image class, import/export a file. Ensure that the image has the same orientation.
+- [ ] Debug the rectangle/ box classes. There is something off with the dimensions. This is related to the previous point potentially.
+
 
 Other ideas:
 
@@ -47,6 +54,7 @@ Other ideas:
 - We could also make the scene itself time-dependent (e.g. moving light sources, objects, etc). Planets passing around the sun would be fun.
 - Objects just need their own velocity, rate-of-turn and angular momentum around the z axis
 - Enable background gradients/images.
+- Preview images in the terminal
 
 ## General notes
 
