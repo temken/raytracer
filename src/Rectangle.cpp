@@ -42,16 +42,22 @@ std::optional<Intersection> Rectangle::Intersect(const Ray& ray) {
     double vCoord = localPoint.Dot(mV);
 
     if (mTexture.has_value()) {
-        double u = (uCoord / mWidth) + 0.5;
-        double v = (vCoord / mHeight) + 0.5;
-        Color texColor = mTexture->GetColorAt(u, v);
-        SetColor(texColor);
+        mULastInteraction = (uCoord / mWidth) + 0.5;
+        mVLastInteraction = (vCoord / mHeight) + 0.5;
     }
 
     if (std::fabs(uCoord) <= 0.5 * mWidth && std::fabs(vCoord) <= 0.5 * mHeight) {
         return Intersection{t, hitPoint, (denom < 0) ? mNormal : -1.0 * mNormal, this};
     }
     return std::nullopt;
+}
+
+Color Rectangle::GetColor() const {
+    if (mTexture.has_value()) {
+        return mTexture->GetColorAt(mULastInteraction, mVLastInteraction);
+    } else {
+        return mColor;
+    }
 }
 
 void Rectangle::SetTexture(std::string filename) {
