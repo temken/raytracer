@@ -10,7 +10,7 @@ Disk::Disk(const std::string& name, const Vector3D& center, const Vector3D& norm
     mNormal(normal.Normalized()),
     mRadius(radius) {}
 
-std::optional<Intersection> Disk::Intersect(const Ray& ray) const {
+std::optional<Intersection> Disk::Intersect(const Ray& ray) {
     double denom = mNormal.Dot(ray.GetDirection());
     if (std::fabs(denom) < sEpsilon) {
         return std::nullopt;

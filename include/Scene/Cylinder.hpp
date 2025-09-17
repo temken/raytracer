@@ -9,7 +9,7 @@ class Cylinder : public Object {
 public:
     Cylinder(const std::string& name, const Vector3D& center, const Vector3D& normal, double radius, double height, const Color& mantleColor, const Color& capColor);
 
-    virtual std::optional<Intersection> Intersect(const Ray& ray) const override;
+    virtual std::optional<Intersection> Intersect(const Ray& ray) override;
 
     virtual void PrintInfo() const override;
 
@@ -21,8 +21,8 @@ private:
     Disk mTopDisk;
     Disk mBottomDisk;
 
-    std::optional<Intersection> IntersectCaps(const Ray& ray) const;
-    std::optional<Intersection> IntersectMantle(const Ray& ray) const;
+    std::optional<Intersection> IntersectCaps(const Ray& ray);
+    std::optional<Intersection> IntersectMantle(const Ray& ray);
 };
 
 }  // namespace Raytracer

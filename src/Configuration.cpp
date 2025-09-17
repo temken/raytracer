@@ -236,11 +236,15 @@ Rectangle Configuration::ParseRectangle(const YAML::Node& obj) const {
     auto m = obj["material"];
     Color color = ParseColor(m["color"]);
     bool reflective = m["reflective"].as<bool>();
+    std::string textureFile = m["texture"] ? m["texture"].as<std::string>() : "";
 
     Rectangle rectangle(id, center, normal, width, height, color);
     rectangle.SetVisible(visible);
     rectangle.SetEmitsLight(emitsLight);
     rectangle.SetReflective(reflective);
+    if (!textureFile.empty()) {
+        rectangle.SetTexture(textureFile);
+    }
     return rectangle;
 }
 

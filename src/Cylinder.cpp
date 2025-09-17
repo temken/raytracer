@@ -12,7 +12,7 @@ Cylinder::Cylinder(const std::string& name, const Vector3D& center, const Vector
     mBottomDisk("bottom_cap", center - (height / 2.0) * mNormal, -1.0 * mNormal, radius, capColor) {
 }
 
-std::optional<Intersection> Cylinder::Intersect(const Ray& ray) const {
+std::optional<Intersection> Cylinder::Intersect(const Ray& ray) {
     auto mantleIntersection = IntersectMantle(ray);
     auto capIntersection = IntersectCaps(ray);
 
@@ -38,7 +38,7 @@ void Cylinder::PrintInfo() const {
               << "\tColor (Caps): " << mTopDisk.GetColor() << std::endl;
 }
 
-std::optional<Intersection> Cylinder::IntersectCaps(const Ray& ray) const {
+std::optional<Intersection> Cylinder::IntersectCaps(const Ray& ray) {
     auto topIntersection = mTopDisk.Intersect(ray);
     auto bottomIntersection = mBottomDisk.Intersect(ray);
 
@@ -54,7 +54,7 @@ std::optional<Intersection> Cylinder::IntersectCaps(const Ray& ray) const {
     return closestIntersection;
 }
 
-std::optional<Intersection> Cylinder::IntersectMantle(const Ray& ray) const {
+std::optional<Intersection> Cylinder::IntersectMantle(const Ray& ray) {
     Vector3D d = ray.GetDirection();
     Vector3D oc = ray.GetOrigin() - mCenter;
 

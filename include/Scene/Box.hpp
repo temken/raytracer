@@ -20,7 +20,7 @@ public:
     Box(const std::string& name, const Vector3D& center, double size, const Color& color);
     Box(const std::string& name, const Vector3D& center, double size, const std::array<Color, 6>& colors);
 
-    virtual std::optional<Intersection> Intersect(const Ray& ray) const override;
+    virtual std::optional<Intersection> Intersect(const Ray& ray) override;
 
     virtual void PrintInfo() const override;
 

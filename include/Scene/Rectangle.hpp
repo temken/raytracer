@@ -3,6 +3,7 @@
 #include "Rendering/Ray.hpp"
 #include "Scene/Object.hpp"
 #include "Utilities/Color.hpp"
+#include "Utilities/Texture.hpp"
 #include "Utilities/Vector.hpp"
 
 #include <optional>
@@ -13,7 +14,9 @@ class Rectangle : public Object {
 public:
     Rectangle(const std::string& name, const Vector3D& center, const Vector3D& normal, double width, double height, const Color& color);
 
-    virtual std::optional<Intersection> Intersect(const Ray& ray) const override;
+    virtual std::optional<Intersection> Intersect(const Ray& ray) override;
+
+    void SetTexture(std::string filename);
 
     virtual void PrintInfo() const override;
 
@@ -24,6 +27,7 @@ private:
     Vector3D mV;  // Local y-axis in the rectangle plane
     double mWidth;
     double mHeight;
+    std::optional<Texture> mTexture = std::nullopt;
 };
 
 }  // namespace Raytracer
