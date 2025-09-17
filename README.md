@@ -38,9 +38,9 @@
 - [x] Implement the MC path tracing approach
 - [x] Add textures to objects. At least rectangles should not be too hard. (store an image file with the object, promote mColor to Color(), and just return the color of the image at the hit point)
 - [x] Smooth final images and reduce noise
-- [ ] Improve the texture logic in the rectangle class
-- [ ] Move image/video to utilities
-- [ ] Image bluring should be a config parameter of the camera
+- [x] Improve the texture logic in the rectangle class
+- [x] Move image/video to utilities
+- [x] Image bluring should be a config parameter of the camera
 - [ ] Introduce a material class
 - [ ] Semi-reflective/shiny objects
 - [ ] Implement metallic surfaces

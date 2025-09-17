@@ -10,6 +10,7 @@ camera:
     height: 600
   framesPerSecond: 30
   antialiasing: false
+  blur_image: false
   samples_per_pixel: 1
 
 scene:

@@ -57,6 +57,10 @@ void Camera::SetUseAntiAliasing(bool useAA) {
     mUseAntiAliasing = useAA;
 }
 
+void Camera::SetBlurImage(bool blur) {
+    mBlurImage = blur;
+}
+
 Image Camera::Render(const Scene& scene, bool printProgressBar) const {
     Image image(mResolution.width, mResolution.height);
 
@@ -106,7 +110,10 @@ Image Camera::Render(const Scene& scene, bool printProgressBar) const {
             }
         }
     }
-    image.Blur();
+
+    if (mBlurImage) {
+        image.Blur();
+    }
     return image;
 }
 
@@ -141,6 +148,7 @@ void Camera::PrintInfo() const {
               << "FPS:\t\t" << mFramesPerSecond << std::endl
               << "Samples/Pixel:\t" << mSamplesPerPixel << std::endl
               << "Anti-Aliasing:\t" << (mUseAntiAliasing ? "[x]" : "[ ]") << std::endl
+              << "Blur Image:\t" << (mBlurImage ? "[x]" : "[ ]") << std::endl
               << std::endl;
 }
 
