@@ -12,6 +12,7 @@ class Image {
 public:
     Image() = default;
     Image(std::size_t width, std::size_t height, const Color& backgroundColor = Color(0, 0, 0));
+    Image(std::string filepath, bool assume_srgb = true);
 
     std::size_t GetWidth() const;
     std::size_t GetHeight() const;
