@@ -26,6 +26,7 @@ public:
     void SetFramesPerSecond(double fps);
     void SetSamplesPerPixel(size_t samples);
     void SetUseAntiAliasing(bool useAA);
+    void SetBlurImage(bool blur);
 
     Image Render(const Scene& scene, bool printProgressBar = false) const;
     Video RenderOrbitVideo(const Scene& scene, size_t numFrames);
@@ -50,6 +51,7 @@ private:
     std::unique_ptr<Renderer> mRenderer;
     size_t mSamplesPerPixel = 1;
     bool mUseAntiAliasing = false;
+    bool mBlurImage = false;
 
     Ray CreateRay(size_t x, size_t y) const;
 
