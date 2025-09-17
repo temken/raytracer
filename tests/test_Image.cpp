@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "Rendering/Image.hpp"
+#include "Utilities/Image.hpp"
 
 using namespace Raytracer;
 
