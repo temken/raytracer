@@ -9,6 +9,7 @@ namespace Raytracer {
 class Video {
 public:
     Video(double fps = 30.0);
+    Video(const std::vector<Image>& images, double fps = 30.0);
 
     double GetDuration() const;  // in seconds
 
