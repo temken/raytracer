@@ -13,6 +13,13 @@ Video::Video(double fps) :
     mFPS(fps) {
 }
 
+Video::Video(const std::vector<Image>& images, double fps) :
+    mFPS(fps) {
+    for (const auto& img : images) {
+        AddFrame(img);
+    }
+}
+
 double Video::GetDuration() const {
     return mFrames.size() / mFPS;
 }
@@ -42,34 +49,38 @@ void Video::Save(bool openFile, bool showTerminalOutput, bool deleteFrameFiles, 
 
     if (filepath.empty()) {
         std::string outputDirectory = Configuration::GetInstance().GetOutputDirectory();
-        // Create /videos/ folder if it does not exist
         std::filesystem::create_directories(outputDirectory + "/videos/");
         filepath = outputDirectory + "/videos/video_" + std::to_string(std::time(nullptr)) + ".mp4";
     }
+
     std::filesystem::path outputFilepath = filepath;
     std::filesystem::path outputDirectory = outputFilepath.parent_path();
 
-    // Save video frames to individual files
+    // Create a temp subfolder for the frames
+    std::string epoch = std::to_string(std::time(nullptr));
+    std::filesystem::path tempFramesDir = outputDirectory / ("video_tmp_" + epoch);
+    std::filesystem::create_directories(tempFramesDir);
+
     for (std::size_t i = 0; i < mFrames.size(); i++) {
         const std::string frameFilename = std::format("frame_{:04}.png", static_cast<int>(i + 1));
-
-        mFrames[i].Save(false, (outputDirectory / frameFilename).string());
+        mFrames[i].Save(false, (tempFramesDir / frameFilename).string());
     }
 
-    // Generate video from frame files
+    // ffmpeg command
+    const std::string ffmpegExe = std::format("\"{}\"", FFMPEG_PATH);
+    const std::string verbosity = showTerminalOutput ? "" : "-v warning";
+    const std::string inputPattern = std::format("\"{}/frame_%04d.png\"", tempFramesDir.string());
+    const std::string outputFile = std::format("\"{}\"", filepath);
     std::string ffmpegCommand = std::format(
-        "{} -y {} -framerate {} -i {}/frame_%04d.png -c:v libx264 -pix_fmt yuv420p {}",
-        FFMPEG_PATH,
-        showTerminalOutput ? "" : "-v warning",
-        mFPS,
-        outputDirectory.string(),
-        filepath);
+        "{} -y {} -framerate {} -i {} -c:v libx264 -pix_fmt yuv420p {}",
+        ffmpegExe, verbosity, mFPS, inputPattern, outputFile);
+
     std::system(ffmpegCommand.c_str());
 
+    // Clean up temp folder if requested
     if (deleteFrameFiles) {
-        for (std::size_t i = 0; i < mFrames.size(); i++) {
-            std::filesystem::remove((outputDirectory / std::format("frame_{:04}.png", static_cast<int>(i + 1))).string());
-        }
+        std::error_code ec;
+        std::filesystem::remove_all(tempFramesDir, ec);
     }
 
     if (openFile) {

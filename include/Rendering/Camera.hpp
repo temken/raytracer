@@ -28,7 +28,7 @@ public:
     void SetUseAntiAliasing(bool useAA);
     void SetBlurImage(bool blur);
 
-    Image Render(const Scene& scene, bool printProgressBar = false) const;
+    Image Render(const Scene& scene, bool printProgressBar = false, bool createConvergingVideo = false) const;
     Video RenderOrbitVideo(const Scene& scene, size_t numFrames);
 
     void PointToOrigin(double height, double rho, double phi);
@@ -54,6 +54,13 @@ private:
     bool mBlurImage = false;
 
     Ray CreateRay(size_t x, size_t y) const;
+
+    Image CreateImage(const std::vector<std::vector<Color>>& accumulatedColors, size_t samples, bool applyPostProcessing) const;
+
+    static void ApplyPostProcessing(Color& color);
+    static void ApplyGammaCorrection(Color& color);
+    static void ReinhardToneMapping(Color& color);
+    static void LinearToSRGB(Color& color);
 
     void ConfigureCamera();
     static std::unique_ptr<Renderer> CreateRenderer(Renderer::Type type);
