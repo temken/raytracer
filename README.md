@@ -41,6 +41,7 @@
 - [x] Improve the texture logic in the rectangle class
 - [x] Move image/video to utilities
 - [x] Image bluring should be a config parameter of the camera
+- [x] Convergence videos. 
 - [ ] Timedependence of scene/object and camera. Automatically used by video recording. Should also cover the fly around
 - [ ] Introduce a material class
 - [ ] Semi-reflective/shiny objects
