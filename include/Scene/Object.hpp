@@ -14,46 +14,26 @@ struct Intersection;
 
 class Object {
 public:
-    explicit Object(const std::string& name, const Color& color) :
-        mName(name),
-        mColor(color) {}
+    explicit Object(const std::string& name, const Color& color);
     virtual ~Object() = default;
 
-    virtual Color GetColor() const {
-        return mColor;
-    }
+    virtual Color GetColor() const;
 
-    std::string GetName() const {
-        return mName;
-    }
+    std::string GetName() const;
 
-    bool EmitsLight() const {
-        return mEmitsLight;
-    }
+    bool EmitsLight() const;
 
-    void SetColor(const Color& color) {
-        mColor = color;
-    }
+    void SetColor(const Color& color);
 
-    void SetEmitsLight(bool emitsLight) {
-        mEmitsLight = emitsLight;
-    }
+    void SetEmitsLight(bool emitsLight);
 
-    bool IsReflective() const {
-        return mIsReflective;
-    }
+    bool IsReflective() const;
 
-    void SetReflective(bool isReflective) {
-        mIsReflective = isReflective;
-    }
+    void SetReflective(bool isReflective);
 
-    bool IsVisible() const {
-        return mVisible;
-    }
+    bool IsVisible() const;
 
-    void SetVisible(bool visible) {
-        mVisible = visible;
-    }
+    void SetVisible(bool visible);
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) = 0;
 
