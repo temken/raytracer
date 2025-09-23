@@ -50,16 +50,21 @@ int main(int argc, char** argv) {
     Camera camera = Configuration::GetInstance().ConstructCamera();
     Scene scene = Configuration::GetInstance().ConstructScene();
 
+    bool openOutputFiles = true;
+    bool printProgressBar = true;
+
     camera.PrintInfo();
     scene.PrintInfo();
 
-    bool openOutputFiles = true;
-    Image image = camera.Render(scene, true);
-    image.Save(openOutputFiles);
+    // bool createConvergingVideo = false;
+    // Image image = camera.RenderImage(scene, printProgressBar, createConvergingVideo);
+    // image.Save(openOutputFiles);
+    // std::cout << "\n\nBlack pixel ratio: " << image.CalculateBlackPixelRatio() * 100.0 << "%" << std::endl;
 
-    std::cout << "\n\nBlack pixel ratio: " << image.CalculateBlackPixelRatio() * 100.0 << "%" << std::endl;
-
-    Video video = camera.RenderOrbitVideo(scene, 60);
+    double videoDurationSeconds = 10.0;
+    double angularVelocity = 0.2;  // in rad/s
+    camera.InitializeOrbitTrajectory(angularVelocity);
+    Video video = camera.RenderVideo(scene, videoDurationSeconds, printProgressBar);
     video.Save(openOutputFiles);
 
     ////////////////////////////////////////////////////////////////////////

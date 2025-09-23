@@ -33,6 +33,31 @@ void Camera::SetDirection(const Vector3D& direction) {
     ConfigureCamera();
 }
 
+// Dynamics
+void Camera::SetVelocity(const Vector3D& velocity) {
+    mVelocity = velocity;
+}
+
+void Camera::SetAngularVelocity(const Vector3D& angularVelocity) {
+    mAngularVelocity = angularVelocity;
+}
+
+void Camera::SetSpin(const Vector3D& spin) {
+    mSpin = spin;
+}
+
+void Camera::InitializeOrbitTrajectory(double angularVelocity) {
+    mEz = -1.0 * mPosition.Normalized();
+    ConfigureCamera();
+
+    // Set angular and spin velocity for orbit around z axis
+    Vector3D angularVelocityVec({0, 0, angularVelocity});
+    Vector3D spinVec({0, 0, angularVelocity});
+    SetAngularVelocity(angularVelocityVec);
+    SetVelocity(Vector3D());
+    SetSpin(spinVec);
+}
+
 void Camera::SetFieldOfView(double fov) {
     mFieldOfView = fov;
     ConfigureCamera();
@@ -62,7 +87,7 @@ void Camera::SetBlurImage(bool blur) {
     mBlurImage = blur;
 }
 
-Image Camera::Render(const Scene& scene, bool printProgressBar, bool createConvergingVideo) const {
+Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool createConvergingVideo) const {
     size_t samples = mSamplesPerPixel;
     if (mRenderer->IsDeterministic() && !mUseAntiAliasing && mSamplesPerPixel > 1) {
         std::cerr << "Warning: Renderer is deterministic, and anti-aliasing is disabled. Setting samples to 1." << std::endl;
@@ -103,6 +128,22 @@ Image Camera::Render(const Scene& scene, bool printProgressBar, bool createConve
     bool applyPostProcessing = (mRenderer->GetType() == Renderer::Type::MONTE_CARLO && samples > 1);
     Image image = CreateImage(accumulatedColors, samples, applyPostProcessing);
     return image;
+}
+
+Video Camera::RenderVideo(Scene& scene, double durationSeconds, bool printProgressBar) {
+    size_t totalFrames = mFramesPerSecond * durationSeconds;
+    double timeStep = 1.0 / mFramesPerSecond;
+    Video video(mFramesPerSecond);
+    for (size_t i = 0; i < totalFrames; i++) {
+        Image frame = RenderImage(scene);
+        video.AddFrame(frame);
+        if (printProgressBar) {
+            libphysica::Print_Progress_Bar(double(i + 1) / totalFrames);
+        }
+        Evolve(timeStep);
+        scene.Evolve(timeStep);
+    }
+    return video;
 }
 
 Image Camera::CreateImage(const std::vector<std::vector<Color>>& accumulatedColors, size_t samples, bool applyPostProcessing) const {
@@ -156,27 +197,6 @@ void Camera::LinearToSRGB(Color& color) {
     color = Color(to_srgb(color.R()), to_srgb(color.G()), to_srgb(color.B()));
 }
 
-Video Camera::RenderOrbitVideo(const Scene& scene, size_t numFrames) {
-    Video video(mFramesPerSecond);
-    double rho = std::sqrt(mPosition.NormSquared() - mPosition[2] * mPosition[2]);
-    double z = mPosition[2];
-
-    for (size_t i = 0; i < numFrames; i++) {
-        double phi = 2.0 * M_PI * i / numFrames;
-        PointToOrigin(z, rho, phi);
-        Image frame = Render(scene);
-        video.AddFrame(frame);
-        libphysica::Print_Progress_Bar(double(i + 1) / numFrames);
-    }
-    return video;
-}
-
-void Camera::PointToOrigin(double height, double rho, double phi) {
-    Vector3D position({rho * std::cos(phi), rho * std::sin(phi), height});
-    SetPosition(position);
-    SetDirection(-1.0 * position);
-}
-
 void Camera::PrintInfo() const {
     std::cout << "Camera Information:" << std::endl
               << "Renderer:\t" << mRenderer->GetTypeString() << std::endl
@@ -189,6 +209,44 @@ void Camera::PrintInfo() const {
               << "Anti-Aliasing:\t" << (mUseAntiAliasing ? "[x]" : "[ ]") << std::endl
               << "Blur Image:\t" << (mBlurImage ? "[x]" : "[ ]") << std::endl
               << std::endl;
+}
+
+void Camera::Translate(const Vector3D& translation) {
+    mPosition += translation;
+}
+
+void Camera::Rotate(double angle, const Vector3D& axis) {
+    // Rotate around axis through the origin
+    // Camera orientation remains unchanged
+
+    // TODO: Put rotate into a utility function or Vector class
+    Vector3D axisNorm = axis.Normalized();
+    Vector3D rotatedPosition = (mPosition * std::cos(angle)) +
+                               (axisNorm.Cross(mPosition) * std::sin(angle)) +
+                               (axisNorm * (axisNorm.Dot(mPosition)) * (1.0 - std::cos(angle)));
+    mPosition = rotatedPosition;
+}
+
+void Camera::Spin(double angle, const Vector3D& axis) {
+    // Rotate around axis through the camera position
+    Vector3D pos = mPosition;
+    Translate(-1.0 * pos);
+
+    // TODO: Put rotate into a utility function or Vector class
+    Vector3D axisNorm = axis.Normalized();
+    Vector3D rotatedEz = (mEz * std::cos(angle)) +
+                         (axisNorm.Cross(mEz) * std::sin(angle)) +
+                         (axisNorm * (axisNorm.Dot(mEz)) * (1.0 - std::cos(angle)));
+    Translate(pos);
+    mEz = rotatedEz.Normalized();
+    ConfigureCamera();
+}
+
+void Camera::Evolve(double timeStep) {
+    Translate(mVelocity * timeStep);
+    Rotate(mAngularVelocity.Norm() * timeStep, mAngularVelocity.Normalized());
+    Spin(mSpin.Norm() * timeStep, mSpin.Normalized());
+    ConfigureCamera();
 }
 
 Ray Camera::CreateRay(size_t x, size_t y) const {

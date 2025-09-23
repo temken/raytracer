@@ -21,6 +21,15 @@ public:
 
     void SetPosition(const Vector3D& position);
     void SetDirection(const Vector3D& direction);
+
+    // Dynamics
+    void SetVelocity(const Vector3D& velocity);
+    void SetAngularVelocity(const Vector3D& angularVelocity);
+    void SetSpin(const Vector3D& spin);
+
+    void InitializeOrbitTrajectory(double angularVelocity);
+
+    // Settings
     void SetFieldOfView(double fov);
     void SetResolution(size_t width, size_t height);
     void SetFramesPerSecond(double fps);
@@ -28,15 +37,17 @@ public:
     void SetUseAntiAliasing(bool useAA);
     void SetBlurImage(bool blur);
 
-    Image Render(const Scene& scene, bool printProgressBar = false, bool createConvergingVideo = false) const;
-    Video RenderOrbitVideo(const Scene& scene, size_t numFrames);
-
-    void PointToOrigin(double height, double rho, double phi);
+    Image RenderImage(const Scene& scene, bool printProgressBar = false, bool createConvergingVideo = false) const;
+    Video RenderVideo(Scene& scene, double durationSeconds, bool printProgressBar = true);
 
     void PrintInfo() const;
 
 private:
     Vector3D mPosition;
+    Vector3D mVelocity = Vector3D();
+    Vector3D mAngularVelocity = Vector3D();
+    Vector3D mSpin = Vector3D();
+
     // Basis vectors, where the camera points in z direction, and x points horizontally to the left, y points vertically up
     Vector3D mEx = Vector3D({1, 0, 0});
     Vector3D mEy = Vector3D({0, 1, 0});
@@ -52,6 +63,12 @@ private:
     size_t mSamplesPerPixel = 1;
     bool mUseAntiAliasing = false;
     bool mBlurImage = false;
+
+    // Camera dynamics
+    void Translate(const Vector3D& translation);
+    void Rotate(double angle, const Vector3D& axis = Vector3D({0, 0, 1}));
+    void Spin(double angle, const Vector3D& axis = Vector3D({0, 0, 1}));
+    void Evolve(double timeStep);
 
     Ray CreateRay(size_t x, size_t y) const;
 
