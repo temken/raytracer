@@ -5,9 +5,7 @@
 namespace Raytracer {
 
 Rectangle::Rectangle(const std::string& name, const Vector3D& center, const Vector3D& normal, double width, double height, const Color& color) :
-    Object(name, color),
-    mCenter(center),
-    mNormal(normal.Normalized()),
+    Object(name, color, center, normal),
     mWidth(width),
     mHeight(height) {
     // Create two orthogonal vectors in the rectangle plane
@@ -30,13 +28,13 @@ std::optional<Intersection> Rectangle::Intersect(const Ray& ray) {
         return std::nullopt;  // Ray is parallel to the rectangle plane
     }
 
-    double t = (mCenter - ray.GetOrigin()).Dot(mNormal) / denom;
+    double t = (mPosition - ray.GetOrigin()).Dot(mNormal) / denom;
     if (t < sEpsilon) {  // Intersection is behind the ray origin
         return std::nullopt;
     }
 
     Vector3D hitPoint = ray(t);
-    Vector3D localPoint = hitPoint - mCenter;
+    Vector3D localPoint = hitPoint - mPosition;
 
     double uCoord = localPoint.Dot(mU);
     double vCoord = localPoint.Dot(mV);
@@ -67,7 +65,7 @@ void Rectangle::SetTexture(std::string filename) {
 
 void Rectangle::PrintInfo() const {
     std::cout << "Rectangle: " << std::endl
-              << "\tCenter: " << mCenter << std::endl
+              << "\tCenter: " << mPosition << std::endl
               << "\tNormal: " << mNormal << std::endl
               << "\tWidth: " << mWidth << std::endl
               << "\tHeight: " << mHeight << std::endl;

@@ -5,9 +5,7 @@
 namespace Raytracer {
 
 Disk::Disk(const std::string& name, const Vector3D& center, const Vector3D& normal, double radius, const Color& color) :
-    Object(name, color),
-    mCenter(center),
-    mNormal(normal.Normalized()),
+    Object(name, color, center, normal),
     mRadius(radius) {}
 
 std::optional<Intersection> Disk::Intersect(const Ray& ray) {
@@ -16,13 +14,13 @@ std::optional<Intersection> Disk::Intersect(const Ray& ray) {
         return std::nullopt;
     }
 
-    double t = (mCenter - ray.GetOrigin()).Dot(mNormal) / denom;
+    double t = (mPosition - ray.GetOrigin()).Dot(mNormal) / denom;
     if (t < sEpsilon) {
         return std::nullopt;
     }
 
     Vector3D hitPoint = ray(t);
-    Vector3D localPoint = hitPoint - mCenter;
+    Vector3D localPoint = hitPoint - mPosition;
 
     if (localPoint.Norm() <= mRadius) {
         return Intersection{t, hitPoint, (denom < 0) ? -1.0 * mNormal : mNormal, this};
@@ -32,7 +30,7 @@ std::optional<Intersection> Disk::Intersect(const Ray& ray) {
 
 void Disk::PrintInfo() const {
     std::cout << "Disk: " << mName << std::endl
-              << "\tCenter = " << mCenter << std::endl
+              << "\tCenter = " << mPosition << std::endl
               << "\tNormal = " << mNormal << std::endl
               << "\tRadius = " << mRadius << std::endl
               << "\tColor = " << mColor << std::endl;

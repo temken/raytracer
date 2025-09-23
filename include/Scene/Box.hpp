@@ -25,7 +25,6 @@ public:
     virtual void PrintInfo() const override;
 
 private:
-    Vector3D mCenter;
     std::vector<Rectangle> mFaces = {};
     double mLength, mWidth, mHeight;
 };

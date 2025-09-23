@@ -23,8 +23,6 @@ public:
     virtual void PrintInfo() const override;
 
 private:
-    Vector3D mCenter;
-    Vector3D mNormal;
     Vector3D mU;  // Local x-axis in the rectangle plane
     Vector3D mV;  // Local y-axis in the rectangle plane
     double mWidth;
