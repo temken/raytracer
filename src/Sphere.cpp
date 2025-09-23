@@ -6,13 +6,12 @@
 namespace Raytracer {
 
 Sphere::Sphere(const std::string& name, const Vector3D& center, double radius, const Color& color) :
-    Object(name, color),
-    mCenter(center),
+    Object(name, color, center, Vector3D({0, 0, 1})),
     mRadius(radius) {}
 
 // Ray-sphere intersection
 std::optional<Intersection> Sphere::Intersect(const Ray& ray) {
-    Vector3D oc = ray.GetOrigin() - mCenter;
+    Vector3D oc = ray.GetOrigin() - mPosition;
 
     double a = ray.GetDirection().NormSquared();
     double b = 2.0 * oc.Dot(ray.GetDirection());
@@ -39,14 +38,14 @@ std::optional<Intersection> Sphere::Intersect(const Ray& ray) {
     }
 
     Vector3D hitPoint = ray.GetOrigin() + t * ray.GetDirection();
-    Vector3D normal = (hitPoint - mCenter).Normalized();
+    Vector3D normal = (hitPoint - mPosition).Normalized();
 
     return Intersection{t, hitPoint, normal, this};
 }
 
 void Sphere::PrintInfo() const {
     std::cout << "Sphere:" << std::endl
-              << "\tCenter: " << mCenter << std::endl
+              << "\tCenter: " << mPosition << std::endl
               << "\tRadius: " << mRadius << std::endl
               << "\tColor: " << mColor << std::endl;
 }

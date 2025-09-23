@@ -3,13 +3,11 @@
 namespace Raytracer {
 
 Cylinder::Cylinder(const std::string& name, const Vector3D& center, const Vector3D& normal, double radius, double height, const Color& mantleColor, const Color& capColor) :
-    Object(name, mantleColor),
-    mCenter(center),
-    mNormal(normal.Normalized()),
+    Object(name, mantleColor, center, normal),
     mRadius(radius),
     mHeight(height),
-    mTopDisk("top_cap", center + (height / 2.0) * mNormal, mNormal, radius, capColor),
-    mBottomDisk("bottom_cap", center - (height / 2.0) * mNormal, -1.0 * mNormal, radius, capColor) {
+    mTopDisk("top_cap", center + (height / 2.0) * normal, normal, radius, capColor),
+    mBottomDisk("bottom_cap", center - (height / 2.0) * normal, -1.0 * normal, radius, capColor) {
 }
 
 std::optional<Intersection> Cylinder::Intersect(const Ray& ray) {
@@ -30,7 +28,7 @@ std::optional<Intersection> Cylinder::Intersect(const Ray& ray) {
 
 void Cylinder::PrintInfo() const {
     std::cout << "Cylinder Info:" << std::endl
-              << "\tCenter: " << mCenter << std::endl
+              << "\tCenter: " << mPosition << std::endl
               << "\tNormal: " << mNormal << std::endl
               << "\tRadius: " << mRadius << std::endl
               << "\tHeight: " << mHeight << std::endl
@@ -56,7 +54,7 @@ std::optional<Intersection> Cylinder::IntersectCaps(const Ray& ray) {
 
 std::optional<Intersection> Cylinder::IntersectMantle(const Ray& ray) {
     Vector3D d = ray.GetDirection();
-    Vector3D oc = ray.GetOrigin() - mCenter;
+    Vector3D oc = ray.GetOrigin() - mPosition;
 
     double dDotN = d.Dot(mNormal);
     Vector3D dPerp = d - dDotN * mNormal;
@@ -90,9 +88,9 @@ std::optional<Intersection> Cylinder::IntersectMantle(const Ray& ray) {
 
     // Check if the intersection point is within the height bounds
     Vector3D hitPoint = ray(tCylinder);
-    double heightAtHit = (hitPoint - mCenter).Dot(mNormal);
+    double heightAtHit = (hitPoint - mPosition).Dot(mNormal);
     if (std::fabs(heightAtHit) <= mHeight / 2.0) {
-        Vector3D normalAtHit = (hitPoint - mCenter - heightAtHit * mNormal).Normalized();
+        Vector3D normalAtHit = (hitPoint - mPosition - heightAtHit * mNormal).Normalized();
         return Intersection{tCylinder, hitPoint, normalAtHit, this};
     }
 

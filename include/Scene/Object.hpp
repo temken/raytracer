@@ -14,26 +14,28 @@ struct Intersection;
 
 class Object {
 public:
-    explicit Object(const std::string& name, const Color& color);
+    explicit Object(const std::string& name, const Color& color, const Vector3D& position, const Vector3D& normal);
     virtual ~Object() = default;
-
-    virtual Color GetColor() const;
 
     std::string GetName() const;
 
-    bool EmitsLight() const;
+    void SetVisible(bool visible);
+    bool IsVisible() const;
 
+    Vector3D GetPosition() const;
+    void SetPosition(const Vector3D& position);
+
+    Vector3D GetNormal() const;
+    void SetNormal(const Vector3D& normal);
+
+    virtual Color GetColor() const;
     void SetColor(const Color& color);
 
+    bool EmitsLight() const;
     void SetEmitsLight(bool emitsLight);
 
     bool IsReflective() const;
-
     void SetReflective(bool isReflective);
-
-    bool IsVisible() const;
-
-    void SetVisible(bool visible);
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) = 0;
 
@@ -42,6 +44,10 @@ public:
 protected:
     std::string mName;
     bool mVisible = true;
+
+    // Dynamic properties
+    Vector3D mPosition;
+    Vector3D mNormal;
 
     // Material properties
     Color mColor;

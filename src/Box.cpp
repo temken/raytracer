@@ -3,38 +3,37 @@
 namespace Raytracer {
 
 Box::Box(const std::string& name, const Vector3D& center, double length, double width, double height, const std::array<Color, 6>& colors, const std::array<bool, 6>& reflectives) :
-    Object(name, BLACK),
-    mCenter(center),
+    Object(name, BLACK, center, Vector3D({0, 0, 1})),
     mLength(length),
     mWidth(width),
     mHeight(height) {
     // Top face
-    Vector3D topCenter = mCenter + Vector3D({0, 0, mHeight / 2});
+    Vector3D topCenter = mPosition + Vector3D({0, 0, mHeight / 2});
     Rectangle topFace("top", topCenter, Vector3D({0, 0, 1}), mLength, mWidth, colors[0]);
     topFace.SetReflective(reflectives[0]);
     mFaces.push_back(topFace);
     // Bottom face
-    Vector3D bottomCenter = mCenter - Vector3D({0, 0, mHeight / 2});
+    Vector3D bottomCenter = mPosition - Vector3D({0, 0, mHeight / 2});
     Rectangle bottomFace("bottom", bottomCenter, Vector3D({0, 0, -1}), mLength, mWidth, colors[1]);
     bottomFace.SetReflective(reflectives[1]);
     mFaces.push_back(bottomFace);
     // Front face
-    Vector3D frontCenter = mCenter + Vector3D({0, mWidth / 2, 0});
+    Vector3D frontCenter = mPosition + Vector3D({0, mWidth / 2, 0});
     Rectangle frontFace("front", frontCenter, Vector3D({0, 1, 0}), mLength, mHeight, colors[2]);
     frontFace.SetReflective(reflectives[2]);
     mFaces.push_back(frontFace);
     // Back face
-    Vector3D backCenter = mCenter - Vector3D({0, mWidth / 2, 0});
+    Vector3D backCenter = mPosition - Vector3D({0, mWidth / 2, 0});
     Rectangle backFace("back", backCenter, Vector3D({0, -1, 0}), mLength, mHeight, colors[3]);
     backFace.SetReflective(reflectives[3]);
     mFaces.push_back(backFace);
     // Left face
-    Vector3D leftCenter = mCenter - Vector3D({mLength / 2, 0, 0});
+    Vector3D leftCenter = mPosition - Vector3D({mLength / 2, 0, 0});
     Rectangle leftFace("left", leftCenter, Vector3D({-1, 0, 0}), mHeight, mWidth, colors[4]);
     leftFace.SetReflective(reflectives[4]);
     mFaces.push_back(leftFace);
     // Right face
-    Vector3D rightCenter = mCenter + Vector3D({mLength / 2, 0, 0});
+    Vector3D rightCenter = mPosition + Vector3D({mLength / 2, 0, 0});
     Rectangle rightFace("right", rightCenter, Vector3D({1, 0, 0}), mHeight, mWidth, colors[5]);
     rightFace.SetReflective(reflectives[5]);
     mFaces.push_back(rightFace);
@@ -71,7 +70,7 @@ std::optional<Intersection> Box::Intersect(const Ray& ray) {
 
 void Box::PrintInfo() const {
     std::cout << "Box: " << std::endl;
-    std::cout << "\tCenter: " << mCenter << std::endl;
+    std::cout << "\tCenter: " << mPosition << std::endl;
     std::cout << "\tDimensions: (" << mLength << "x" << mWidth << "x" << mHeight << ")" << std::endl;
     for (size_t i = 0; i < mFaces.size(); ++i) {
         std::cout << "\tFace " << i + 1 << ":" << std::endl

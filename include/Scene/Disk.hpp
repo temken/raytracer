@@ -18,8 +18,6 @@ public:
     virtual void PrintInfo() const override;
 
 private:
-    Vector3D mCenter;
-    Vector3D mNormal;
     double mRadius;
 };
 
