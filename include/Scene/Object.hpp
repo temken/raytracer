@@ -28,6 +28,15 @@ public:
     Vector3D GetNormal() const;
     void SetNormal(const Vector3D& normal);
 
+    Vector3D GetVelocity() const;
+    void SetVelocity(const Vector3D& velocity);
+
+    Vector3D GetAngularVelocity() const;
+    void SetAngularVelocity(const Vector3D& angularVelocity);
+
+    Vector3D GetSpin() const;
+    void SetSpin(const Vector3D& spin);
+
     virtual Color GetColor() const;
     void SetColor(const Color& color);
 
@@ -39,6 +48,8 @@ public:
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) = 0;
 
+    void Evolve(double timeStep);
+
     virtual void PrintInfo() const = 0;
 
 protected:
@@ -49,12 +60,20 @@ protected:
     Vector3D mPosition;
     Vector3D mNormal;
 
+    Vector3D mVelocity = Vector3D({0.0, 0.0, 0.0});
+    Vector3D mAngularVelocity = Vector3D({0.0, 0.0, 0.0});
+    Vector3D mSpin = Vector3D({0.0, 0.0, 0.0});
+
     // Material properties
     Color mColor;
     bool mEmitsLight = false;
     bool mIsReflective = false;
 
     static constexpr double sEpsilon = 1e-6;
+
+    virtual void Translate(const Vector3D& translation);
+    virtual void Rotate(const Vector3D& axis, double angle);
+    virtual void Spin(const Vector3D& axis, double angle);
 };
 
 }  // namespace Raytracer

@@ -36,6 +36,30 @@ void Object::SetNormal(const Vector3D& normal) {
     mNormal = normal;
 }
 
+Vector3D Object::GetVelocity() const {
+    return mVelocity;
+}
+
+void Object::SetVelocity(const Vector3D& velocity) {
+    mVelocity = velocity;
+}
+
+Vector3D Object::GetAngularVelocity() const {
+    return mAngularVelocity;
+}
+
+void Object::SetAngularVelocity(const Vector3D& angularVelocity) {
+    mAngularVelocity = angularVelocity;
+}
+
+Vector3D Object::GetSpin() const {
+    return mSpin;
+}
+
+void Object::SetSpin(const Vector3D& spin) {
+    mSpin = spin;
+}
+
 Color Object::GetColor() const {
     return mColor;
 }
@@ -60,8 +84,21 @@ void Object::SetReflective(bool isReflective) {
     mIsReflective = isReflective;
 }
 
+void Object::Evolve(double timeStep) {
+    Translate(mVelocity * timeStep);
+    Rotate(mAngularVelocity.Normalized(), mAngularVelocity.Norm() * timeStep);
+    Spin(mSpin.Normalized(), mSpin.Norm() * timeStep);
 }
 
+void Object::Translate(const Vector3D& translation) {
+    mPosition += translation;
+}
+void Object::Rotate(const Vector3D& axis, double angle) {
+    // Implement rotation logic
+}
+
+void Object::Spin(const Vector3D& axis, double angle) {
+    // Implement spin logic
 }
 
 }  // namespace Raytracer
