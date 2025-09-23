@@ -61,6 +61,7 @@ Image ideas:
 - [ ] Light lanterns along a road in the night with nice ambient
 
 Known bugs and issues:
+- [ ] Fix the orientation/rotation of rectangles and boxes.
 - [ ] Increasing the resolution sometimes seems to widen the field of view and vice versa
 - [ ] Test and debug the image class, import/export a file. Ensure that the image has the same orientation.
 - [ ] Debug the rectangle/ box classes. There is something off with the dimensions. This is related to the previous point potentially.
