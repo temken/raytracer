@@ -72,8 +72,8 @@ protected:
     static constexpr double sEpsilon = 1e-6;
 
     virtual void Translate(const Vector3D& translation);
-    virtual void Rotate(const Vector3D& axis, double angle);
-    virtual void Spin(const Vector3D& axis, double angle);
+    virtual void Rotate(double angle, const Vector3D& axis);
+    virtual void Spin(double angle, const Vector3D& axis);
 };
 
 }  // namespace Raytracer

@@ -86,18 +86,18 @@ void Object::SetReflective(bool isReflective) {
 
 void Object::Evolve(double timeStep) {
     Translate(mVelocity * timeStep);
-    Rotate(mAngularVelocity.Normalized(), mAngularVelocity.Norm() * timeStep);
-    Spin(mSpin.Normalized(), mSpin.Norm() * timeStep);
+    Rotate(mAngularVelocity.Norm() * timeStep, mAngularVelocity.Normalized());
+    Spin(mSpin.Norm() * timeStep, mSpin.Normalized());
 }
 
 void Object::Translate(const Vector3D& translation) {
     mPosition += translation;
 }
-void Object::Rotate(const Vector3D& axis, double angle) {
+void Object::Rotate(double angle, const Vector3D& axis) {
     // Implement rotation logic
 }
 
-void Object::Spin(const Vector3D& axis, double angle) {
+void Object::Spin(double angle, const Vector3D& axis) {
     // Implement spin logic
 }
 

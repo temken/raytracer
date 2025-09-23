@@ -18,6 +18,12 @@ Color Scene::GetBackgroundColor() const {
     return mBackgroundColor;
 }
 
+void Scene::Evolve(double timeStep) {
+    for (auto& object : mObjects) {
+        object->Evolve(timeStep);
+    }
+}
+
 void Scene::PrintInfo() const {
     std::cout << "Scene Information:" << std::endl;
     std::cout << "Background Color: " << mBackgroundColor << std::endl;
