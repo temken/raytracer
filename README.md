@@ -42,34 +42,36 @@
 - [x] Move image/video to utilities
 - [x] Image bluring should be a config parameter of the camera
 - [x] Convergence videos. 
-- [ ] Timedependence of scene/object and camera. Automatically used by video recording. Should also cover the fly around
+- [x] Timedependence of scene/object and camera. Automatically used by video recording. Should also cover the fly around
+- [ ] Fix cylinder
+- [ ] Introduce ring class 
 - [ ] Introduce a material class
 - [ ] Semi-reflective/shiny objects
+- [ ] LIght source are either on/off. Should be possible to dim them. Maybe this has something to do with luminance?
 - [ ] Implement metallic surfaces
 - [ ] Add refractive/transparent media.
 - [ ] Add more pre-defined colors
+- [ ] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
 - [ ] Optimize the rendering process with openmp or cuda
 - [ ] Improve the block blur algorithm to not smudge edges. -> Bilateral filter
 - [ ] Implement depth of field capability
 - [ ] Create camera based on aspect ratio and one pixel dimension
 - [ ] New objects: Cones, Rings
-- [ ] Code clean up
-  - [ ] Move the headers into src/??
+- [ ] Normal textures
+- [ ] Image textures for other objects (Spheres!)
 
 
 Image ideas:
-- [ ] Light lanterns along a road in the night with nice ambient
+- Light lanterns along a road in the night with nice ambient
 
 Known bugs and issues:
-- [ ] Fix the orientation/rotation of rectangles and boxes.
 - [ ] Increasing the resolution sometimes seems to widen the field of view and vice versa
 - [ ] Test and debug the image class, import/export a file. Ensure that the image has the same orientation.
 - [ ] Debug the rectangle/ box classes. There is something off with the dimensions. This is related to the previous point potentially.
-- [ ] LIght source are either on/off. Should be possible to dim them. Maybe this has something to do with luminance?
 
 Other ideas:
 
-- Define trajectories that the camera can follow (time dependence). For a give speed, fps we can generate neat videos flying through the scene. velocity and rot
+- Define trajectories that the camera can follow (time dependence is already ).
 - We could also make the scene itself time-dependent (e.g. moving light sources, objects, etc). Planets passing around the sun would be fun.
 - Objects just need their own velocity, rate-of-turn and angular momentum around the z axis
 - Enable background gradients/images.

@@ -40,6 +40,23 @@ private:
     static Vector3D ParseVector3D(const YAML::Node& n);
     static Color ParseColor(const YAML::Node& n);
 
+    struct ObjectProperties {
+        std::string id;
+        bool visible = true;
+        bool emitsLight = false;
+        Color color = WHITE;
+        bool reflective = false;
+
+        // Dynamics
+        Vector3D position = Vector3D({0.0, 0.0, 0.0});
+        Vector3D normal = Vector3D({0.0, 0.0, 1.0});
+        Vector3D velocity = Vector3D({0.0, 0.0, 0.0});
+        Vector3D angularVelocity = Vector3D({0.0, 0.0, 0.0});
+        Vector3D spin = Vector3D({0.0, 0.0, 0.0});
+    };
+
+    ObjectProperties ParseObjectProperties(const YAML::Node& obj) const;
+
     Sphere ParseSphere(const YAML::Node& obj) const;
     Disk ParseDisk(const YAML::Node& obj) const;
     Rectangle ParseRectangle(const YAML::Node& obj) const;
