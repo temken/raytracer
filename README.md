@@ -44,12 +44,13 @@
 - [x] Convergence videos. 
 - [x] Timedependence of scene/object and camera. Automatically used by video recording. Should also cover the fly around
 - [x] Fix cylinder
-- [ ] Introduce ring class 
+- [x] Introduce torus class (Intersect is still buggy)
 - [ ] Introduce a material class
 - [ ] Semi-reflective/shiny objects
 - [ ] LIght source are either on/off. Should be possible to dim them. Maybe this has something to do with luminance?
 - [ ] Implement metallic surfaces
 - [ ] Add refractive/transparent media.
+- [ ] Get debugging to work.
 - [ ] Add more pre-defined colors
 - [ ] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
 - [ ] Optimize the rendering process with openmp or cuda
