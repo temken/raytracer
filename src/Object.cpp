@@ -4,9 +4,9 @@ namespace Raytracer {
 
 Object::Object(const std::string& name, const Color& color, const Vector3D& position, const Vector3D& normal) :
     mName(name),
-    mColor(color),
     mPosition(position),
-    mNormal(normal.Normalized()) {}
+    mNormal(normal.Normalized()),
+    mColor(color) {}
 
 std::string Object::GetName() const {
     return mName;
@@ -85,9 +85,18 @@ void Object::SetReflective(bool isReflective) {
 }
 
 void Object::Evolve(double timeStep) {
-    Translate(mVelocity * timeStep);
-    Rotate(mAngularVelocity.Norm() * timeStep, mAngularVelocity.Normalized());
-    Spin(mSpin.Norm() * timeStep, mSpin.Normalized());
+    if (timeStep <= 0) {
+        throw std::invalid_argument("Time step must be positive");
+    }
+    if (mVelocity.Norm() > sEpsilon) {
+        Translate(mVelocity * timeStep);
+    }
+    if (mAngularVelocity.Norm() > sEpsilon) {
+        Rotate(mAngularVelocity.Norm() * timeStep, mAngularVelocity.Normalized());
+    }
+    if (mSpin.Norm() > sEpsilon) {
+        Spin(mSpin.Norm() * timeStep, mSpin.Normalized());
+    }
 }
 
 void Object::Translate(const Vector3D& translation) {

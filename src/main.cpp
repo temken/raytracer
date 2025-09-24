@@ -61,8 +61,8 @@ int main(int argc, char** argv) {
     // image.Save(openOutputFiles);
     // std::cout << "\n\nBlack pixel ratio: " << image.CalculateBlackPixelRatio() * 100.0 << "%" << std::endl;
 
-    double videoDurationSeconds = 10.0;
-    double angularVelocity = 0.2;  // in rad/s
+    double videoDurationSeconds = 5.0;
+    double angularVelocity = 2 * M_PI / videoDurationSeconds;  // in rad/s
     camera.InitializeOrbitTrajectory(angularVelocity);
     Video video = camera.RenderVideo(scene, videoDurationSeconds, printProgressBar);
     video.Save(openOutputFiles);
