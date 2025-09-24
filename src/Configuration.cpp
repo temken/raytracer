@@ -58,14 +58,14 @@ Camera Configuration::ConstructCamera() const {
     }
 
     double fieldOfView = node["fov_deg"].as<double>();
-    Vector3D position = {
-        node["position"][0].as<double>(),
-        node["position"][1].as<double>(),
-        node["position"][2].as<double>()};
-    Vector3D direction = {
-        node["direction"][0].as<double>(),
-        node["direction"][1].as<double>(),
-        node["direction"][2].as<double>()};
+    Vector3D position = ParseVector3D(node["position"]);
+    Vector3D direction = ParseVector3D(node["direction"]);
+
+    // Dynamics
+    Vector3D velocity = node["velocity"] ? ParseVector3D(node["velocity"]) : Vector3D({0.0, 0.0, 0.0});
+    Vector3D angularVelocity = node["angular_velocity"] ? ParseVector3D(node["angular_velocity"]) : Vector3D({0.0, 0.0, 0.0});
+    Vector3D spin = node["spin"] ? ParseVector3D(node["spin"]) : Vector3D({0.0, 0.0, 0.0});
+
     auto res = node["resolution"];
     size_t width = res["width"].as<int>();
     size_t height = res["height"].as<int>();
@@ -76,6 +76,11 @@ Camera Configuration::ConstructCamera() const {
 
     // Configure the camera
     Camera camera(position, direction, rendererType);
+
+    camera.SetVelocity(velocity);
+    camera.SetAngularVelocity(angularVelocity);
+    camera.SetSpin(spin);
+
     camera.SetFieldOfView(fieldOfView);
     camera.SetResolution(width, height);
     camera.SetSamplesPerPixel(samplesPerPixel);
@@ -187,63 +192,83 @@ Color Configuration::ParseColor(const YAML::Node& n) {
     throw std::runtime_error("color must be a 3-element sequence or a predefined color name");
 }
 
-Disk Configuration::ParseDisk(const YAML::Node& obj) const {
-    std::string id = obj["id"].as<std::string>();
-    bool visible = obj["visible"] ? obj["visible"].as<bool>() : true;
-    bool emitsLight = obj["emits_light"] ? obj["emits_light"].as<bool>() : false;
-    Vector3D position = ParseVector3D(obj["position"]);
-    Vector3D normal = ParseVector3D(obj["normal"]);
-    double radius = obj["radius"].as<double>();
+Configuration::ObjectProperties Configuration::ParseObjectProperties(const YAML::Node& obj) const {
+    ObjectProperties props;
+
+    props.id = obj["id"].as<std::string>();
+    props.visible = obj["visible"] ? obj["visible"].as<bool>() : true;
+    props.emitsLight = obj["emits_light"] ? obj["emits_light"].as<bool>() : false;
+    props.position = obj["position"] ? ParseVector3D(obj["position"]) : Vector3D({0.0, 0.0, 0.0});
+    props.normal = obj["normal"] ? ParseVector3D(obj["normal"]) : Vector3D({0.0, 0.0, 1.0});
+
+    // Dynamics
+    props.velocity = obj["velocity"] ? ParseVector3D(obj["velocity"]) : Vector3D({0.0, 0.0, 0.0});
+    props.angularVelocity = obj["angular_velocity"] ? ParseVector3D(obj["angular_velocity"]) : Vector3D({0.0, 0.0, 0.0});
+    props.spin = obj["spin"] ? ParseVector3D(obj["spin"]) : Vector3D({0.0, 0.0, 0.0});
 
     auto m = obj["material"];
-    Color color = ParseColor(m["color"]);
-    bool reflective = m["reflective"].as<bool>();
+    if (m) {
+        props.color = m["color"] ? ParseColor(m["color"]) : WHITE;
+        props.reflective = m["reflective"] ? m["reflective"].as<bool>() : false;
+    } else {
+        props.color = WHITE;
+        props.reflective = false;
+    }
 
-    Disk disk(id, position, normal, radius, color);
-    disk.SetVisible(visible);
-    disk.SetEmitsLight(emitsLight);
-    disk.SetReflective(reflective);
-    return disk;
+    return props;
 }
 
 Sphere Configuration::ParseSphere(const YAML::Node& obj) const {
-    std::string id = obj["id"].as<std::string>();
-    bool visible = obj["visible"] ? obj["visible"].as<bool>() : true;
-    bool emitsLight = obj["emits_light"] ? obj["emits_light"].as<bool>() : false;
-    Vector3D center = ParseVector3D(obj["position"]);
+    ObjectProperties props = ParseObjectProperties(obj);
     double radius = obj["radius"].as<double>();
 
-    auto m = obj["material"];
-    Color color = ParseColor(m["color"]);
-    bool reflective = m["reflective"].as<bool>();
+    // Construct the sphere
+    Sphere sphere(props.id, props.position, radius, props.color);
 
-    Sphere sphere(id, center, radius, color);
-    sphere.SetVisible(visible);
-    sphere.SetEmitsLight(emitsLight);
-    sphere.SetReflective(reflective);
+    sphere.SetVelocity(props.velocity);
+    sphere.SetAngularVelocity(props.angularVelocity);
+    sphere.SetSpin(props.spin);
+
+    sphere.SetVisible(props.visible);
+    sphere.SetEmitsLight(props.emitsLight);
+    sphere.SetReflective(props.reflective);
+
     return sphere;
 }
 
+Disk Configuration::ParseDisk(const YAML::Node& obj) const {
+    ObjectProperties props = ParseObjectProperties(obj);
+    double radius = obj["radius"].as<double>();
+
+    // Construct the disk
+    Disk disk(props.id, props.position, props.normal, radius, props.color);
+
+    disk.SetVelocity(props.velocity);
+    disk.SetAngularVelocity(props.angularVelocity);
+    disk.SetSpin(props.spin);
+
+    disk.SetVisible(props.visible);
+    disk.SetEmitsLight(props.emitsLight);
+    disk.SetReflective(props.reflective);
+    return disk;
+}
+
 Rectangle Configuration::ParseRectangle(const YAML::Node& obj) const {
-    std::string id = obj["id"].as<std::string>();
-    bool visible = obj["visible"] ? obj["visible"].as<bool>() : true;
-    bool emitsLight = obj["emits_light"] ? obj["emits_light"].as<bool>() : false;
-    Vector3D center = ParseVector3D(obj["position"]);
-    Vector3D normal = ParseVector3D(obj["normal"]);
+    ObjectProperties props = ParseObjectProperties(obj);
+    double width = obj["dimensions"]["width"].as<double>();
+    double height = obj["dimensions"]["height"].as<double>();
+    std::string textureFile = obj["material"]["texture"] ? obj["material"]["texture"].as<std::string>() : "";
 
-    auto dim = obj["dimensions"];
-    double width = dim["width"].as<double>();
-    double height = dim["height"].as<double>();
+    // Construct the rectangle
+    Rectangle rectangle(props.id, props.position, props.normal, width, height, props.color);
 
-    auto m = obj["material"];
-    Color color = ParseColor(m["color"]);
-    bool reflective = m["reflective"].as<bool>();
-    std::string textureFile = m["texture"] ? m["texture"].as<std::string>() : "";
+    rectangle.SetVelocity(props.velocity);
+    rectangle.SetAngularVelocity(props.angularVelocity);
+    rectangle.SetSpin(props.spin);
 
-    Rectangle rectangle(id, center, normal, width, height, color);
-    rectangle.SetVisible(visible);
-    rectangle.SetEmitsLight(emitsLight);
-    rectangle.SetReflective(reflective);
+    rectangle.SetVisible(props.visible);
+    rectangle.SetEmitsLight(props.emitsLight);
+    rectangle.SetReflective(props.reflective);
     if (!textureFile.empty()) {
         rectangle.SetTexture(textureFile);
     }
@@ -251,10 +276,7 @@ Rectangle Configuration::ParseRectangle(const YAML::Node& obj) const {
 }
 
 Box Configuration::ParseBox(const YAML::Node& obj) const {
-    std::string id = obj["id"].as<std::string>();
-    bool visible = obj["visible"] ? obj["visible"].as<bool>() : true;
-    bool emitsLight = obj["emits_light"] ? obj["emits_light"].as<bool>() : false;
-    Vector3D center = ParseVector3D(obj["position"]);
+    ObjectProperties props = ParseObjectProperties(obj);
 
     auto dim = obj["dimensions"];
     double length = dim["length"].as<double>();
@@ -272,30 +294,37 @@ Box Configuration::ParseBox(const YAML::Node& obj) const {
         reflectives[i] = n["reflective"].as<bool>();
     }
 
-    Box box(id, center, length, width, height, colors, reflectives);
-    box.SetVisible(visible);
-    box.SetEmitsLight(emitsLight);
+    // Construct the box
+    Box box(props.id, props.position, length, width, height, colors, reflectives);
+    box.SetVisible(props.visible);
+    box.SetEmitsLight(props.emitsLight);
+
+    box.SetVelocity(props.velocity);
+    box.SetAngularVelocity(props.angularVelocity);
+    box.SetSpin(props.spin);
+
     return box;
 }
 
 Cylinder Configuration::ParseCylinder(const YAML::Node& obj) const {
-    std::string id = obj["id"].as<std::string>();
-    bool visible = obj["visible"] ? obj["visible"].as<bool>() : true;
-    bool emitsLight = obj["emits_light"] ? obj["emits_light"].as<bool>() : false;
-    Vector3D center = ParseVector3D(obj["position"]);
-    Vector3D normal = ParseVector3D(obj["normal"]);
+    ObjectProperties props = ParseObjectProperties(obj);
     double radius = obj["radius"].as<double>();
     double height = obj["height"].as<double>();
 
     auto m = obj["material"];
     Color mantleColor = ParseColor(m["mantle_color"]);
     Color capColor = ParseColor(m["cap_color"]);
-    bool reflective = m["reflective"].as<bool>();
 
-    Cylinder cylinder(id, center, normal, radius, height, mantleColor, capColor);
-    cylinder.SetVisible(visible);
-    cylinder.SetEmitsLight(emitsLight);
-    cylinder.SetReflective(reflective);
+    // Construct the cylinder
+    Cylinder cylinder(props.id, props.position, props.normal, radius, height, mantleColor, capColor);
+
+    cylinder.SetVelocity(props.velocity);
+    cylinder.SetAngularVelocity(props.angularVelocity);
+    cylinder.SetSpin(props.spin);
+
+    cylinder.SetVisible(props.visible);
+    cylinder.SetEmitsLight(props.emitsLight);
+    cylinder.SetReflective(props.reflective);
     return cylinder;
 }
 
