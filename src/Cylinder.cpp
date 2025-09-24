@@ -6,8 +6,8 @@ Cylinder::Cylinder(const std::string& name, const Vector3D& center, const Vector
     Object(name, mantleColor, center, normal),
     mRadius(radius),
     mHeight(height),
-    mTopDisk("top_cap", center + (height / 2.0) * normal, normal, radius, capColor),
-    mBottomDisk("bottom_cap", center - (height / 2.0) * normal, -1.0 * normal, radius, capColor) {
+    mTopDisk("top_cap", center + (height / 2.0) * mNormal, mNormal, radius, capColor),
+    mBottomDisk("bottom_cap", center - (height / 2.0) * mNormal, -1.0 * mNormal, radius, capColor) {
 }
 
 std::optional<Intersection> Cylinder::Intersect(const Ray& ray) {

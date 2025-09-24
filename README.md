@@ -43,7 +43,7 @@
 - [x] Image bluring should be a config parameter of the camera
 - [x] Convergence videos. 
 - [x] Timedependence of scene/object and camera. Automatically used by video recording. Should also cover the fly around
-- [ ] Fix cylinder
+- [x] Fix cylinder
 - [ ] Introduce ring class 
 - [ ] Introduce a material class
 - [ ] Semi-reflective/shiny objects
