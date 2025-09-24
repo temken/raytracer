@@ -7,6 +7,7 @@
 #include "Scene/Rectangle.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/Sphere.hpp"
+#include "Scene/Torus.hpp"
 
 #include <yaml-cpp/yaml.h>
 
@@ -62,6 +63,7 @@ private:
     Rectangle ParseRectangle(const YAML::Node& obj) const;
     Box ParseBox(const YAML::Node& obj) const;
     Cylinder ParseCylinder(const YAML::Node& obj) const;
+    Torus ParseTorus(const YAML::Node& obj) const;
 
     void CreateOutputDirectory() const;
 };
