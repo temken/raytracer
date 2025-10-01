@@ -1,3 +1,4 @@
+#include <omp.h>
 #include <chrono>
 #include <cmath>
 #include <cstdlib>
@@ -45,6 +46,8 @@ int main(int argc, char** argv) {
         return 1;
     }
     ////////////////////////////////////////////////////////////////////////
+
+    std::cout << "Used threads: " << omp_get_max_threads() << std::endl;
 
     Configuration::GetInstance().PrintInfo();
     Camera camera = Configuration::GetInstance().ConstructCamera();

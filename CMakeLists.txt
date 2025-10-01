@@ -21,6 +21,7 @@ set(EXTERNAL_DIR ${PROJECT_SOURCE_DIR}/external)
 
 # External projects
 find_package(Boost 1.65 REQUIRED)
+find_package(OpenMP REQUIRED)
 include(FetchContent)
 
 # yaml-cpp
@@ -156,19 +157,19 @@ endif(CODE_COVERAGE)
 
 option(BUILD_TESTING "Build the testing tree." ON)
 
-# Only build tests if we are the top-level project
-# Allows this to be used by super projects with `add_subdirectory`
-if(BUILD_TESTING AND(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR))
-  enable_testing()
-  FetchContent_GetProperties(googletest)
+# # Only build tests if we are the top-level project
+# # Allows this to be used by super projects with `add_subdirectory`
+# if(BUILD_TESTING AND(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR))
+# enable_testing()
+# FetchContent_GetProperties(googletest)
 
-  if(NOT googletest_POPULATED)
-    FetchContent_Populate(googletest)
-    add_subdirectory(
-      ${googletest_SOURCE_DIR}
-      ${googletest_BINARY_DIR}
-      EXCLUDE_FROM_ALL)
-  endif()
+# if(NOT googletest_POPULATED)
+# FetchContent_Populate(googletest)
+# add_subdirectory(
+# ${googletest_SOURCE_DIR}
+# ${googletest_BINARY_DIR}
+# EXCLUDE_FROM_ALL)
+# endif()
 
-  add_subdirectory(${TESTS_DIR})
-endif()
+# add_subdirectory(${TESTS_DIR})
+# endif()
