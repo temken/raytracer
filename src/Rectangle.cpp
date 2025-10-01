@@ -34,25 +34,19 @@ std::optional<Intersection> Rectangle::Intersect(const Ray& ray) {
     }
 
     Vector3D hitPoint = ray(t);
-    Vector3D localPoint = hitPoint - mPosition;
 
-    double uCoord = localPoint.Dot(mU);
-    double vCoord = localPoint.Dot(mV);
+    std::pair<double, double> uv = GetNormalizedTextureCoordinates(hitPoint);
 
-    if (mTexture.has_value()) {
-        mULastInteraction = (uCoord / mWidth) + 0.5;
-        mVLastInteraction = (vCoord / mHeight) + 0.5;
-    }
-
-    if (std::fabs(uCoord) <= 0.5 * mWidth && std::fabs(vCoord) <= 0.5 * mHeight) {
+    if (std::fabs(uv.first) <= 0.5 && std::fabs(uv.second) <= 0.5) {
         return Intersection{t, hitPoint, (denom < 0) ? mNormal : -1.0 * mNormal, this};
     }
     return std::nullopt;
 }
 
-Color Rectangle::GetColor() const {
+Color Rectangle::GetColor(const Vector3D& hitPoint) const {
     if (mTexture.has_value()) {
-        return mTexture->GetColorAt(mULastInteraction, mVLastInteraction);
+        auto uv = GetNormalizedTextureCoordinates(hitPoint);
+        return mTexture->GetColorAt(uv.first + 0.5, uv.second + 0.5);
     } else {
         return mColor;
     }
@@ -75,6 +69,19 @@ void Rectangle::PrintInfo() const {
         std::cout << "\tTexture: " << "None" << std::endl
                   << "\tColor: " << GetColor() << std::endl;
     }
+}
+
+std::pair<double, double> Rectangle::GetNormalizedTextureCoordinates(const Vector3D& hitPoint) const {
+    Vector3D localPoint = hitPoint - mPosition;
+
+    double uCoord = localPoint.Dot(mU);
+    double vCoord = localPoint.Dot(mV);
+
+    // Map to [0, 1]
+    double u = uCoord / mWidth;
+    double v = vCoord / mHeight;
+
+    return {u, v};
 }
 
 }  // namespace Raytracer

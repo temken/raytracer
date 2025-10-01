@@ -60,7 +60,7 @@ void Object::SetSpin(const Vector3D& spin) {
     mSpin = spin;
 }
 
-Color Object::GetColor() const {
+Color Object::GetColor(const Vector3D& hitPoint) const {
     return mColor;
 }
 

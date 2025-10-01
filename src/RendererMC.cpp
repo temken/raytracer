@@ -17,14 +17,14 @@ Color RendererMC::TraceRay(Ray ray, const Scene& scene) {
         const auto* object = intersection->object;
 
         if (object->EmitsLight()) {
-            return throughput * object->GetColor();
+            return throughput * object->GetColor(intersection->point);
         }
 
         Vector3D newDir;
 
         if (object->IsReflective()) {
             newDir = ray.GetDirection() - 2 * ray.GetDirection().Dot(intersection->normal) * intersection->normal;
-            throughput = throughput * object->GetColor();
+            throughput = throughput * object->GetColor(intersection->point);
         } else {
             // Diffuse surface: random new direction in hemisphere
             // Build ONB around normal
@@ -46,7 +46,7 @@ Color RendererMC::TraceRay(Ray ray, const Scene& scene) {
             newDir = (x * eX + y * eY + cosTheta * eZ).Normalized();
 
             // Lambertian: throughput *= albedo
-            throughput = throughput * object->GetColor();
+            throughput = throughput * object->GetColor(intersection->point);
         }
 
         ray = Ray(intersection->point, newDir);

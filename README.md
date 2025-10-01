@@ -45,20 +45,27 @@
 - [x] Timedependence of scene/object and camera. Automatically used by video recording. Should also cover the fly around
 - [x] Fix cylinder
 - [x] Introduce torus class (Intersect is still buggy)
-- [ ] Introduce a material class
-- [ ] Semi-reflective/shiny objects
-- [ ] LIght source are either on/off. Should be possible to dim them. Maybe this has something to do with luminance?
-- [ ] Implement metallic surfaces
-- [ ] Add refractive/transparent media.
-- [ ] Get debugging to work.
-- [ ] Add more pre-defined colors
-- [ ] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
-- [ ] Optimize the rendering process with openmp or cuda
+- [x] Optimize the rendering process with openmp or cuda (openmp might require gnu compilers)
+- [ ] Improve the config file
+  - [ ] Colors in the config file should be possible to define as integer 0..255, not just floats 0..1
+  - [ ] Take image or video -> Decide in config file
+  - [ ] Set number of threads in config file
 - [ ] Improve the block blur algorithm to not smudge edges. -> Bilateral filter
+- [ ] Introduce a material class
+  - [ ] Semi-reflective/shiny objects
+  - [ ] LIght source are either on/off. Should be possible to dim them. Maybe this has something to do with luminance?
+  - [ ] Implement metallic surfaces
+  - [ ] Add refractive/transparent media.
+  - [ ] Add more pre-defined colors
+- [ ] Create some interesting images and videos using all the capabilities so far.
+- [ ] Print preview of image downscaled in terminal
+- [ ] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
+- [ ] Check out BSDF
+- [ ] Get debugging to work.
 - [ ] Implement depth of field capability
 - [ ] Create camera based on aspect ratio and one pixel dimension
 - [ ] New objects: Cones, Rings
-- [ ] Normal textures
+- [ ] Normal textures especially for glass surfaces, but not just
 - [ ] Image textures for other objects (Spheres!)
 
 
@@ -69,15 +76,14 @@ Known bugs and issues:
 - [ ] Increasing the resolution sometimes seems to widen the field of view and vice versa
 - [ ] Test and debug the image class, import/export a file. Ensure that the image has the same orientation.
 - [ ] Debug the rectangle/ box classes. There is something off with the dimensions. This is related to the previous point potentially.
+  - [ ] Check the brick scene. The texture orientation is different for each wall. It might have to do with the fact that the normals are aligned with an axis -> Swap x,y of the rectangle.
 
 Other ideas:
 
 - Define trajectories that the camera can follow (time dependence is already ).
-- We could also make the scene itself time-dependent (e.g. moving light sources, objects, etc). Planets passing around the sun would be fun.
-- Objects just need their own velocity, rate-of-turn and angular momentum around the z axis
 - Enable background gradients/images.
 - Preview images in the terminal
-- Make a UI with qt to show the scene and camera, move stuff, render quick images. Simple UI to have some interactive fun.
+- Make a UI with qt or imgui to show the scene and camera, move stuff, render quick images. Simple UI to have some interactive fun.
 
 ## General notes
 

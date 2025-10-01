@@ -37,7 +37,7 @@ public:
     Vector3D GetSpin() const;
     void SetSpin(const Vector3D& spin);
 
-    virtual Color GetColor() const;
+    virtual Color GetColor(const Vector3D& hitPoint = Vector3D()) const;
     void SetColor(const Color& color);
 
     bool EmitsLight() const;

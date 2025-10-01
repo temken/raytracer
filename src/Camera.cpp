@@ -6,6 +6,8 @@
 
 #include "libphysica/Utilities.hpp"
 
+#include <omp.h>
+#include <chrono>
 #include <random>
 
 namespace Raytracer {
@@ -88,6 +90,8 @@ void Camera::SetBlurImage(bool blur) {
 }
 
 Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool createConvergingVideo) const {
+    // Set the starting time
+    auto startTime = std::chrono::high_resolution_clock::now();
     size_t samples = mSamplesPerPixel;
     if (mRenderer->IsDeterministic() && !mUseAntiAliasing && mSamplesPerPixel > 1) {
         std::cerr << "Warning: Renderer is deterministic, and anti-aliasing is disabled. Setting samples to 1." << std::endl;
@@ -103,16 +107,23 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
         video = std::make_unique<Video>(mFramesPerSecond);
     }
     for (size_t s = 0; s < samples; s++) {
+#pragma omp parallel for collapse(2) schedule(static)
         for (size_t y = 0; y < mResolution.height; y++) {
             for (size_t x = 0; x < mResolution.width; x++) {
                 // Sample the pixel
                 Ray ray = CreateRay(x, y);
                 Color color = mRenderer->TraceRay(ray, scene);
                 accumulatedColors[y][x] += color;
-                renderedPixels++;
             }
-            if (printProgressBar && renderedPixels % 10000 == 0) {
-                libphysica::Print_Progress_Bar(double(renderedPixels) / totalPixels);
+            if (printProgressBar) {
+                size_t done;
+#pragma omp atomic capture
+                done = ++renderedPixels;
+
+                if ((done % 200000) == 0 || done == totalPixels) {
+                    double duration = std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - startTime).count();
+                    libphysica::Print_Progress_Bar(double(done) / double(totalPixels), 0, 60, duration, "Blue");
+                }
             }
         }
         if (video) {
@@ -127,10 +138,17 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
     }
     bool applyPostProcessing = (mRenderer->GetType() == Renderer::Type::MONTE_CARLO && samples > 1);
     Image image = CreateImage(accumulatedColors, samples, applyPostProcessing);
+    double totalDuration = std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - startTime).count();
+    if (printProgressBar) {
+        libphysica::Print_Progress_Bar(1.0, 0, 60, totalDuration, "Blue");
+    }
+    std::cout << "\n\nRendered image with " << 1.0 / totalDuration << " FPS" << std::endl;
     return image;
 }
 
 Video Camera::RenderVideo(Scene& scene, double durationSeconds, bool printProgressBar) {
+    auto startTime = std::chrono::high_resolution_clock::now();
+
     size_t totalFrames = mFramesPerSecond * durationSeconds;
     double timeStep = 1.0 / mFramesPerSecond;
     Video video(mFramesPerSecond);
@@ -138,10 +156,15 @@ Video Camera::RenderVideo(Scene& scene, double durationSeconds, bool printProgre
         Image frame = RenderImage(scene);
         video.AddFrame(frame);
         if (printProgressBar) {
-            libphysica::Print_Progress_Bar(double(i + 1) / totalFrames);
+            double duration = std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - startTime).count();
+            libphysica::Print_Progress_Bar(double(i + 1) / totalFrames, 0, 60, duration, "Red");
         }
         Evolve(timeStep);
         scene.Evolve(timeStep);
+    }
+    if (printProgressBar) {
+        double totalDuration = std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - startTime).count();
+        std::cout << "\n\nRendered video with " << totalFrames / totalDuration << " FPS" << std::endl;
     }
     return video;
 }

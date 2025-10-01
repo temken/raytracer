@@ -10,7 +10,7 @@ Color RendererSimple::TraceRay(Ray ray, const Scene& scene) {
             Ray reflectRay(intersection->point, reflectDir);
             return TraceRay(reflectRay, scene);
         } else {
-            return intersection->object->GetColor();
+            return intersection->object->GetColor(intersection->point);
         }
     }
     return scene.GetBackgroundColor();

@@ -30,7 +30,8 @@ target_link_libraries(libraytracer
 	PUBLIC
 	coverage_config
 	libphysica
-	yaml-cpp)
+	yaml-cpp
+	OpenMP::OpenMP_CXX)
 
 target_include_directories(libraytracer
 	PRIVATE

@@ -16,7 +16,7 @@ public:
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) override;
 
-    virtual Color GetColor() const override;
+    virtual Color GetColor(const Vector3D& hitPoint = Vector3D()) const override;
 
     void SetTexture(std::string filename);
 
@@ -30,8 +30,9 @@ private:
 
     // Optional texture
     std::optional<Texture> mTexture = std::nullopt;
-    double mULastInteraction = 0.0;
-    double mVLastInteraction = 0.0;
+
+    // Returns (u, v) coordinates in range [-0.5, 0.5] for the rectangle
+    std::pair<double, double> GetNormalizedTextureCoordinates(const Vector3D& hitPoint) const;
 };
 
 }  // namespace Raytracer
