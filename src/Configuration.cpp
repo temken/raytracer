@@ -4,6 +4,7 @@
 
 #include <filesystem>
 #include <iostream>
+#include <map>
 
 namespace Raytracer {
 
@@ -148,50 +149,61 @@ Vector3D Configuration::ParseVector3D(const YAML::Node& n) {
 }
 
 Color Configuration::ParseColor(const YAML::Node& n) {
-    if (n.IsSequence()) {
-        // RGB triplet: [r, g, b]
-        return Color(
-            n[0].as<double>(),
-            n[1].as<double>(),
-            n[2].as<double>());
-    }
+
+    static const std::map<std::string, Color> namedColors = {
+        {"black",  BLACK},
+        {"white",  WHITE},
+        {"gray",   GRAY},
+        {"red",    RED},
+        {"orange", ORANGE},
+        {"yellow", YELLOW},
+        {"cyan",   CYAN},
+        {"blue",   BLUE},
+        {"green",  GREEN},
+    };
+
+    // --- Named colors (scalar) ---
     if (n.IsScalar()) {
         std::string s = n.as<std::string>();
-        // normalize (case-insensitive)
-        std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
+        std::transform(s.begin(), s.end(), s.begin(),
+                       [](unsigned char c) { return std::tolower(c); });
 
-        // map names to your predefined constants
-        if (s == "black") {
-            return BLACK;
-        }
-        if (s == "white") {
-            return WHITE;
-        }
-        if (s == "gray") {
-            return GRAY;
-        }
-        if (s == "red") {
-            return RED;
-        }
-        if (s == "orange") {
-            return ORANGE;
-        }
-        if (s == "yellow") {
-            return YELLOW;
-        }
-        if (s == "cyan") {
-            return CYAN;
-        }
-        if (s == "blue") {
-            return BLUE;
-        }
-        if (s == "green") {
-            return GREEN;
-        }
+        auto it = namedColors.find(s);
+        if (it != namedColors.end())
+            return it->second;
 
         throw std::runtime_error("Unknown color name: " + s);
     }
-    throw std::runtime_error("color must be a 3-element sequence or a predefined color name");
+
+    // --- RGB sequence: [r, g, b] ---
+    if (n.IsSequence() && n.size() == 3) {
+        double r = n[0].as<double>();
+        double g = n[1].as<double>();
+        double b = n[2].as<double>();
+
+        double maxv = std::max({r, g, b});
+        if (maxv > 1.0)
+            return Color(r / 255.0, g / 255.0, b / 255.0);
+        else
+            return Color(r, g, b);
+    }
+
+    // --- RGB map: {r: ..., g: ..., b: ...} ---
+    if (n.IsMap()) {
+        if (!n["r"] || !n["g"] || !n["b"])
+            throw std::runtime_error("Color map must contain keys r, g, and b");
+
+        double r = n["r"].as<double>();
+        double g = n["g"].as<double>();
+        double b = n["b"].as<double>();
+
+        double maxv = std::max({r, g, b});
+        if (maxv > 1.0)
+            return Color(r / 255.0, g / 255.0, b / 255.0);
+        else
+            return Color(r, g, b);
+    }
+    throw std::runtime_error("Color must be a scalar name, a 3-element sequence, or a map \{r,g,b\}");
 }
 
 Configuration::ObjectProperties Configuration::ParseObjectProperties(const YAML::Node& obj) const {
