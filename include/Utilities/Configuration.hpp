@@ -13,6 +13,13 @@
 
 namespace Raytracer {
 
+struct RenderConfig {
+    bool renderImage = false;
+    bool renderVideo = false;
+    double videoDuration = 0.0;  // seconds
+    bool openOutputFiles = true;
+};
+
 class Configuration {
 public:
     static Configuration& GetInstance();
@@ -20,7 +27,18 @@ public:
     void ParseYamlFile(const std::string& path);
 
     std::string GetID() const;
+
     size_t GetNumThreads() const;
+
+    RenderConfig GetRenderConfig() const;
+
+    bool RenderImage() const;
+    bool RenderImageConvergingVideo() const;
+    bool RenderVideo() const;
+    double GetVideoDuration() const;
+
+    bool OpenOutputFiles() const;
+
     Camera ConstructCamera() const;
     Scene ConstructScene() const;
 
@@ -36,12 +54,21 @@ private:
     Configuration() = default;
     ~Configuration() = default;
 
-    std::string mID;
-    size_t mNumThreads;
     YAML::Node mRoot;
+
+    std::string mID;
 
     static Vector3D ParseVector3D(const YAML::Node& n);
     static Color ParseColor(const YAML::Node& n);
+
+    struct RenderOptions {
+        bool renderImage = true;
+        bool renderImageConvergingVideo = false;
+        bool renderVideo = false;
+        double videoDuration = 5.0;  // in seconds
+    } mRenderOptions;
+
+    void ParseRenderOptions(const YAML::Node& node);
 
     struct ObjectProperties {
         std::string id;

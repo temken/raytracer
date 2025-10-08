@@ -2,17 +2,23 @@ id: scene-001
 
 threads: 6
 
+render:
+  image: true
+  video: true
+  video_duration: 2.0
+  open_output_files: true
+
 camera:
-  renderer_type: MONTE_CARLO # Options: SIMPLE, MONTE_CARLO
+  renderer_type: SIMPLE # Options: SIMPLE, MONTE_CARLO
   fov_deg: 120.0
-  position: [9.0, 0.0, 0.0]
+  position: [9.0, 0.2, 0.0]
   direction: [-1.0, 0.0, 0.0]
   resolution:
     width: 800
     height: 600
-  framesPerSecond: 30
+  framesPerSecond: 15
   antialiasing: false
-  blur_image: false
+  blur_image: true
   samples_per_pixel: 1
 
 scene:
@@ -23,6 +29,7 @@ scene:
       visible: true
       emits_light: true
       position: [0.0, 0.0, 5.0]
+      velocity: [0.0, 0.0, -2.0]
       radius: 1.0
       material:
         color: white

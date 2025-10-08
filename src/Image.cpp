@@ -102,6 +102,14 @@ void Image::Clear(const Color& color) {
     std::fill(mPixels.begin(), mPixels.end(), color);
 }
 
+void Image::PrintInfo() const {
+    std::cout << "Image Information:" << std::endl
+              << "Dimensions:\t" << mWidth << " x " << mHeight << std::endl
+              << "Total Pixels:\t" << mWidth * mHeight << std::endl
+              << "Black Ratio:\t" << CalculateBlackPixelRatio() * 100.0 << " %" << std::endl
+              << std::endl;
+}
+
 double Image::CalculateBlackPixelRatio() const {
     if (mPixels.empty()) {
         return 0.0;
