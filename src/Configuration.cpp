@@ -30,12 +30,6 @@ void Configuration::ParseYamlFile(const std::string& path) {
         throw std::runtime_error("Missing required key: id");
     }
 
-    if(auto threads = mRoot["threads"]) {
-        mNumThreads = threads.as<size_t>();
-    } else {
-        throw std::runtime_error("Missing required key: threads");
-    }
-
     CreateOutputDirectory();
 }
 
@@ -44,7 +38,31 @@ std::string Configuration::GetID() const {
 }
 
 size_t Configuration::GetNumThreads() const {
-    return mNumThreads;
+    // Parse the number of threads from the YAML, default to 1 if not specified
+    if (auto threads = mRoot["threads"]) {
+        return threads.as<size_t>();
+    } else {
+        throw std::runtime_error("Missing required key: threads");
+    }
+}
+
+RenderConfig Configuration::GetRenderConfig() const {
+    RenderConfig config;
+
+    if (!mRoot) {
+        throw std::runtime_error("No YAML loaded");
+    }
+    auto node = mRoot["render"];
+    if (!node) {
+        throw std::runtime_error("Missing render section");
+    }
+
+    config.renderImage = node["image"] ? node["image"].as<bool>() : true;
+    config.renderVideo = node["video"] ? node["video"].as<bool>() : false;
+    config.videoDuration = node["video_duration"] ? node["video_duration"].as<double>() : 5.0;
+    config.openOutputFiles = node["open_output_files"] ? node["open_output_files"].as<bool>() : true;
+
+    return config;
 }
 
 Camera Configuration::ConstructCamera() const {
@@ -147,7 +165,7 @@ std::string Configuration::GetOutputDirectory() const {
 void Configuration::PrintInfo() const {
     std::cout << "\nConfiguration Information:" << std::endl;
     std::cout << "ID:\t\t" << mID << std::endl;
-    std::cout << "Threads:\t" << mNumThreads << std::endl;
+    std::cout << "Threads:\t" << GetNumThreads() << std::endl;
     std::cout << "Output:\t\t" << GetOutputDirectory() << std::endl
               << std::endl;
 }
@@ -160,17 +178,16 @@ Vector3D Configuration::ParseVector3D(const YAML::Node& n) {
 }
 
 Color Configuration::ParseColor(const YAML::Node& n) {
-
     static const std::map<std::string, Color> namedColors = {
-        {"black",  BLACK},
-        {"white",  WHITE},
-        {"gray",   GRAY},
-        {"red",    RED},
+        {"black", BLACK},
+        {"white", WHITE},
+        {"gray", GRAY},
+        {"red", RED},
         {"orange", ORANGE},
         {"yellow", YELLOW},
-        {"cyan",   CYAN},
-        {"blue",   BLUE},
-        {"green",  GREEN},
+        {"cyan", CYAN},
+        {"blue", BLUE},
+        {"green", GREEN},
     };
 
     // --- Named colors (scalar) ---
@@ -180,8 +197,9 @@ Color Configuration::ParseColor(const YAML::Node& n) {
                        [](unsigned char c) { return std::tolower(c); });
 
         auto it = namedColors.find(s);
-        if (it != namedColors.end())
+        if (it != namedColors.end()) {
             return it->second;
+        }
 
         throw std::runtime_error("Unknown color name: " + s);
     }
@@ -193,26 +211,29 @@ Color Configuration::ParseColor(const YAML::Node& n) {
         double b = n[2].as<double>();
 
         double maxv = std::max({r, g, b});
-        if (maxv > 1.0)
+        if (maxv > 1.0) {
             return Color(r / 255.0, g / 255.0, b / 255.0);
-        else
+        } else {
             return Color(r, g, b);
+        }
     }
 
     // --- RGB map: {r: ..., g: ..., b: ...} ---
     if (n.IsMap()) {
-        if (!n["r"] || !n["g"] || !n["b"])
+        if (!n["r"] || !n["g"] || !n["b"]) {
             throw std::runtime_error("Color map must contain keys r, g, and b");
+        }
 
         double r = n["r"].as<double>();
         double g = n["g"].as<double>();
         double b = n["b"].as<double>();
 
         double maxv = std::max({r, g, b});
-        if (maxv > 1.0)
+        if (maxv > 1.0) {
             return Color(r / 255.0, g / 255.0, b / 255.0);
-        else
+        } else {
             return Color(r, g, b);
+        }
     }
     throw std::runtime_error("Color must be a scalar name, a 3-element sequence, or a map \{r,g,b\}");
 }

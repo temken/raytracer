@@ -141,8 +141,9 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
     double totalDuration = std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - startTime).count();
     if (printProgressBar) {
         libphysica::Print_Progress_Bar(1.0, 0, 60, totalDuration, "Blue");
+        std::cout << "\nRendered image with " << 1.0 / totalDuration << " FPS" << std::endl;
     }
-    std::cout << "\n\nRendered image with " << 1.0 / totalDuration << " FPS" << std::endl;
+
     return image;
 }
 
@@ -164,7 +165,7 @@ Video Camera::RenderVideo(Scene& scene, double durationSeconds, bool printProgre
     }
     if (printProgressBar) {
         double totalDuration = std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - startTime).count();
-        std::cout << "\n\nRendered video with " << totalFrames / totalDuration << " FPS" << std::endl;
+        std::cout << "\nRendered video with " << totalFrames / totalDuration << " FPS" << std::endl;
     }
     return video;
 }

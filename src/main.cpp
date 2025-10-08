@@ -45,30 +45,37 @@ int main(int argc, char** argv) {
         std::cerr << "Error parsing configuration file: " << e.what() << std::endl;
         return 1;
     }
+
     ////////////////////////////////////////////////////////////////////////
 
-    std::cout << "Used threads: " << omp_get_max_threads() << std::endl;
+    omp_set_num_threads(Configuration::GetInstance().GetNumThreads());
 
-    Configuration::GetInstance().PrintInfo();
+    RenderConfig renderConfig = Configuration::GetInstance().GetRenderConfig();
+
     Camera camera = Configuration::GetInstance().ConstructCamera();
     Scene scene = Configuration::GetInstance().ConstructScene();
 
-    bool openOutputFiles = true;
-    bool printProgressBar = true;
-
+    Configuration::GetInstance().PrintInfo();
     camera.PrintInfo();
     scene.PrintInfo();
 
-    // bool createConvergingVideo = false;
-    // Image image = camera.RenderImage(scene, printProgressBar, createConvergingVideo);
-    // image.Save(openOutputFiles);
-    // std::cout << "\n\nBlack pixel ratio: " << image.CalculateBlackPixelRatio() * 100.0 << "%" << std::endl;
+    if (renderConfig.renderImage) {
+        std::cout << "\nRendering image..." << std::endl;
+        bool printProgressBar = true;
+        bool renderImageConvergingVideo = false;
+        Image image = camera.RenderImage(scene, printProgressBar, renderImageConvergingVideo);
+        image.PrintInfo();
+        image.Save(renderConfig.openOutputFiles);
+    }
 
-    double videoDurationSeconds = 5.0;
-    double angularVelocity = 2 * M_PI / videoDurationSeconds;  // in rad/s
-    camera.InitializeOrbitTrajectory(angularVelocity);
-    Video video = camera.RenderVideo(scene, videoDurationSeconds, printProgressBar);
-    video.Save(openOutputFiles);
+    if (renderConfig.renderVideo) {
+        std::cout << "\nRendering video..." << std::endl;
+        bool printProgressBar = true;
+        camera.InitializeOrbitTrajectory(2 * M_PI / renderConfig.videoDuration);
+        Video video = camera.RenderVideo(scene, renderConfig.videoDuration, printProgressBar);
+        video.PrintInfo();
+        video.Save(renderConfig.openOutputFiles);
+    }
 
     ////////////////////////////////////////////////////////////////////////
     //Final terminal output
