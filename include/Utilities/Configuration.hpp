@@ -20,6 +20,7 @@ public:
     void ParseYamlFile(const std::string& path);
 
     std::string GetID() const;
+    size_t GetNumThreads() const;
     Camera ConstructCamera() const;
     Scene ConstructScene() const;
 
@@ -36,6 +37,7 @@ private:
     ~Configuration() = default;
 
     std::string mID;
+    size_t mNumThreads;
     YAML::Node mRoot;
 
     static Vector3D ParseVector3D(const YAML::Node& n);
