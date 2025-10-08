@@ -30,11 +30,21 @@ void Configuration::ParseYamlFile(const std::string& path) {
         throw std::runtime_error("Missing required key: id");
     }
 
+    if(auto threads = mRoot["threads"]) {
+        mNumThreads = threads.as<size_t>();
+    } else {
+        throw std::runtime_error("Missing required key: threads");
+    }
+
     CreateOutputDirectory();
 }
 
 std::string Configuration::GetID() const {
     return mID;
+}
+
+size_t Configuration::GetNumThreads() const {
+    return mNumThreads;
 }
 
 Camera Configuration::ConstructCamera() const {
@@ -135,9 +145,10 @@ std::string Configuration::GetOutputDirectory() const {
 }
 
 void Configuration::PrintInfo() const {
-    std::cout << "Configuration Information:" << std::endl;
-    std::cout << "ID: " << mID << std::endl;
-    std::cout << "Output Directory: " << GetOutputDirectory() << std::endl
+    std::cout << "\nConfiguration Information:" << std::endl;
+    std::cout << "ID:\t\t" << mID << std::endl;
+    std::cout << "Threads:\t" << mNumThreads << std::endl;
+    std::cout << "Output:\t\t" << GetOutputDirectory() << std::endl
               << std::endl;
 }
 

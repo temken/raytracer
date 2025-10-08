@@ -1,5 +1,7 @@
 id: scene-001
 
+threads: 6
+
 camera:
   renderer_type: MONTE_CARLO # Options: SIMPLE, MONTE_CARLO
   fov_deg: 120.0

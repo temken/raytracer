@@ -47,9 +47,9 @@
 - [x] Introduce torus class (Intersect is still buggy)
 - [x] Optimize the rendering process with openmp or cuda (openmp might require gnu compilers)
 - [ ] Improve the config file
-  - [ ] Colors in the config file should be possible to define as integer 0..255, not just floats 0..1
+  - [x] Colors in the config file should be possible to define as integer 0..255, not just floats 0..1
   - [ ] Take image or video -> Decide in config file
-  - [ ] Set number of threads in config file
+  - [x] Set number of threads in config file
 - [ ] Improve the block blur algorithm to not smudge edges. -> Bilateral filter
 - [ ] Introduce a material class
   - [ ] Semi-reflective/shiny objects
