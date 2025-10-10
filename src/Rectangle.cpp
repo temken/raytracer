@@ -4,8 +4,8 @@
 
 namespace Raytracer {
 
-Rectangle::Rectangle(const std::string& name, const Vector3D& center, const Vector3D& normal, double width, double height, const Color& color) :
-    Object(name, color, center, normal),
+Rectangle::Rectangle(const std::string& name, const Material& material, const Vector3D& center, const Vector3D& normal, double width, double height) :
+    Object(name, material, center, normal),
     mWidth(width),
     mHeight(height) {
     // Create two orthogonal vectors in the rectangle plane
@@ -18,8 +18,6 @@ Rectangle::Rectangle(const std::string& name, const Vector3D& center, const Vect
     }
     mU = mU.Normalized();
     mV = mV.Normalized();
-    // mU = mU.Normalized();
-    // mV = mNormal.Cross(mU);
 }
 
 std::optional<Intersection> Rectangle::Intersect(const Ray& ray) {
@@ -48,7 +46,7 @@ Color Rectangle::GetColor(const Vector3D& hitPoint) const {
         auto uv = GetNormalizedTextureCoordinates(hitPoint);
         return mTexture->GetColorAt(uv.first + 0.5, uv.second + 0.5);
     } else {
-        return mColor;
+        return mMaterial.GetColor();
     }
 }
 
@@ -58,17 +56,12 @@ void Rectangle::SetTexture(std::string filename) {
 }
 
 void Rectangle::PrintInfo() const {
-    std::cout << "Rectangle: " << std::endl
-              << "\tCenter: " << mPosition << std::endl
-              << "\tNormal: " << mNormal << std::endl
+    PrintInfoBase();
+    std::cout << "Shape:\tRectangle" << std::endl
               << "\tWidth: " << mWidth << std::endl
-              << "\tHeight: " << mHeight << std::endl;
-    if (mTexture) {
-        std::cout << "\tTexture: " << "Yes" << std::endl;
-    } else {
-        std::cout << "\tTexture: " << "None" << std::endl
-                  << "\tColor: " << GetColor() << std::endl;
-    }
+              << "\tHeight: " << mHeight << std::endl
+              << "\tColor texture:\t" << (mTexture ? "[x]" : "[ ]") << std::endl;
+    mMaterial.PrintInfo();
 }
 
 std::pair<double, double> Rectangle::GetNormalizedTextureCoordinates(const Vector3D& hitPoint) const {

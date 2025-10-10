@@ -238,12 +238,61 @@ Color Configuration::ParseColor(const YAML::Node& n) {
     throw std::runtime_error("Color must be a scalar name, a 3-element sequence, or a map {r,g,b}");
 }
 
+Material Configuration::ParseMaterial(const YAML::Node& mat) {
+    if (!mat.IsMap()) {
+        throw std::runtime_error("Material node must be a map");
+    }
+
+    // 1️⃣ Parse color
+    Color color = Color(1.0, 1.0, 1.0);  // default white
+    if (mat["color"]) {
+        color = ParseColor(mat["color"]);
+    }
+
+    // Optional specular color
+    Color colorSpecular = color;  // default to diffuse color
+    if (mat["colorSpecular"]) {
+        colorSpecular = ParseColor(mat["colorSpecular"]);
+    }
+
+    // 2️⃣ Optional scalar properties
+    double roughness = mat["roughness"] ? mat["roughness"].as<double>() : 0.0;
+    double refractiveIndex = mat["refractiveIndex"] ? mat["refractiveIndex"].as<double>() : 1.0;
+    double meanFreePath = mat["meanFreePath"] ? mat["meanFreePath"].as<double>() : 0.0;
+    double luminance = mat["luminance"] ? mat["luminance"].as<double>() : 0.0;
+
+    // 3️⃣ Construct the material
+    Material material(color, roughness, refractiveIndex, meanFreePath, luminance);
+    material.SetColorSpecular(colorSpecular);
+
+    // 4️⃣ Optional interaction probabilities
+    if (mat["probabilities"] && mat["probabilities"].IsMap()) {
+        std::map<Material::InteractionType, double> probs;
+        const YAML::Node& p = mat["probabilities"];
+
+        if (p["diffuse"]) {
+            probs[Material::InteractionType::DIFFUSE] = p["diffuse"].as<double>();
+        }
+        if (p["reflective"]) {
+            probs[Material::InteractionType::REFLECTIVE] = p["reflective"].as<double>();
+        }
+        if (p["refractive"]) {
+            probs[Material::InteractionType::REFRACTIVE] = p["refractive"] ? p["refractive"].as<double>() : 0.0;
+        }
+
+        material.SetInteractionProbabilities(probs);
+    }
+
+    return material;
+}
+
 Configuration::ObjectProperties Configuration::ParseObjectProperties(const YAML::Node& obj) const {
     ObjectProperties props;
 
+    // Static properties
     props.id = obj["id"].as<std::string>();
     props.visible = obj["visible"] ? obj["visible"].as<bool>() : true;
-    props.emitsLight = obj["emits_light"] ? obj["emits_light"].as<bool>() : false;
+    props.material = obj["material"] ? ParseMaterial(obj["material"]) : Material();
     props.position = obj["position"] ? ParseVector3D(obj["position"]) : Vector3D({0.0, 0.0, 0.0});
     props.normal = obj["normal"] ? ParseVector3D(obj["normal"]) : Vector3D({0.0, 0.0, 1.0});
 
@@ -251,15 +300,6 @@ Configuration::ObjectProperties Configuration::ParseObjectProperties(const YAML:
     props.velocity = obj["velocity"] ? ParseVector3D(obj["velocity"]) : Vector3D({0.0, 0.0, 0.0});
     props.angularVelocity = obj["angular_velocity"] ? ParseVector3D(obj["angular_velocity"]) : Vector3D({0.0, 0.0, 0.0});
     props.spin = obj["spin"] ? ParseVector3D(obj["spin"]) : Vector3D({0.0, 0.0, 0.0});
-
-    auto m = obj["material"];
-    if (m) {
-        props.color = m["color"] ? ParseColor(m["color"]) : WHITE;
-        props.reflective = m["reflective"] ? m["reflective"].as<bool>() : false;
-    } else {
-        props.color = WHITE;
-        props.reflective = false;
-    }
 
     return props;
 }
@@ -269,15 +309,13 @@ Sphere Configuration::ParseSphere(const YAML::Node& obj) const {
     double radius = obj["radius"].as<double>();
 
     // Construct the sphere
-    Sphere sphere(props.id, props.position, radius, props.color);
+    Sphere sphere(props.id, props.material, props.position, radius);
 
     sphere.SetVelocity(props.velocity);
     sphere.SetAngularVelocity(props.angularVelocity);
     sphere.SetSpin(props.spin);
 
     sphere.SetVisible(props.visible);
-    sphere.SetEmitsLight(props.emitsLight);
-    sphere.SetReflective(props.reflective);
 
     return sphere;
 }
@@ -287,15 +325,13 @@ Disk Configuration::ParseDisk(const YAML::Node& obj) const {
     double radius = obj["radius"].as<double>();
 
     // Construct the disk
-    Disk disk(props.id, props.position, props.normal, radius, props.color);
+    Disk disk(props.id, props.material, props.position, props.normal, radius);
 
     disk.SetVelocity(props.velocity);
     disk.SetAngularVelocity(props.angularVelocity);
     disk.SetSpin(props.spin);
 
     disk.SetVisible(props.visible);
-    disk.SetEmitsLight(props.emitsLight);
-    disk.SetReflective(props.reflective);
     return disk;
 }
 
@@ -306,15 +342,13 @@ Rectangle Configuration::ParseRectangle(const YAML::Node& obj) const {
     std::string textureFile = obj["material"]["texture"] ? obj["material"]["texture"].as<std::string>() : "";
 
     // Construct the rectangle
-    Rectangle rectangle(props.id, props.position, props.normal, width, height, props.color);
+    Rectangle rectangle(props.id, props.material, props.position, props.normal, width, height);
 
     rectangle.SetVelocity(props.velocity);
     rectangle.SetAngularVelocity(props.angularVelocity);
     rectangle.SetSpin(props.spin);
 
     rectangle.SetVisible(props.visible);
-    rectangle.SetEmitsLight(props.emitsLight);
-    rectangle.SetReflective(props.reflective);
     if (!textureFile.empty()) {
         rectangle.SetTexture(textureFile);
     }
@@ -329,21 +363,9 @@ Box Configuration::ParseBox(const YAML::Node& obj) const {
     double width = dim["width"].as<double>();
     double height = dim["height"].as<double>();
 
-    auto faces = obj["material"]["face_colors"];
-    std::vector<std::string> faceKeys = {"+x", "-x", "+y", "-y", "+z", "-z"};
-    std::array<Color, 6> colors;
-    std::array<bool, 6> reflectives;
-
-    for (size_t i = 0; i < faceKeys.size(); ++i) {
-        auto n = faces[faceKeys[i]];
-        colors[i] = ParseColor(n["color"]);
-        reflectives[i] = n["reflective"].as<bool>();
-    }
-
     // Construct the box
-    Box box(props.id, props.position, length, width, height, colors, reflectives);
+    Box box(props.id, props.material, props.position, length, width, height);
     box.SetVisible(props.visible);
-    box.SetEmitsLight(props.emitsLight);
 
     box.SetVelocity(props.velocity);
     box.SetAngularVelocity(props.angularVelocity);
@@ -357,20 +379,14 @@ Cylinder Configuration::ParseCylinder(const YAML::Node& obj) const {
     double radius = obj["radius"].as<double>();
     double height = obj["height"].as<double>();
 
-    auto m = obj["material"];
-    Color mantleColor = ParseColor(m["mantle_color"]);
-    Color capColor = ParseColor(m["cap_color"]);
-
     // Construct the cylinder
-    Cylinder cylinder(props.id, props.position, props.normal, radius, height, mantleColor, capColor);
+    Cylinder cylinder(props.id, props.material, props.position, radius, height);
 
     cylinder.SetVelocity(props.velocity);
     cylinder.SetAngularVelocity(props.angularVelocity);
     cylinder.SetSpin(props.spin);
 
     cylinder.SetVisible(props.visible);
-    cylinder.SetEmitsLight(props.emitsLight);
-    cylinder.SetReflective(props.reflective);
     return cylinder;
 }
 
@@ -380,15 +396,13 @@ Torus Configuration::ParseTorus(const YAML::Node& obj) const {
     double outerRadius = obj["outer_radius"].as<double>();
 
     // Construct the torus
-    Torus torus(props.id, props.position, props.normal, innerRadius, outerRadius, props.color);
+    Torus torus(props.id, props.material, props.position, props.normal, innerRadius, outerRadius);
 
     torus.SetVelocity(props.velocity);
     torus.SetAngularVelocity(props.angularVelocity);
     torus.SetSpin(props.spin);
 
     torus.SetVisible(props.visible);
-    torus.SetEmitsLight(props.emitsLight);
-    torus.SetReflective(props.reflective);
     return torus;
 }
 

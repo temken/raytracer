@@ -12,7 +12,7 @@ namespace Raytracer {
 
 class Rectangle : public Object {
 public:
-    Rectangle(const std::string& name, const Vector3D& center, const Vector3D& normal, double width, double height, const Color& color);
+    Rectangle(const std::string& name, const Material& material, const Vector3D& center, const Vector3D& normal, double width, double height);
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) override;
 

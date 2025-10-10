@@ -112,10 +112,15 @@ void Object::PrintInfoBase() const {
     std::cout << "Object:" << mName << std::endl
               << "\tVisible:\t" << (mVisible ? "[x]" : "[ ]") << std::endl
               << "\tPosition:\t" << mPosition << std::endl
-              << "\tNormal:\t" << mNormal << std::endl
-              << "\tVelocity:\t" << mVelocity << std::endl
-              << "\tAngular Velocity:\t" << mAngularVelocity << std::endl
-              << "\tSpin:\t" << mSpin << std::endl
-              << std::endl;
+              << "\tNormal:\t" << mNormal << std::endl;
+
+    if (mVelocity.Norm() > sEpsilon || mAngularVelocity.Norm() > sEpsilon || mSpin.Norm() > sEpsilon) {
+        std::cout << "\tDynamic properties:" << std::endl
+                  << "\tVelocity:\t" << mVelocity << std::endl
+                  << "\tAngular Velocity:\t" << mAngularVelocity << std::endl
+                  << "\tSpin:\t" << mSpin << std::endl;
+    }
+    std::cout << std::endl;
+}
 
 }  // namespace Raytracer

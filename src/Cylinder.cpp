@@ -2,12 +2,12 @@
 
 namespace Raytracer {
 
-Cylinder::Cylinder(const std::string& name, const Vector3D& center, const Vector3D& normal, double radius, double height, const Color& mantleColor, const Color& capColor) :
-    Object(name, mantleColor, center, normal),
+Cylinder::Cylinder(const std::string& name, const Material& material, const Vector3D& center, const Vector3D& normal, double radius, double height) :
+    Object(name, material, center, normal),
     mRadius(radius),
     mHeight(height),
-    mTopDisk("top_cap", center + (height / 2.0) * mNormal, mNormal, radius, capColor),
-    mBottomDisk("bottom_cap", center - (height / 2.0) * mNormal, -1.0 * mNormal, radius, capColor) {
+    mTopDisk("top_cap", material, center + (height / 2.0) * mNormal, mNormal, radius),
+    mBottomDisk("bottom_cap", material, center - (height / 2.0) * mNormal, -1.0 * mNormal, radius) {
 }
 
 std::optional<Intersection> Cylinder::Intersect(const Ray& ray) {
@@ -27,13 +27,11 @@ std::optional<Intersection> Cylinder::Intersect(const Ray& ray) {
 }
 
 void Cylinder::PrintInfo() const {
-    std::cout << "Cylinder Info:" << std::endl
-              << "\tCenter: " << mPosition << std::endl
-              << "\tNormal: " << mNormal << std::endl
+    PrintInfoBase();
+    std::cout << "Shape:\tCylinder" << std::endl
               << "\tRadius: " << mRadius << std::endl
-              << "\tHeight: " << mHeight << std::endl
-              << "\tColor (Mantle): " << GetColor() << std::endl
-              << "\tColor (Caps): " << mTopDisk.GetColor() << std::endl;
+              << "\tHeight: " << mHeight << std::endl;
+    mMaterial.PrintInfo();
 }
 
 std::optional<Intersection> Cylinder::IntersectCaps(const Ray& ray) {

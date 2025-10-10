@@ -5,8 +5,8 @@
 
 namespace Raytracer {
 
-Sphere::Sphere(const std::string& name, const Vector3D& center, double radius, const Color& color) :
-    Object(name, color, center, Vector3D({0, 0, 1})),
+Sphere::Sphere(const std::string& name, const Material& material, const Vector3D& center, double radius) :
+    Object(name, material, center, Vector3D({0, 0, 1})),
     mRadius(radius) {}
 
 // Ray-sphere intersection
@@ -44,10 +44,11 @@ std::optional<Intersection> Sphere::Intersect(const Ray& ray) {
 }
 
 void Sphere::PrintInfo() const {
-    std::cout << "Sphere:" << std::endl
+    PrintInfoBase();
+    std::cout << "Shape:\t Sphere" << std::endl
               << "\tCenter: " << mPosition << std::endl
-              << "\tRadius: " << mRadius << std::endl
-              << "\tColor: " << mColor << std::endl;
+              << "\tRadius: " << mRadius << std::endl;
+    mMaterial.PrintInfo();
 }
 
 }  // namespace Raytracer

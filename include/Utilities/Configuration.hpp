@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Rendering/Camera.hpp"
+#include "Rendering/Material.hpp"
 #include "Scene/Box.hpp"
 #include "Scene/Cylinder.hpp"
 #include "Scene/Disk.hpp"
@@ -60,6 +61,7 @@ private:
 
     static Vector3D ParseVector3D(const YAML::Node& n);
     static Color ParseColor(const YAML::Node& n);
+    static Material ParseMaterial(const YAML::Node& mat);
 
     struct RenderOptions {
         bool renderImage = true;
@@ -73,9 +75,6 @@ private:
     struct ObjectProperties {
         std::string id;
         bool visible = true;
-        bool emitsLight = false;
-        Color color = WHITE;
-        bool reflective = false;
 
         // Dynamics
         Vector3D position = Vector3D({0.0, 0.0, 0.0});
@@ -83,6 +82,8 @@ private:
         Vector3D velocity = Vector3D({0.0, 0.0, 0.0});
         Vector3D angularVelocity = Vector3D({0.0, 0.0, 0.0});
         Vector3D spin = Vector3D({0.0, 0.0, 0.0});
+
+        Material material;
     };
 
     ObjectProperties ParseObjectProperties(const YAML::Node& obj) const;
