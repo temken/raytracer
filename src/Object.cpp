@@ -2,11 +2,12 @@
 
 namespace Raytracer {
 
-Object::Object(const std::string& name, const Color& color, const Vector3D& position, const Vector3D& normal) :
+Object::Object(const std::string& name, const Material& material, const Vector3D& position, const Vector3D& normal) :
     mName(name),
+    mMaterial(material),
     mPosition(position),
-    mNormal(normal.Normalized()),
-    mColor(color) {}
+    mNormal(normal.Normalized()) {
+}
 
 std::string Object::GetName() const {
     return mName;
@@ -18,6 +19,14 @@ void Object::SetVisible(bool visible) {
 
 bool Object::IsVisible() const {
     return mVisible;
+}
+
+Material& Object::GetMaterial() {
+    return mMaterial;
+}
+
+void Object::SetMaterial(const Material& material) {
+    mMaterial = material;
 }
 
 Vector3D Object::GetPosition() const {
@@ -34,6 +43,14 @@ Vector3D Object::GetNormal() const {
 
 void Object::SetNormal(const Vector3D& normal) {
     mNormal = normal;
+}
+
+Color Object::GetColor(const Vector3D& hitPoint) const {
+    return mMaterial.GetColor();
+}
+
+bool Object::EmitsLight() const {
+    return mMaterial.EmitsLight();
 }
 
 Vector3D Object::GetVelocity() const {
@@ -60,30 +77,6 @@ void Object::SetSpin(const Vector3D& spin) {
     mSpin = spin;
 }
 
-Color Object::GetColor(const Vector3D& hitPoint) const {
-    return mColor;
-}
-
-void Object::SetColor(const Color& color) {
-    mColor = color;
-}
-
-bool Object::EmitsLight() const {
-    return mEmitsLight;
-}
-
-void Object::SetEmitsLight(bool emitsLight) {
-    mEmitsLight = emitsLight;
-}
-
-bool Object::IsReflective() const {
-    return mIsReflective;
-}
-
-void Object::SetReflective(bool isReflective) {
-    mIsReflective = isReflective;
-}
-
 void Object::Evolve(double timeStep) {
     if (timeStep <= 0) {
         throw std::invalid_argument("Time step must be positive");
@@ -99,6 +92,11 @@ void Object::Evolve(double timeStep) {
     }
 }
 
+void Object::PrintInfo() const {
+    PrintInfoBase();
+    mMaterial.PrintInfo();
+}
+
 void Object::Translate(const Vector3D& translation) {
     mPosition += translation;
 }
@@ -109,5 +107,15 @@ void Object::Rotate(double angle, const Vector3D& axis) {
 void Object::Spin(double angle, const Vector3D& axis) {
     // Implement spin logic
 }
+
+void Object::PrintInfoBase() const {
+    std::cout << "Object:" << mName << std::endl
+              << "\tVisible:\t" << (mVisible ? "[x]" : "[ ]") << std::endl
+              << "\tPosition:\t" << mPosition << std::endl
+              << "\tNormal:\t" << mNormal << std::endl
+              << "\tVelocity:\t" << mVelocity << std::endl
+              << "\tAngular Velocity:\t" << mAngularVelocity << std::endl
+              << "\tSpin:\t" << mSpin << std::endl
+              << std::endl;
 
 }  // namespace Raytracer
