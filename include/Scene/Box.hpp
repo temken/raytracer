@@ -14,11 +14,7 @@ namespace Raytracer {
 class Box : public Object {
 public:
     // Constructors for Box with different parameters
-    Box(const std::string& name, const Vector3D& center, double length, double width, double height, const std::array<Color, 6>& colors, const std::array<bool, 6>& reflectives);
-    Box(const std::string& name, const Vector3D& center, double length, double width, double height, const std::array<Color, 6>& colors, bool reflective = false);
-    Box(const std::string& name, const Vector3D& center, double length, double width, double height, const Color& color, bool reflective = false);
-    Box(const std::string& name, const Vector3D& center, double size, const Color& color);
-    Box(const std::string& name, const Vector3D& center, double size, const std::array<Color, 6>& colors);
+    Box(const std::string& name, const Material& material, const Vector3D& center, double length, double width, double height);
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) override;
 

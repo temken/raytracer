@@ -9,7 +9,7 @@ namespace Raytracer {
 
 class Sphere : public Object {
 public:
-    Sphere(const std::string& name, const Vector3D& center, double radius, const Color& color);
+    Sphere(const std::string& name, const Material& material, const Vector3D& center, double radius);
 
     std::optional<Intersection> Intersect(const Ray& ray) override;
 

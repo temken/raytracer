@@ -7,7 +7,7 @@ namespace Raytracer {
 
 class Cylinder : public Object {
 public:
-    Cylinder(const std::string& name, const Vector3D& center, const Vector3D& normal, double radius, double height, const Color& mantleColor, const Color& capColor);
+    Cylinder(const std::string& name, const Material& material, const Vector3D& center, const Vector3D& normal, double radius, double height);
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) override;
 

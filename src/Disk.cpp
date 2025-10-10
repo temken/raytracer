@@ -4,8 +4,8 @@
 
 namespace Raytracer {
 
-Disk::Disk(const std::string& name, const Vector3D& center, const Vector3D& normal, double radius, const Color& color) :
-    Object(name, color, center, normal),
+Disk::Disk(const std::string& name, const Material& material, const Vector3D& center, const Vector3D& normal, double radius) :
+    Object(name, material, center, normal),
     mRadius(radius) {}
 
 std::optional<Intersection> Disk::Intersect(const Ray& ray) {
@@ -29,11 +29,10 @@ std::optional<Intersection> Disk::Intersect(const Ray& ray) {
 }
 
 void Disk::PrintInfo() const {
-    std::cout << "Disk: " << mName << std::endl
-              << "\tCenter = " << mPosition << std::endl
-              << "\tNormal = " << mNormal << std::endl
-              << "\tRadius = " << mRadius << std::endl
-              << "\tColor = " << mColor << std::endl;
+    PrintInfoBase();
+    std::cout << "Shape:\tDisk" << std::endl
+              << "\tRadius:\t" << mRadius << std::endl;
+    mMaterial.PrintInfo();
 }
 
 }  // namespace Raytracer
