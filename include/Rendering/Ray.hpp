@@ -18,6 +18,14 @@ public:
     void SetOrigin(const Vector3D& newOrigin);
     void SetDirection(const Vector3D& newDirection);
 
+    Color GetColor() const;
+    void SetColor(const Color& color);
+    void MultiplyColor(const Color& color);
+
+    double GetRadiance() const;
+    void SetRadiance(double radiance);
+    void AddRadiance(double radiance);
+
     Vector3D PointAtParameter(double t) const;
 
     Vector3D operator()(double t) const {
@@ -37,6 +45,9 @@ public:
 private:
     Vector3D mOrigin = Vector3D({0.0, 0.0, 0.0});
     Vector3D mDirection = Vector3D({1.0, 0.0, 0.0});
+
+    Color mColor = Color(1.0, 1.0, 1.0);
+    double mRadiance = 0.0;
 };
 
 }  // namespace Raytracer
