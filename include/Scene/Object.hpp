@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Rendering/Material.hpp"
 #include "Rendering/Ray.hpp"
 #include "Utilities/Color.hpp"
 #include "Utilities/Intersection.hpp"
@@ -14,13 +15,16 @@ struct Intersection;
 
 class Object {
 public:
-    explicit Object(const std::string& name, const Color& color, const Vector3D& position, const Vector3D& normal);
+    explicit Object(const std::string& name, const Material& material, const Vector3D& position, const Vector3D& normal);
     virtual ~Object() = default;
 
     std::string GetName() const;
 
     void SetVisible(bool visible);
     bool IsVisible() const;
+
+    Material& GetMaterial();
+    void SetMaterial(const Material& material);
 
     Vector3D GetPosition() const;
     void SetPosition(const Vector3D& position);
@@ -38,23 +42,19 @@ public:
     void SetSpin(const Vector3D& spin);
 
     virtual Color GetColor(const Vector3D& hitPoint = Vector3D()) const;
-    void SetColor(const Color& color);
-
     bool EmitsLight() const;
-    void SetEmitsLight(bool emitsLight);
-
-    bool IsReflective() const;
-    void SetReflective(bool isReflective);
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) = 0;
 
     void Evolve(double timeStep);
 
-    virtual void PrintInfo() const = 0;
+    virtual void PrintInfo() const;
 
 protected:
     std::string mName;
     bool mVisible = true;
+
+    Material mMaterial;
 
     // Dynamic properties
     Vector3D mPosition;
@@ -64,16 +64,13 @@ protected:
     Vector3D mAngularVelocity = Vector3D({0.0, 0.0, 0.0});
     Vector3D mSpin = Vector3D({0.0, 0.0, 0.0});
 
-    // Material properties
-    Color mColor;
-    bool mEmitsLight = false;
-    bool mIsReflective = false;
-
     static constexpr double sEpsilon = 1e-6;
 
     virtual void Translate(const Vector3D& translation);
     virtual void Rotate(double angle, const Vector3D& axis);
     virtual void Spin(double angle, const Vector3D& axis);
+
+    void PrintInfoBase() const;
 };
 
 }  // namespace Raytracer
