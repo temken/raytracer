@@ -235,7 +235,7 @@ Color Configuration::ParseColor(const YAML::Node& n) {
             return Color(r, g, b);
         }
     }
-    throw std::runtime_error("Color must be a scalar name, a 3-element sequence, or a map \{r,g,b\}");
+    throw std::runtime_error("Color must be a scalar name, a 3-element sequence, or a map {r,g,b}");
 }
 
 Configuration::ObjectProperties Configuration::ParseObjectProperties(const YAML::Node& obj) const {

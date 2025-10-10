@@ -50,16 +50,23 @@
   - [x] Colors in the config file should be possible to define as integer 0..255, not just floats 0..1
   - [x] Take image or video -> Decide in config file
   - [x] Set number of threads in config file
+- [x] Introduce a material class
+  - [x] Semi-reflective/shiny objects
+  - [x] LIght source are either on/off. Should be possible to dim them. Maybe this has something to do with luminance?
+  - [x] Implement metallic surfaces
+  - [x] Add refractive/transparent media.
+- [ ] Use the material class in the renderer
+  - [ ] Add material to object and parse from config file
+  - [ ] Use material in the Simple renderer
+  - [ ] Use material inthe MC renderer
 - [ ] Improve the block blur algorithm to not smudge edges. -> Bilateral filter
-- [ ] Introduce a material class
-  - [ ] Semi-reflective/shiny objects
-  - [ ] LIght source are either on/off. Should be possible to dim them. Maybe this has something to do with luminance?
-  - [ ] Implement metallic surfaces
-  - [ ] Add refractive/transparent media.
-  - [ ] Add more pre-defined colors
+- [ ] Renderer with next event estimation: Create a renderer with deterministic shadows by checking for the closest light source or something.
+  - [ ] Could this be a way to solve the black pixel issue?
 - [ ] Create some interesting images and videos using all the capabilities so far.
+- [ ] Add more pre-defined colors
 - [ ] Print preview of image downscaled in terminal
 - [ ] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
+- [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
 - [ ] Check out BSDF
 - [ ] Get debugging to work.
 - [ ] Implement depth of field capability
@@ -71,6 +78,7 @@
 
 Image ideas:
 - Light lanterns along a road in the night with nice ambient
+- Create a series of material comparisons, e.g. roughness, metallicity, glas, ...
 
 Known bugs and issues:
 - [ ] Increasing the resolution sometimes seems to widen the field of view and vice versa
