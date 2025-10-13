@@ -56,9 +56,15 @@
   - [x] Implement metallic surfaces
   - [x] Add refractive/transparent media.
 - [ ] Use the material class in the renderer
-  - [ ] Add material to object and parse from config file
-  - [ ] Use material in the Simple renderer
-  - [ ] Use material inthe MC renderer
+  - [x] Add material to object and parse from config file
+  - [x] The intersection class should store the material not the object. That should be sufficient
+
+  - [x] Use material in the Simple renderer
+  - [x] Use material inthe MC renderer
+  - [ ] Update my config files
+  - [ ] Test
+- [ ] Fix the texture so I can have a brick room for future testing.
+- [ ] Create some nice images with the new class
 - [ ] Improve the block blur algorithm to not smudge edges. -> Bilateral filter
 - [ ] Renderer with next event estimation: Create a renderer with deterministic shadows by checking for the closest light source or something.
   - [ ] Could this be a way to solve the black pixel issue?

@@ -2,8 +2,8 @@
 
 namespace Raytracer {
 
-Torus::Torus(const std::string& name, const Vector3D& center, const Vector3D& normal, double innerRadius, double outerRadius, const Color& color) :
-    Object(name, color, center, normal),
+Torus::Torus(const std::string& name, const Material& material, const Vector3D& center, const Vector3D& normal, double innerRadius, double outerRadius) :
+    Object(name, material, center, normal),
     mInnerRadius(innerRadius),
     mOuterRadius(outerRadius) {
 }
@@ -195,7 +195,7 @@ std::optional<Intersection> Torus::Intersect(const Ray& ray) {
                                 4.0 * hitVec[1] * (sumSquared - paramSquared + 2.0 * R * R),
                                 4.0 * hitVec[2] * (sumSquared - paramSquared)})
                           .Normalized();
-    return Intersection{t, hitPoint, normal, this};
+    return Intersection{t, hitPoint, normal, &mMaterial};
 }
 
 void Torus::PrintInfo() const {

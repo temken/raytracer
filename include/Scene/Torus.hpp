@@ -12,7 +12,7 @@ namespace Raytracer {
 
 class Torus : public Object {
 public:
-    Torus(const std::string& name, const Vector3D& center, const Vector3D& normal, double innerRadius, double outerRadius, const Color& color);
+    Torus(const std::string& name, const Material& material, const Vector3D& center, const Vector3D& normal, double innerRadius, double outerRadius);
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) override;
 
