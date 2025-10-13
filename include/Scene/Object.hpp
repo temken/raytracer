@@ -23,7 +23,7 @@ public:
     void SetVisible(bool visible);
     bool IsVisible() const;
 
-    Material& GetMaterial();
+    Material GetMaterial();
     void SetMaterial(const Material& material);
 
     Vector3D GetPosition() const;

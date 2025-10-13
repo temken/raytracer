@@ -55,6 +55,10 @@ private:
     double b = 0.0;
 };
 
+inline Raytracer::Color operator*(double scalar, const Raytracer::Color& color) {
+    return color * scalar;
+}
+
 // Predefined colors
 const Color BLACK = Color(0, 0, 0);
 const Color WHITE = Color(1, 1, 1);

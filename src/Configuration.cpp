@@ -380,7 +380,7 @@ Cylinder Configuration::ParseCylinder(const YAML::Node& obj) const {
     double height = obj["height"].as<double>();
 
     // Construct the cylinder
-    Cylinder cylinder(props.id, props.material, props.position, radius, height);
+    Cylinder cylinder(props.id, props.material, props.position, props.normal, radius, height);
 
     cylinder.SetVelocity(props.velocity);
     cylinder.SetAngularVelocity(props.angularVelocity);
