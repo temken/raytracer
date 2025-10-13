@@ -19,6 +19,9 @@ public:
 
     void Evolve(double timeStep);
 
+    size_t NumberOfObjects() const;
+    size_t NumberOfLightSources() const;
+
     void PrintInfo() const;
 
 private:
