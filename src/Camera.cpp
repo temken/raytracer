@@ -1,5 +1,6 @@
 #include "Rendering/Camera.hpp"
 
+#include "Rendering/RendererDeterministic.hpp"
 #include "Rendering/RendererMC.hpp"
 #include "Rendering/RendererSimple.hpp"
 #include "Utilities/Configuration.hpp"
@@ -310,6 +311,8 @@ std::unique_ptr<Renderer> Camera::CreateRenderer(Renderer::Type type) {
             return std::make_unique<RendererSimple>();
         case Renderer::Type::MONTE_CARLO:
             return std::make_unique<RendererMC>();
+        case Renderer::Type::DETERMINISTIC:
+            return std::make_unique<RendererDeterministic>();
         default:
             throw std::invalid_argument("Unknown renderer type");
     }

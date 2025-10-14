@@ -19,7 +19,11 @@ public:
     Material();
     Material(const Color& color, double roughness = 1.0, double refractiveIndex = 1.0, double meanFreePath = 0.0, double luminance = 0.0);
 
-    void Interact(Ray& ray, const Vector3D& intersectionPoint, const Vector3D& normal);
+    void Interact(Ray& ray, const Vector3D& intersectionPoint, const Vector3D& normal, bool applyRoughness = true);
+
+    void Diffuse(Ray& incomingRay, const Vector3D& intersectionPoint, const Vector3D& normal);
+    void Reflect(Ray& incomingRay, const Vector3D& intersectionPoint, const Vector3D& normal, bool applyRoughness);
+    void Refract(Ray& incomingRay, const Vector3D& intersectionPoint, const Vector3D& normal, bool applyRoughness);
 
     Color GetColor() const;
     void SetColor(const Color& color);
@@ -41,6 +45,7 @@ public:
     void SetRadiance(double radiance);
 
     void SetInteractionProbabilities(const std::map<InteractionType, double>& probs);
+    InteractionType MostLikelyInteraction() const;
 
     void PrintInfo() const;
 
@@ -62,10 +67,6 @@ private:
     static constexpr double kEpsilon = 1e-5;
 
     void NormalizeProbabilities();
-
-    void Diffuse(Ray& incomingRay, const Vector3D& intersectionPoint, const Vector3D& normal);
-    void Reflect(Ray& incomingRay, const Vector3D& intersectionPoint, const Vector3D& normal);
-    void Refract(Ray& incomingRay, const Vector3D& intersectionPoint, const Vector3D& normal);
 
     Vector3D SampleCone(const Vector3D& axis, double angle);
 };

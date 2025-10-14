@@ -82,6 +82,8 @@ Camera Configuration::ConstructCamera() const {
         rendererType = Renderer::Type::SIMPLE;
     } else if (renderingEngineStr == "MONTE_CARLO") {
         rendererType = Renderer::Type::MONTE_CARLO;
+    } else if (renderingEngineStr == "DETERMINISTIC") {
+        rendererType = Renderer::Type::DETERMINISTIC;
     } else {
         throw std::invalid_argument("Unknown rendering type: " + renderingEngineStr);
     }
