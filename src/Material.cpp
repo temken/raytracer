@@ -18,7 +18,7 @@ Material::Material(const Color& color, double roughness, double refractiveIndex,
     NormalizeProbabilities();
 }
 
-void Material::Interact(Ray& ray, const Vector3D& intersectionPoint, const Vector3D& normal) {
+void Material::Interact(Ray& ray, const Vector3D& intersectionPoint, const Vector3D& normal, bool applyRoughness) {
     // Draw a random number in [0,1)
     const double r = mDistribution(mGenerator);
 
@@ -35,17 +35,99 @@ void Material::Interact(Ray& ray, const Vector3D& intersectionPoint, const Vecto
                     return;
 
                 case InteractionType::REFLECTIVE:
-                    Reflect(ray, intersectionPoint, normal);
+                    Reflect(ray, intersectionPoint, normal, applyRoughness);
                     return;
 
                 case InteractionType::REFRACTIVE:
-                    Refract(ray, intersectionPoint, normal);
+                    Refract(ray, intersectionPoint, normal, applyRoughness);
                     return;
             }
         }
     }
 
     throw std::runtime_error("Material::Interact: No interaction type selected; check probabilities.");
+}
+
+void Material::Diffuse(Ray& ray, const Vector3D& intersectionPoint, const Vector3D& normal) {
+    // Diffuse surface: random new direction in hemisphere
+    // Build ONB around normal
+    Vector3D eZ = normal;
+    Vector3D a = (std::fabs(eZ[0]) > 0.707) ? Vector3D({0.0, 1.0, 0.0}) : Vector3D({1.0, 0.0, 0.0});
+    Vector3D eX = a.Cross(eZ).Normalized();
+    Vector3D eY = eZ.Cross(eX);
+
+    // Cosine-weighted hemisphere sample in local coords
+    double u1 = mDistribution(mGenerator);
+    double u2 = mDistribution(mGenerator);
+    double cosTheta = std::sqrt(u1);
+    double sinTheta = std::sqrt(1.0 - u1);
+    double phi = 2.0 * M_PI * u2;
+    double x = sinTheta * std::cos(phi);
+    double y = sinTheta * std::sin(phi);
+
+    // Transform to world and normalize
+    Vector3D newDir = (x * eX + y * eY + cosTheta * eZ).Normalized();
+
+    ray.SetOrigin(intersectionPoint + kEpsilon * newDir);
+    ray.SetDirection(newDir);
+    ray.MultiplyColor(mColor);
+    ray.AddRadiance(mRadiance);
+}
+
+void Material::Reflect(Ray& ray, const Vector3D& intersectionPoint, const Vector3D& normal, bool applyRoughness) {
+    Vector3D incomingDir = ray.GetDirection();
+    Vector3D newDir = incomingDir - 2 * incomingDir.Dot(normal) * normal;
+    if (applyRoughness && mRoughness > 0.0) {
+        double maxAngle = mRoughness * (M_PI / 2.0);  // roughness=1 => 90° cone
+        newDir = SampleCone(newDir, maxAngle);
+    }
+    ray.SetOrigin(intersectionPoint + kEpsilon * newDir);
+    ray.SetDirection(newDir);
+    ray.MultiplyColor(mColorSpecular);
+    ray.AddRadiance(mRadiance);
+}
+
+void Material::Refract(Ray& ray, const Vector3D& intersectionPoint, const Vector3D& normal, bool applyRoughness) {
+    Vector3D d = ray.GetDirection().Normalized();
+    Vector3D n = normal.Normalized();
+
+    // Determine if the ray is entering or exiting
+    double cosThetaI = -n.Dot(d);
+    bool entering = cosThetaI > 0.0;
+    double etaI = 1.0;               // refractive index of incident medium (air)
+    double etaT = mRefractiveIndex;  // refractive index of material
+
+    if (!entering) {
+        n *= -1.0;
+        std::swap(etaI, etaT);  // swap indices
+        cosThetaI = -cosThetaI;
+    }
+
+    double eta = etaI / etaT;
+    double sin2ThetaT = eta * eta * (1.0 - cosThetaI * cosThetaI);
+
+    // Handle total internal reflection
+    if (sin2ThetaT > 1.0) {
+        Reflect(ray, intersectionPoint, n, applyRoughness);
+        return;
+    }
+
+    double cosThetaT = std::sqrt(1.0 - sin2ThetaT);
+
+    // Refracted direction
+    Vector3D refractDir = eta * d + (eta * cosThetaI - cosThetaT) * n;
+    refractDir = refractDir.Normalized();
+
+    // Roughness / glossy refraction
+    if (applyRoughness && mRoughness > 0.0) {
+        double maxAngle = mRoughness * (M_PI / 4.0);  // half the reflection roughness
+        refractDir = SampleCone(refractDir, maxAngle);
+    }
+
+    ray.SetOrigin(intersectionPoint + kEpsilon * refractDir);
+    ray.SetDirection(refractDir);
+    ray.MultiplyColor(mColor);
+    ray.AddRadiance(mRadiance);
 }
 
 Color Material::GetColor() const {
@@ -105,6 +187,20 @@ void Material::SetInteractionProbabilities(const std::map<InteractionType, doubl
     NormalizeProbabilities();
 }
 
+Material::InteractionType Material::MostLikelyInteraction() const {
+    double maxProb = 0.0;
+    InteractionType mostLikely = InteractionType::DIFFUSE;
+
+    for (const auto& [type, prob] : probabilities) {
+        if (prob > maxProb) {
+            maxProb = prob;
+            mostLikely = type;
+        }
+    }
+
+    return mostLikely;
+}
+
 void Material::PrintInfo() const {
     std::cout << "Material Info:" << std::endl
               << "\tColor:\t" << mColor << std::endl
@@ -140,90 +236,6 @@ void Material::NormalizeProbabilities() {
     for (auto& pair : probabilities) {
         pair.second /= total;
     }
-}
-
-void Material::Diffuse(Ray& ray, const Vector3D& intersectionPoint, const Vector3D& normal) {
-    // Diffuse surface: random new direction in hemisphere
-    // Build ONB around normal
-    Vector3D eZ = normal;
-    Vector3D a = (std::fabs(eZ[0]) > 0.707) ? Vector3D({0.0, 1.0, 0.0}) : Vector3D({1.0, 0.0, 0.0});
-    Vector3D eX = a.Cross(eZ).Normalized();
-    Vector3D eY = eZ.Cross(eX);
-
-    // Cosine-weighted hemisphere sample in local coords
-    double u1 = mDistribution(mGenerator);
-    double u2 = mDistribution(mGenerator);
-    double cosTheta = std::sqrt(u1);
-    double sinTheta = std::sqrt(1.0 - u1);
-    double phi = 2.0 * M_PI * u2;
-    double x = sinTheta * std::cos(phi);
-    double y = sinTheta * std::sin(phi);
-
-    // Transform to world and normalize
-    Vector3D newDir = (x * eX + y * eY + cosTheta * eZ).Normalized();
-
-    ray.SetOrigin(intersectionPoint + kEpsilon * newDir);
-    ray.SetDirection(newDir);
-    ray.MultiplyColor(mColor);
-    ray.AddRadiance(mRadiance);
-}
-
-void Material::Reflect(Ray& ray, const Vector3D& intersectionPoint, const Vector3D& normal) {
-    Vector3D incomingDir = ray.GetDirection();
-    Vector3D newDir = incomingDir - 2 * incomingDir.Dot(normal) * normal;
-    if (mRoughness > 0.0) {
-        double maxAngle = mRoughness * (M_PI / 2.0);  // roughness=1 => 90° cone
-        newDir = SampleCone(newDir, maxAngle);
-    }
-    ray.SetOrigin(intersectionPoint + kEpsilon * newDir);
-    ray.SetDirection(newDir);
-    ray.MultiplyColor(mColorSpecular);
-    ray.AddRadiance(mRadiance);
-}
-
-void Material::Refract(Ray& ray, const Vector3D& intersectionPoint, const Vector3D& normal) {
-    Vector3D d = ray.GetDirection().Normalized();
-    Vector3D n = normal.Normalized();
-
-    // Determine if the ray is entering or exiting
-    double cosThetaI = -n.Dot(d);
-    bool entering = cosThetaI > 0.0;
-    double etaI = 1.0;               // refractive index of incident medium (air)
-    double etaT = mRefractiveIndex;  // refractive index of material
-
-    if (!entering) {
-        n *= -1.0;
-        std::swap(etaI, etaT);  // swap indices
-        cosThetaI = -cosThetaI;
-    }
-
-    double eta = etaI / etaT;
-    double sin2ThetaT = eta * eta * (1.0 - cosThetaI * cosThetaI);
-
-    // Handle total internal reflection
-    if (sin2ThetaT > 1.0) {
-        Reflect(ray, intersectionPoint, n);
-        return;
-    }
-
-    double cosThetaT = std::sqrt(1.0 - sin2ThetaT);
-
-    // Refracted direction
-    Vector3D refractDir = eta * d + (eta * cosThetaI - cosThetaT) * n;
-    refractDir = refractDir.Normalized();
-
-    // Roughness / glossy refraction
-    if (mRoughness > 0.0) {
-        double maxAngle = mRoughness * (M_PI / 4.0);  // half the reflection roughness
-        refractDir = SampleCone(refractDir, maxAngle);
-    }
-
-    ray.SetOrigin(intersectionPoint + kEpsilon * refractDir);
-    ray.SetDirection(refractDir);
-
-    // Apply transmissive color and emission
-    ray.MultiplyColor(mColor);
-    ray.AddRadiance(mRadiance);
 }
 
 Vector3D Material::SampleCone(const Vector3D& axis, double angle) {

@@ -24,7 +24,7 @@ render:
   open_output_files: true
 
 camera:
-  renderer_type: MONTE_CARLO # Options: SIMPLE, MONTE_CARLO
+  renderer_type: MONTE_CARLO # Options: SIMPLE, DETERMINISTIC MONTE_CARLO
   fov_deg: 120.0
   position: [9.0, 0.2, 0.0]
   direction: [-1.0, 0.0, 0.0]
@@ -32,9 +32,9 @@ camera:
     width: 800
     height: 600
   framesPerSecond: 15
-  antialiasing: true
+  antialiasing: false
   blur_image: false
-  samples_per_pixel: 300
+  samples_per_pixel: 200
 
 scene:
   background_color: black
@@ -134,19 +134,24 @@ scene:
       position: [0.0, 0.0, 0]
       radius: 2.0
       material:
-        color: [1.0, 1.0, 1.0]
+        color: white
         probabilities:
           diffuse: 0.0
           reflective: 1.0
           refractive: 0.0
 
     - type: Sphere
-      id: blue-ball
+      id: glass-ball
       visible: true
       position: [3.0, 4.0, 2.0]
       radius: 2.0
       material:
-        color: blue
+        color: white
+        refractiveIndex: 1.5
+        probabilities:
+          diffuse: 0.0
+          reflective: 0.1
+          refractive: 0.9
 
     - type: Sphere
       id: red-ball

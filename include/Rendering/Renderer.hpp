@@ -11,6 +11,7 @@ class Renderer {
 public:
     enum class Type {
         SIMPLE,
+        DETERMINISTIC,
         MONTE_CARLO,
         // Future renderers can be added here
     };

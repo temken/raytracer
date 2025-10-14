@@ -8,13 +8,14 @@
 
 namespace Raytracer {
 
-class RendererSimple : public Renderer {
+class RendererDeterministic : public Renderer {
 public:
-    RendererSimple() :
-        Renderer(Type::SIMPLE, true) {};
+    RendererDeterministic() :
+        Renderer(Type::DETERMINISTIC, true) {};
     virtual Color TraceRay(Ray ray, const Scene& scene) override;
 
 private:
+    const bool kApplyRoughness = false;
 };
 
 }  // namespace Raytracer
