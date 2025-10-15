@@ -33,7 +33,7 @@ std::optional<Intersection> Rectangle::Intersect(const Ray& ray) {
 
     Vector3D hitPoint = ray(t);
 
-    std::pair<double, double> uv = GetNormalizedTextureCoordinates(hitPoint);
+    std::pair<double, double> uv = GetTextureCoordinates(hitPoint);
 
     if (std::fabs(uv.first) <= 0.5 && std::fabs(uv.second) <= 0.5) {
         return Intersection{t, hitPoint, (denom < 0) ? mNormal : -1.0 * mNormal, this};
@@ -41,40 +41,26 @@ std::optional<Intersection> Rectangle::Intersect(const Ray& ray) {
     return std::nullopt;
 }
 
-Color Rectangle::GetColor(const Vector3D& hitPoint) const {
-    if (mTexture.has_value()) {
-        auto uv = GetNormalizedTextureCoordinates(hitPoint);
-        return mTexture->GetColorAt(uv.first + 0.5, uv.second + 0.5);
-    } else {
-        return mMaterial.GetBaseColor();
-    }
-}
+std::pair<double, double> Rectangle::GetTextureCoordinates(const Vector3D& hitPoint) const {
+    // Relative to center
+    Vector3D localPoint = hitPoint - mPosition;
 
-void Rectangle::SetTexture(std::string filename) {
-    std::string filepath = TOP_LEVEL_DIR "/textures/" + filename;
-    mTexture = Texture(filepath);
+    double uCoord = localPoint.Dot(mU);
+    double vCoord = localPoint.Dot(mV);
+
+    // Map to [-0.5, 0.5]
+    double u = uCoord / mWidth;
+    double v = vCoord / mHeight;
+
+    return {u, v};
 }
 
 void Rectangle::PrintInfo() const {
     PrintInfoBase();
     std::cout << "Shape:\tRectangle" << std::endl
               << "\tWidth: " << mWidth << std::endl
-              << "\tHeight: " << mHeight << std::endl
-              << "\tColor texture:\t" << (mTexture ? "[x]" : "[ ]") << std::endl;
+              << "\tHeight: " << mHeight << std::endl;
     mMaterial.PrintInfo();
-}
-
-std::pair<double, double> Rectangle::GetNormalizedTextureCoordinates(const Vector3D& hitPoint) const {
-    Vector3D localPoint = hitPoint - mPosition;
-
-    double uCoord = localPoint.Dot(mU);
-    double vCoord = localPoint.Dot(mV);
-
-    // Map to [0, 1]
-    double u = uCoord / mWidth;
-    double v = vCoord / mHeight;
-
-    return {u, v};
 }
 
 }  // namespace Raytracer

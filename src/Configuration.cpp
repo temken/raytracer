@@ -245,7 +245,7 @@ Material Configuration::ParseMaterial(const YAML::Node& mat) {
         throw std::runtime_error("Material node must be a map");
     }
 
-    // 1️⃣ Parse base color
+    // 1️⃣ Parse colors
     Color baseColor = Color(1.0, 1.0, 1.0);  // default white
     if (mat["baseColor"]) {
         baseColor = ParseColor(mat["baseColor"]);
@@ -259,6 +259,12 @@ Material Configuration::ParseMaterial(const YAML::Node& mat) {
         specularColor = ParseColor(mat["specularColor"]);
     }
 
+    // Optional color texture
+    std::string textureFilename;
+    if (mat["colorTexture"]) {
+        textureFilename = mat["colorTexture"].as<std::string>();
+    }
+
     // 2️⃣ Optional scalar properties
     double roughness = mat["roughness"] ? mat["roughness"].as<double>() : 0.0;
     double refractiveIndex = mat["refractiveIndex"] ? mat["refractiveIndex"].as<double>() : 1.0;
@@ -268,6 +274,9 @@ Material Configuration::ParseMaterial(const YAML::Node& mat) {
     // 3️⃣ Construct the material
     Material material(baseColor, roughness, refractiveIndex, meanFreePath, luminance);
     material.SetSpecularColor(specularColor);
+    if (!textureFilename.empty()) {
+        material.SetColorTexture(textureFilename);
+    }
 
     // 4️⃣ Optional interaction probabilities
     if (mat["probabilities"] && mat["probabilities"].IsMap()) {
@@ -343,19 +352,13 @@ Rectangle Configuration::ParseRectangle(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double width = obj["dimensions"]["width"].as<double>();
     double height = obj["dimensions"]["height"].as<double>();
-    std::string textureFile = obj["material"]["texture"] ? obj["material"]["texture"].as<std::string>() : "";
 
     // Construct the rectangle
     Rectangle rectangle(props.id, props.material, props.position, props.normal, width, height);
-
     rectangle.SetVelocity(props.velocity);
     rectangle.SetAngularVelocity(props.angularVelocity);
     rectangle.SetSpin(props.spin);
-
     rectangle.SetVisible(props.visible);
-    if (!textureFile.empty()) {
-        rectangle.SetTexture(textureFile);
-    }
     return rectangle;
 }
 

@@ -8,12 +8,12 @@ Color RendererDeterministic::TraceRay(Ray ray, const Scene& scene) {
         Material::InteractionType mostLikelyInteraction = intersection->object->GetMaterial().MostLikelyInteraction();
         switch (mostLikelyInteraction) {
             case Material::InteractionType::DIFFUSE:
-                return intersection->object->GetMaterial().GetBaseColor();
+                return intersection->object->GetMaterial().GetColor(intersection.value());
             case Material::InteractionType::REFLECTIVE:
-                intersection->object->GetMaterial().Reflect(ray, intersection->point, intersection->normal, kApplyRoughness);
+                intersection->object->GetMaterial().Reflect(ray, intersection.value(), kApplyRoughness);
                 break;
             case Material::InteractionType::REFRACTIVE:
-                intersection->object->GetMaterial().Refract(ray, intersection->point, intersection->normal, kApplyRoughness);
+                intersection->object->GetMaterial().Refract(ray, intersection.value(), kApplyRoughness);
                 break;
         }
     } else {

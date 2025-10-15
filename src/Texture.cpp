@@ -1,5 +1,7 @@
 #define STB_IMAGE_IMPLEMENTATION
+
 #include "Utilities/Texture.hpp"
+
 #include "stb_image.h"
 
 namespace Raytracer {

@@ -45,8 +45,8 @@ void Object::SetNormal(const Vector3D& normal) {
     mNormal = normal;
 }
 
-Color Object::GetColor(const Vector3D& hitPoint) const {
-    return mMaterial.GetBaseColor();
+Color Object::GetColor(const Intersection& intersection) const {
+    return mMaterial.GetColor(intersection);
 }
 
 bool Object::EmitsLight() const {
@@ -75,6 +75,10 @@ Vector3D Object::GetSpin() const {
 
 void Object::SetSpin(const Vector3D& spin) {
     mSpin = spin;
+}
+
+std::pair<double, double> Object::GetTextureCoordinates(const Vector3D& hitPoint) const {
+    return {0.0, 0.0};
 }
 
 void Object::Evolve(double timeStep) {
