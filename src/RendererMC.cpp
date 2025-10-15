@@ -7,8 +7,7 @@ RendererMC::RendererMC() :
 }
 
 Color RendererMC::TraceRay(Ray ray, const Scene& scene) {
-    size_t interactions = 0;
-    while (interactions < mMaximumInteractions) {
+    while (ray.GetDepth() < kMaximumDepth) {
         auto intersection = Intersect(ray, scene);
         if (!intersection.has_value()) {
             return ray.GetColor() * scene.GetBackgroundColor();
@@ -21,7 +20,7 @@ Color RendererMC::TraceRay(Ray ray, const Scene& scene) {
         }
 
         // Russian roulette after a few bounces
-        if (interactions >= 3) {
+        if (ray.GetDepth() >= 3) {
             Color throughput = ray.GetColor();
             double p = std::max({throughput.R(), throughput.G(), throughput.B()});
             p = std::clamp(p, 0.05, 0.95);
@@ -31,7 +30,6 @@ Color RendererMC::TraceRay(Ray ray, const Scene& scene) {
             throughput = throughput * (1.0 / p);
             ray.SetColor(throughput);
         }
-        interactions++;
     }
     return ray.GetRadiance() * ray.GetColor();
 }

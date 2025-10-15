@@ -63,6 +63,8 @@
   - [x] Update my config files
   - [x] Test
 - [x] Fix the texture so I can have a brick room for future testing.
+- [ ] Create camera based on aspect ratio and one pixel dimension
+  - [ ] If it persists: Fix the bug that changes the field of view for different resolutions
 - [ ] Add more pre-defined colors
 - [ ] Create some nice images with the new class. Create some interesting images and videos using all the capabilities so far.
 - [ ] Renderer with next event estimation: Create a renderer with deterministic shadows by checking for the closest light source or something.
@@ -74,7 +76,7 @@
 - [ ] Check out BSDF
 - [ ] Get debugging to work.
 - [ ] Implement depth of field capability
-- [ ] Create camera based on aspect ratio and one pixel dimension
+
 - [ ] New objects: Cones, Rings
 - [ ] Normal textures especially for glass surfaces, but not just
 - [ ] Image textures for other objects (Spheres!)
@@ -87,8 +89,8 @@ Image ideas:
 Known bugs and issues:
 - [ ] Increasing the resolution sometimes seems to widen the field of view and vice versa
 - [ ] Test and debug the image class, import/export a file. Ensure that the image has the same orientation.
-- [ ] Debug the rectangle/ box classes. There is something off with the dimensions. This is related to the previous point potentially.
-  - [ ] Check the brick scene. The texture orientation is different for each wall. It might have to do with the fact that the normals are aligned with an axis -> Swap x,y of the rectangle.
+- [x] Debug the rectangle/ box classes. There is something off with the dimensions. This is related to the previous point potentially.
+  - [x] Check the brick scene. The texture orientation is different for each wall. It might have to do with the fact that the normals are aligned with an axis -> Swap x,y of the rectangle.
 
 Other ideas:
 

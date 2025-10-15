@@ -3,8 +3,11 @@
 namespace Raytracer {
 
 Color RendererDeterministic::TraceRay(Ray ray, const Scene& scene) {
-    auto intersection = Intersect(ray, scene);
-    if (intersection) {
+    while (ray.GetDepth() < kMaximumDepth) {
+        auto intersection = Intersect(ray, scene);
+        if (!intersection.has_value()) {
+            return ray.GetColor() * scene.GetBackgroundColor();
+        }
         Material::InteractionType mostLikelyInteraction = intersection->object->GetMaterial().MostLikelyInteraction();
         switch (mostLikelyInteraction) {
             case Material::InteractionType::DIFFUSE:
@@ -16,10 +19,8 @@ Color RendererDeterministic::TraceRay(Ray ray, const Scene& scene) {
                 intersection->object->GetMaterial().Refract(ray, intersection.value(), kApplyRoughness);
                 break;
         }
-    } else {
-        return ray.GetColor() * scene.GetBackgroundColor();
     }
-    return TraceRay(ray, scene);
+    return ray.GetRadiance() * ray.GetColor();
 }
 
 }  // namespace Raytracer
