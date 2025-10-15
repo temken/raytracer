@@ -13,8 +13,11 @@ class Scene {
 public:
     Scene(const Color& backgroundColor = BLACK);
 
-    void AddObject(std::unique_ptr<Object> object);
-    const std::vector<std::unique_ptr<Object>>& GetObjects() const;
+    void AddObject(std::shared_ptr<Object> object);
+
+    const std::vector<std::shared_ptr<Object>>& GetObjects() const;
+    const std::vector<std::shared_ptr<Object>>& GetLightSources() const;
+
     Color GetBackgroundColor() const;
 
     void Evolve(double timeStep);
@@ -25,7 +28,8 @@ public:
     void PrintInfo() const;
 
 private:
-    std::vector<std::unique_ptr<Object>> mObjects;
+    std::vector<std::shared_ptr<Object>> mObjects;
+    std::vector<std::shared_ptr<Object>> mLightSources;
     Color mBackgroundColor;
 };
 
