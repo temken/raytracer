@@ -1,0 +1,194 @@
+id: brick-room
+
+threads: 8
+
+render:
+  image: true
+  video: false
+  video_duration: 2.0
+  open_output_files: true
+
+camera:
+  renderer_type: MONTE_CARLO # Options: SIMPLE, MONTE_CARLO
+  fov_deg: 120.0
+  position: [5.0, 0.0, 5.0]
+  direction: [-1.0, 0.0, 0.0]
+  resolution:
+    width: 800
+    height: 600
+  framesPerSecond: 30
+  antialiasing: false
+  blur_image: false
+  samples_per_pixel: 500
+
+scene:
+  background_color: black
+  objects:
+    - type: Rectangle
+      id: floor
+      visible: true
+      position: [0.0, 0.0, 0.0]
+      normal: [0.0, 0.0, 1.0]
+      dimensions:
+        width: 10.0
+        height: 20.0
+      material:
+        baseColor: gray
+
+    - type: Rectangle
+      id: ceiling
+      visible: true
+      position: [0.0, 0.0, 10.0]
+      normal: [0.0, 0.0, -1.0]
+      dimensions:
+        width: 10.0
+        height: 20.0
+      material:
+        baseColor: gray
+
+    - type: Rectangle
+      id: back-wall
+      visible: true
+      position: [-5.0, 0.0, 5.0]
+      normal: [1.0, 0.0, 0.0]
+      dimensions:
+        width: 10.0
+        height: 20.0
+      material:
+        baseColor: gray
+        colorTexture: bricks.jpg
+      
+    - type: Rectangle
+      id: front-wall
+      visible: true
+      position: [5.0, 0.0, 5.0]
+      normal: [-1.0, 0.0, 0.0]
+      dimensions:
+        width: 10.0
+        height: 20.0
+      material:
+        baseColor: gray
+        colorTexture: bricks.jpg
+
+    - type: Rectangle
+      id: right-wall
+      visible: true
+      position: [0.0, 10.0, 5.0]
+      normal: [0.0, 1.0, 0.0]
+      dimensions:
+        width: 10.0
+        height: 10.0
+      material:
+        baseColor: gray
+        colorTexture: bricks.jpg
+
+    - type: Rectangle
+      id: left-wall
+      visible: true
+      position: [0.0, -10.0, 5.0]
+      normal: [0.0, -1.0, 0.0]
+      dimensions:
+        width: 10.0
+        height: 10.0
+      material:
+        baseColor: gray
+        colorTexture: bricks.jpg
+
+    - type: Cylinder
+      id: ceiling lamp
+      visible: true
+      position: [0.0, 8.0, 9.9]
+      normal: [1.0, 0.0, 0.0]
+      radius: 0.1
+      height: 10.0
+      material:
+        baseColor: white
+        luminance: 2.0
+
+    - type: Cylinder
+      id: ceiling lamp
+      visible: true
+      position: [0.0, 6.0, 9.9]
+      normal: [1.0, 0.0, 0.0]
+      radius: 0.1
+      height: 10.0
+      material:
+        baseColor: white
+        luminance: 2.0
+
+    - type: Cylinder
+      id: ceiling lamp
+      visible: true
+      position: [0.0, 4.0, 9.9]
+      normal: [1.0, 0.0, 0.0]
+      radius: 0.1
+      height: 10.0
+      material:
+        baseColor: white
+        luminance: 2.0
+
+    - type: Cylinder
+      id: ceiling lamp
+      visible: true
+      position: [0.0, 2.0, 9.9]
+      normal: [1.0, 0.0, 0.0]
+      radius: 0.1
+      height: 10.0
+      material:
+        baseColor: white
+        luminance: 2.0
+
+    - type: Cylinder
+      id: ceiling lamp
+      visible: true
+      position: [0.0, 0.0, 9.9]
+      normal: [1.0, 0.0, 0.0]
+      radius: 0.1
+      height: 10.0
+      material:
+        baseColor: white
+        luminance: 2.0
+
+    - type: Cylinder
+      id: ceiling lamp
+      visible: true
+      position: [0.0, -2.0, 9.9]
+      normal: [1.0, 0.0, 0.0]
+      radius: 0.1
+      height: 10.0
+      material:
+        baseColor: white
+        luminance: 2.0
+
+    - type: Cylinder
+      id: ceiling lamp
+      visible: true
+      position: [0.0, -4.0, 9.9]
+      normal: [1.0, 0.0, 0.0]
+      radius: 0.1
+      height: 10.0
+      material:
+        baseColor: white
+        luminance: 2.0
+
+    - type: Cylinder
+      id: ceiling lamp
+      visible: true
+      position: [0.0, -6.0, 9.9]
+      normal: [1.0, 0.0, 0.0]
+      radius: 0.1
+      height: 10.0
+      material:
+        baseColor: white
+        luminance: 2.0
+
+    - type: Cylinder
+      id: ceiling lamp
+      visible: true
+      position: [0.0, -8.0, 9.9]
+      normal: [1.0, 0.0, 0.0]
+      radius: 0.1
+      height: 10.0
+      material:
+        baseColor: white
+        luminance: 2.0
