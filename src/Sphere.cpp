@@ -40,7 +40,7 @@ std::optional<Intersection> Sphere::Intersect(const Ray& ray) {
     Vector3D hitPoint = ray.GetOrigin() + t * ray.GetDirection();
     Vector3D normal = (hitPoint - mPosition).Normalized();
 
-    return Intersection{t, hitPoint, normal, &mMaterial};
+    return Intersection{t, hitPoint, normal, this};
 }
 
 void Sphere::PrintInfo() const {

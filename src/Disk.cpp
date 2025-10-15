@@ -23,7 +23,7 @@ std::optional<Intersection> Disk::Intersect(const Ray& ray) {
     Vector3D localPoint = hitPoint - mPosition;
 
     if (localPoint.Norm() <= mRadius) {
-        return Intersection{t, hitPoint, (denom < 0) ? mNormal : -1.0 * mNormal, &mMaterial};
+        return Intersection{t, hitPoint, (denom < 0) ? mNormal : -1.0 * mNormal, this};
     }
     return std::nullopt;
 }

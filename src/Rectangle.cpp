@@ -36,7 +36,7 @@ std::optional<Intersection> Rectangle::Intersect(const Ray& ray) {
     std::pair<double, double> uv = GetNormalizedTextureCoordinates(hitPoint);
 
     if (std::fabs(uv.first) <= 0.5 && std::fabs(uv.second) <= 0.5) {
-        return Intersection{t, hitPoint, (denom < 0) ? mNormal : -1.0 * mNormal, &mMaterial};
+        return Intersection{t, hitPoint, (denom < 0) ? mNormal : -1.0 * mNormal, this};
     }
     return std::nullopt;
 }

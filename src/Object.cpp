@@ -21,7 +21,7 @@ bool Object::IsVisible() const {
     return mVisible;
 }
 
-Material Object::GetMaterial() {
+Material& Object::GetMaterial() {
     return mMaterial;
 }
 

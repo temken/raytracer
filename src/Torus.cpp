@@ -195,7 +195,7 @@ std::optional<Intersection> Torus::Intersect(const Ray& ray) {
                                 4.0 * hitVec[1] * (sumSquared - paramSquared + 2.0 * R * R),
                                 4.0 * hitVec[2] * (sumSquared - paramSquared)})
                           .Normalized();
-    return Intersection{t, hitPoint, normal, &mMaterial};
+    return Intersection{t, hitPoint, normal, this};
 }
 
 void Torus::PrintInfo() const {

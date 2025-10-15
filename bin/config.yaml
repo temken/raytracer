@@ -34,7 +34,7 @@ camera:
   framesPerSecond: 15
   antialiasing: false
   blur_image: false
-  samples_per_pixel: 200
+  samples_per_pixel: 20
 
 scene:
   background_color: black

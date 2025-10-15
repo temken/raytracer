@@ -133,6 +133,7 @@ void Material::Refract(Ray& ray, const Vector3D& intersectionPoint, const Vector
 Color Material::GetColor() const {
     return mColor;
 }
+
 void Material::SetColor(const Color& color) {
     mColor = color;
 }
