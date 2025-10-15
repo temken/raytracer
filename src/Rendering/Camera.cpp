@@ -134,7 +134,7 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
         }
     }
     if (video) {
-        std::string filepath = Configuration::GetInstance().GetOutputDirectory() + "/videos/converging_video_" + std::to_string(std::time(nullptr)) + ".mp4";
+        std::string filepath = Configuration::GetInstance().GetOutputDirectory() + "/videos/converging_video_" + Configuration::GetInstance().GetRunID() + ".mp4";
         std::cout << "Saving converging video to: " << filepath << std::endl;
         video->Save(true, false, false, filepath);
     }

@@ -63,11 +63,15 @@
   - [x] Update my config files
   - [x] Test
 - [x] Fix the texture so I can have a brick room for future testing.
-- [ ] Move everything into the src files
+- [x] Move everything into the src files
+- [x] Have a run ID that is consistent across output files.
+    - [x] Also save the config yaml files and mark the exact git commit hash in it
 - [ ] Create some nice images with the new class. Create some interesting images and videos using all the capabilities so far.
 - [ ] Image textures for other objects (Spheres!)
 - [ ] Add more pre-defined colors
-- [ ] Renderer with next event estimation: Create a renderer with deterministic shadows by checking for the closest light source or something.
+- [ ] Renderer with next event estimation
+  - [ ] MCreate a renderer with deterministic shadows by checking for the closest light source or something.
+  - [ ] Add a new MC renderer tht uses NEE by sampling points on light sources.
   - [ ] Could this be a way to solve the black pixel issue?
 - [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
 - [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter
