@@ -3,7 +3,7 @@ add_test(NAME test_Executable COMMAND executable
 	WORKING_DIRECTORY ${BIN_DIR})
 
 # 1. Test all modules
-file(GLOB TESTFILES "*.cpp")
+file(GLOB_RECURSE TESTFILES "*.cpp")
 
 #####################################################################
 # Option A: If a static library is built. (see src/CMakeLists.txt)
@@ -23,7 +23,7 @@ foreach(TESTFILE ${TESTFILES})
 
 	target_compile_options(${TESTNAME} PUBLIC -Wall -pedantic)
 
-	install(TARGETS ${TESTNAME} DESTINATION ${TESTS_DIR})
+	install(TARGETS ${TESTNAME} DESTINATION ${TESTS_DIR}/bin/)
 
 	add_test(NAME ${TESTNAME} COMMAND ${TESTNAME}
 		WORKING_DIRECTORY ${TESTS_DIR})
