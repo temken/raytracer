@@ -62,7 +62,7 @@
   - [x] Use material inthe MC renderer
   - [x] Update my config files
   - [x] Test
-- [ ] Fix the texture so I can have a brick room for future testing.
+- [x] Fix the texture so I can have a brick room for future testing.
 - [ ] Add more pre-defined colors
 - [ ] Create some nice images with the new class. Create some interesting images and videos using all the capabilities so far.
 - [ ] Renderer with next event estimation: Create a renderer with deterministic shadows by checking for the closest light source or something.
