@@ -133,7 +133,7 @@ bool Image::Save(bool openFile, std::string filepath) const {
         std::string directory = Configuration::GetInstance().GetOutputDirectory();
         // Create /images/ folder if it does not exist
         std::filesystem::create_directories(directory + "/images/");
-        filepath = directory + "/images/image_" + std::to_string(std::time(nullptr)) + ".png";
+        filepath = directory + "/images/image_" + Configuration::GetInstance().GetRunID() + ".png";
     }
 
     std::vector<std::uint8_t> rgba;

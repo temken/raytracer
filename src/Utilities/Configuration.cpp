@@ -2,7 +2,9 @@
 
 #include "Version.hpp"
 
+#include <chrono>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <map>
 
@@ -25,16 +27,24 @@ void Configuration::ParseYamlFile(const std::string& path) {
     }
 
     if (auto id = mRoot["id"]) {
-        mID = id.as<std::string>();
+        mSceneID = id.as<std::string>();
     } else {
         throw std::runtime_error("Missing required key: id");
     }
 
+    mRunID = CreateRunID();
+
     CreateOutputDirectory();
+
+    CopyYamlFile(path);
 }
 
-std::string Configuration::GetID() const {
-    return mID;
+std::string Configuration::GetSceneID() const {
+    return mSceneID;
+}
+
+std::string Configuration::GetRunID() const {
+    return mRunID;
 }
 
 size_t Configuration::GetNumThreads() const {
@@ -161,14 +171,15 @@ Scene Configuration::ConstructScene() const {
 }
 
 std::string Configuration::GetOutputDirectory() const {
-    return PROJECT_DIR "output/" + mID;
+    return PROJECT_DIR "output/" + mSceneID;
 }
 
 void Configuration::PrintInfo() const {
-    std::cout << "\nConfiguration Information:" << std::endl;
-    std::cout << "ID:\t\t" << mID << std::endl;
-    std::cout << "Threads:\t" << GetNumThreads() << std::endl;
-    std::cout << "Output:\t\t" << GetOutputDirectory() << std::endl
+    std::cout << "\nConfiguration Information:" << std::endl
+              << "Scene ID:\t\t" << mSceneID << std::endl
+              << "Run ID:\t\t" << mRunID << std::endl
+              << "Threads:\t" << GetNumThreads() << std::endl
+              << "Output:\t\t" << GetOutputDirectory() << std::endl
               << std::endl;
 }
 
@@ -413,8 +424,45 @@ Torus Configuration::ParseTorus(const YAML::Node& obj) const {
     return torus;
 }
 
+std::string Configuration::CreateRunID() const {
+    auto now = std::chrono::system_clock::now();
+    std::time_t t = std::chrono::system_clock::to_time_t(now);
+    std::tm tm = *std::localtime(&t);
+
+    std::ostringstream oss;
+    oss << std::put_time(&tm, "%Y-%m-%d_%H-%M-%S");
+    return oss.str();
+}
+
 void Configuration::CreateOutputDirectory() const {
     std::filesystem::create_directories(GetOutputDirectory());
+}
+
+void Configuration::CopyYamlFile(const std::string& path) const {
+    // Ensure config subdirectory exists
+    auto configDir = std::filesystem::path(GetOutputDirectory()) / "configs";
+    std::filesystem::create_directories(configDir);
+
+    // Target file path
+    auto targetPath = configDir / ("config_" + mRunID + ".yaml");
+
+    // Open source and target files
+    std::ifstream src(path);
+    if (!src.is_open()) {
+        throw std::runtime_error("Failed to open source YAML file: " + path);
+    }
+
+    std::ofstream dst(targetPath);
+    if (!dst.is_open()) {
+        throw std::runtime_error("Failed to create config file: " + targetPath.string());
+    }
+
+    // Write header line
+    dst << "# " << PROJECT_NAME << "-" << PROJECT_VERSION << "\tgit:"
+        << GIT_BRANCH << "/" << GIT_COMMIT_HASH << "\n\n";
+
+    // Copy YAML content
+    dst << src.rdbuf();
 }
 
 }  // namespace Raytracer

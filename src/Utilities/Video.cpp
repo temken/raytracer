@@ -50,15 +50,14 @@ void Video::Save(bool openFile, bool showTerminalOutput, bool deleteFrameFiles, 
     if (filepath.empty()) {
         std::string outputDirectory = Configuration::GetInstance().GetOutputDirectory();
         std::filesystem::create_directories(outputDirectory + "/videos/");
-        filepath = outputDirectory + "/videos/video_" + std::to_string(std::time(nullptr)) + ".mp4";
+        filepath = outputDirectory + "/videos/video_" + Configuration::GetInstance().GetRunID() + ".mp4";
     }
 
     std::filesystem::path outputFilepath = filepath;
     std::filesystem::path outputDirectory = outputFilepath.parent_path();
 
     // Create a temp subfolder for the frames
-    std::string epoch = std::to_string(std::time(nullptr));
-    std::filesystem::path tempFramesDir = outputDirectory / ("video_tmp_" + epoch);
+    std::filesystem::path tempFramesDir = outputDirectory / ("video_tmp_" + Configuration::GetInstance().GetRunID());
     std::filesystem::create_directories(tempFramesDir);
 
     for (std::size_t i = 0; i < mFrames.size(); i++) {

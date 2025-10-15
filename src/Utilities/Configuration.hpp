@@ -27,7 +27,8 @@ public:
 
     void ParseYamlFile(const std::string& path);
 
-    std::string GetID() const;
+    std::string GetSceneID() const;
+    std::string GetRunID() const;
 
     size_t GetNumThreads() const;
 
@@ -57,7 +58,8 @@ private:
 
     YAML::Node mRoot;
 
-    std::string mID;
+    std::string mSceneID;
+    std::string mRunID;
 
     static Vector3D ParseVector3D(const YAML::Node& n);
     static Color ParseColor(const YAML::Node& n);
@@ -95,7 +97,9 @@ private:
     Cylinder ParseCylinder(const YAML::Node& obj) const;
     Torus ParseTorus(const YAML::Node& obj) const;
 
+    std::string CreateRunID() const;
     void CreateOutputDirectory() const;
+    void CopyYamlFile(const std::string& path) const;
 };
 
 }  // namespace Raytracer
