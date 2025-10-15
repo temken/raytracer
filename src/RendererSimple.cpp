@@ -5,7 +5,7 @@ namespace Raytracer {
 Color RendererSimple::TraceRay(Ray ray, const Scene& scene) {
     auto intersection = Intersect(ray, scene);
     if (intersection) {
-        return intersection->material->GetColor();
+        return intersection->object->GetMaterial().GetColor();
     } else {
         return scene.GetBackgroundColor();
     }

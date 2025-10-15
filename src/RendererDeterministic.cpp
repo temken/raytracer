@@ -5,15 +5,15 @@ namespace Raytracer {
 Color RendererDeterministic::TraceRay(Ray ray, const Scene& scene) {
     auto intersection = Intersect(ray, scene);
     if (intersection) {
-        Material::InteractionType mostLikelyInteraction = intersection->material->MostLikelyInteraction();
+        Material::InteractionType mostLikelyInteraction = intersection->object->GetMaterial().MostLikelyInteraction();
         switch (mostLikelyInteraction) {
             case Material::InteractionType::DIFFUSE:
-                return intersection->material->GetColor();
+                return intersection->object->GetMaterial().GetColor();
             case Material::InteractionType::REFLECTIVE:
-                intersection->material->Reflect(ray, intersection->point, intersection->normal, kApplyRoughness);
+                intersection->object->GetMaterial().Reflect(ray, intersection->point, intersection->normal, kApplyRoughness);
                 break;
             case Material::InteractionType::REFRACTIVE:
-                intersection->material->Refract(ray, intersection->point, intersection->normal, kApplyRoughness);
+                intersection->object->GetMaterial().Refract(ray, intersection->point, intersection->normal, kApplyRoughness);
                 break;
         }
     } else {

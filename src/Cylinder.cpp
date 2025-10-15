@@ -89,7 +89,7 @@ std::optional<Intersection> Cylinder::IntersectMantle(const Ray& ray) {
     double heightAtHit = (hitPoint - mPosition).Dot(mNormal);
     if (std::fabs(heightAtHit) <= mHeight / 2.0) {
         Vector3D normalAtHit = (hitPoint - mPosition - heightAtHit * mNormal).Normalized();
-        return Intersection{tCylinder, hitPoint, normalAtHit, &mMaterial};
+        return Intersection{tCylinder, hitPoint, normalAtHit, this};
     }
 
     return std::nullopt;

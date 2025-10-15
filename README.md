@@ -55,21 +55,19 @@
   - [x] LIght source are either on/off. Should be possible to dim them. Maybe this has something to do with luminance?
   - [x] Implement metallic surfaces
   - [x] Add refractive/transparent media.
-- [ ] Use the material class in the renderer
+- [x] Use the material class in the renderer
   - [x] Add material to object and parse from config file
   - [x] The intersection class should store the material not the object. That should be sufficient
-
   - [x] Use material in the Simple renderer
   - [x] Use material inthe MC renderer
-  - [ ] Update my config files
-  - [ ] Test
+  - [x] Update my config files
+  - [x] Test
 - [ ] Fix the texture so I can have a brick room for future testing.
-- [ ] Create some nice images with the new class
-- [ ] Improve the block blur algorithm to not smudge edges. -> Bilateral filter
+- [ ] Add more pre-defined colors
+- [ ] Create some nice images with the new class. Create some interesting images and videos using all the capabilities so far.
 - [ ] Renderer with next event estimation: Create a renderer with deterministic shadows by checking for the closest light source or something.
   - [ ] Could this be a way to solve the black pixel issue?
-- [ ] Create some interesting images and videos using all the capabilities so far.
-- [ ] Add more pre-defined colors
+- [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter
 - [ ] Print preview of image downscaled in terminal
 - [ ] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
 - [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
