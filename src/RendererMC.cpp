@@ -14,7 +14,7 @@ Color RendererMC::TraceRay(Ray ray, const Scene& scene) {
             return ray.GetColor() * scene.GetBackgroundColor();
         }
 
-        intersection->object->GetMaterial().Interact(ray, intersection->point, intersection->normal);
+        intersection->object->GetMaterial().Interact(ray, intersection.value());
 
         if (intersection->object->GetMaterial().EmitsLight()) {
             break;

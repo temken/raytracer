@@ -2,8 +2,11 @@
 
 #include "Rendering/Ray.hpp"
 #include "Utilities/Color.hpp"
+#include "Utilities/Intersection.hpp"
+#include "Utilities/Texture.hpp"
 
 #include <map>
+#include <optional>
 #include <random>
 
 namespace Raytracer {
@@ -19,11 +22,14 @@ public:
     Material();
     Material(const Color& baseColor, double roughness = 1.0, double refractiveIndex = 1.0, double meanFreePath = 0.0, double luminance = 0.0);
 
-    void Interact(Ray& ray, const Vector3D& intersectionPoint, const Vector3D& normal, bool applyRoughness = true);
+    void Interact(Ray& ray, const Intersection& intersection, bool applyRoughness = true);
 
-    void Diffuse(Ray& incomingRay, const Vector3D& intersectionPoint, const Vector3D& normal);
-    void Reflect(Ray& incomingRay, const Vector3D& intersectionPoint, const Vector3D& normal, bool applyRoughness);
-    void Refract(Ray& incomingRay, const Vector3D& intersectionPoint, const Vector3D& normal, bool applyRoughness);
+    void Diffuse(Ray& incomingRay, const Intersection& intersection);
+    void Reflect(Ray& incomingRay, const Intersection& intersection, bool applyRoughness);
+    void Refract(Ray& incomingRay, const Intersection& intersection, bool applyRoughness);
+
+    // Get color at intersection point (with texture if available)
+    Color GetColor(const Intersection& intersection) const;
 
     Color GetBaseColor() const;
     void SetBaseColor(const Color& color);
@@ -47,6 +53,8 @@ public:
     void SetInteractionProbabilities(const std::map<InteractionType, double>& probs);
     InteractionType MostLikelyInteraction() const;
 
+    void SetColorTexture(std::string filename);
+
     void PrintInfo() const;
 
 private:
@@ -63,6 +71,9 @@ private:
     // Random numbers:
     std::mt19937 mGenerator{std::random_device{}()};
     std::uniform_real_distribution<double> mDistribution{0.0, 1.0};
+
+    // Optional texture
+    std::optional<Texture> mColorTexture = std::nullopt;
 
     static constexpr double kEpsilon = 1e-5;
 

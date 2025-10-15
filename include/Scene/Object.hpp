@@ -41,10 +41,13 @@ public:
     Vector3D GetSpin() const;
     void SetSpin(const Vector3D& spin);
 
-    virtual Color GetColor(const Vector3D& hitPoint = Vector3D()) const;
+    Color GetColor(const Intersection& intersection) const;
     bool EmitsLight() const;
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) = 0;
+
+    // Relative to center, range [-0.5, 0.5]
+    virtual std::pair<double, double> GetTextureCoordinates(const Vector3D& hitPoint) const;
 
     void Evolve(double timeStep);
 

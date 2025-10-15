@@ -203,8 +203,8 @@ void Torus::PrintInfo() const {
               << "\tCenter: " << mPosition << std::endl
               << "\tNormal: " << mNormal << std::endl
               << "\tInner Radius: " << mInnerRadius << std::endl
-              << "\tOuter Radius: " << mOuterRadius << std::endl
-              << "\tColor: " << GetColor() << std::endl;
+              << "\tOuter Radius: " << mOuterRadius << std::endl;
+    mMaterial.PrintInfo();
 }
 
 }  // namespace Raytracer
