@@ -17,7 +17,7 @@ public:
     };
 
     Material();
-    Material(const Color& color, double roughness = 1.0, double refractiveIndex = 1.0, double meanFreePath = 0.0, double luminance = 0.0);
+    Material(const Color& baseColor, double roughness = 1.0, double refractiveIndex = 1.0, double meanFreePath = 0.0, double luminance = 0.0);
 
     void Interact(Ray& ray, const Vector3D& intersectionPoint, const Vector3D& normal, bool applyRoughness = true);
 
@@ -25,11 +25,11 @@ public:
     void Reflect(Ray& incomingRay, const Vector3D& intersectionPoint, const Vector3D& normal, bool applyRoughness);
     void Refract(Ray& incomingRay, const Vector3D& intersectionPoint, const Vector3D& normal, bool applyRoughness);
 
-    Color GetColor() const;
-    void SetColor(const Color& color);
+    Color GetBaseColor() const;
+    void SetBaseColor(const Color& color);
 
-    Color GetColorSpecular() const;
-    void SetColorSpecular(const Color& color);
+    Color GetSpecularColor() const;
+    void SetSpecularColor(const Color& color);
 
     double GetRoughness() const;
     void SetRoughness(double roughness);
@@ -50,8 +50,8 @@ public:
     void PrintInfo() const;
 
 private:
-    Color mColor;
-    Color mColorSpecular;
+    Color mBaseColor;
+    Color mSpecularColor;
     double mRoughness;        // 0 = perfect mirror, 1 = very rough
     double mRefractiveIndex;  // 1 = vacuum, 1.33 = water, 1.5 = glass
     double mMeanFreePath;     // Average distance a photon travels in the material before interacting

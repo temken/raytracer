@@ -4,9 +4,9 @@ namespace Raytracer {
 
 Material::Material() {
 }
-Material::Material(const Color& color, double roughness, double refractiveIndex, double meanFreePath, double radiance) :
-    mColor(color),
-    mColorSpecular(color),  // Default to same as color
+Material::Material(const Color& baseColor, double roughness, double refractiveIndex, double meanFreePath, double radiance) :
+    mBaseColor(baseColor),
+    mSpecularColor(baseColor),  // Default to same as baseColor
     mRoughness(roughness),
     mRefractiveIndex(refractiveIndex),
     mMeanFreePath(meanFreePath),
@@ -70,7 +70,7 @@ void Material::Diffuse(Ray& ray, const Vector3D& intersectionPoint, const Vector
 
     ray.SetOrigin(intersectionPoint + kEpsilon * newDir);
     ray.SetDirection(newDir);
-    ray.MultiplyColor(mColor);
+    ray.MultiplyColor(mBaseColor);
     ray.AddRadiance(mRadiance);
 }
 
@@ -83,7 +83,7 @@ void Material::Reflect(Ray& ray, const Vector3D& intersectionPoint, const Vector
     }
     ray.SetOrigin(intersectionPoint + kEpsilon * newDir);
     ray.SetDirection(newDir);
-    ray.MultiplyColor(mColorSpecular);
+    ray.MultiplyColor(mSpecularColor);
     ray.AddRadiance(mRadiance);
 }
 
@@ -126,23 +126,23 @@ void Material::Refract(Ray& ray, const Vector3D& intersectionPoint, const Vector
 
     ray.SetOrigin(intersectionPoint + kEpsilon * refractDir);
     ray.SetDirection(refractDir);
-    ray.MultiplyColor(mColor);
+    ray.MultiplyColor(mBaseColor);
     ray.AddRadiance(mRadiance);
 }
 
-Color Material::GetColor() const {
-    return mColor;
+Color Material::GetBaseColor() const {
+    return mBaseColor;
 }
 
-void Material::SetColor(const Color& color) {
-    mColor = color;
+void Material::SetBaseColor(const Color& color) {
+    mBaseColor = color;
 }
 
-Color Material::GetColorSpecular() const {
-    return mColorSpecular;
+Color Material::GetSpecularColor() const {
+    return mSpecularColor;
 }
-void Material::SetColorSpecular(const Color& color) {
-    mColorSpecular = color;
+void Material::SetSpecularColor(const Color& color) {
+    mSpecularColor = color;
 }
 
 double Material::GetRoughness() const {
@@ -204,8 +204,8 @@ Material::InteractionType Material::MostLikelyInteraction() const {
 
 void Material::PrintInfo() const {
     std::cout << "Material Info:" << std::endl
-              << "\tColor:\t" << mColor << std::endl
-              << "\tSpecular Color:\t" << mColorSpecular << std::endl
+              << "\tBase Color:\t" << mBaseColor << std::endl
+              << "\tSpecular Color:\t" << mSpecularColor << std::endl
               << "\tRoughness:\t" << mRoughness << std::endl
               << "\tRefractive Index:\t" << mRefractiveIndex << std::endl
               << "\tMean Free Path:\t" << mMeanFreePath << std::endl

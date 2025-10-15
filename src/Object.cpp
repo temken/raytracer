@@ -46,7 +46,7 @@ void Object::SetNormal(const Vector3D& normal) {
 }
 
 Color Object::GetColor(const Vector3D& hitPoint) const {
-    return mMaterial.GetColor();
+    return mMaterial.GetBaseColor();
 }
 
 bool Object::EmitsLight() const {
