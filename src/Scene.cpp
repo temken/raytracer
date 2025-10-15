@@ -6,12 +6,19 @@ Scene::Scene(const Color& backgroundColor) :
     mBackgroundColor(backgroundColor) {
 }
 
-void Scene::AddObject(std::unique_ptr<Object> object) {
-    mObjects.push_back(std::move(object));
+void Scene::AddObject(std::shared_ptr<Object> object) {
+    mObjects.push_back(object);
+    if (object->EmitsLight()) {
+        mLightSources.push_back(object);
+    }
 }
 
-const std::vector<std::unique_ptr<Object>>& Scene::GetObjects() const {
+const std::vector<std::shared_ptr<Object>>& Scene::GetObjects() const {
     return mObjects;
+}
+
+const std::vector<std::shared_ptr<Object>>& Scene::GetLightSources() const {
+    return mLightSources;
 }
 
 Color Scene::GetBackgroundColor() const {
@@ -29,13 +36,7 @@ size_t Scene::NumberOfObjects() const {
 }
 
 size_t Scene::NumberOfLightSources() const {
-    size_t count = 0;
-    for (const auto& object : mObjects) {
-        if (object->EmitsLight()) {
-            count++;
-        }
-    }
-    return count;
+    return mLightSources.size();
 }
 
 void Scene::PrintInfo() const {
