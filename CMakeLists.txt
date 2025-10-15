@@ -13,7 +13,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(BIN_DIR ${PROJECT_SOURCE_DIR}/bin)
 set(GENERATED_DIR ${PROJECT_BINARY_DIR}/generated)
-set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 set(LIB_DIR ${PROJECT_SOURCE_DIR}/lib)
 set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
 set(TESTS_DIR ${PROJECT_SOURCE_DIR}/tests)
@@ -125,12 +124,12 @@ execute_process( # Git commit hash
 )
 
 configure_file(
-  ${INCLUDE_DIR}/version.hpp.in
-  ${GENERATED_DIR}/version.hpp
+  ${SRC_DIR}/Version.hpp.in
+  ${GENERATED_DIR}/Version.hpp
 )
 
 # Source and include directories
-include_directories(${INCLUDE_DIR})
+include_directories(${SRC_DIR})
 add_subdirectory(${SRC_DIR})
 
 # Code Coverage Configuration

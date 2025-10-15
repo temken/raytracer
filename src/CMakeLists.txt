@@ -17,7 +17,7 @@ target_include_directories(raytracer
 install(TARGETS raytracer DESTINATION ${BIN_DIR})
 
 # Static library
-file(GLOB FILES "*.cpp")
+file(GLOB_RECURSE FILES "*.cpp")
 list(REMOVE_ITEM FILES ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
 add_library(libraytracer
 	${FILES})
@@ -38,7 +38,7 @@ target_include_directories(libraytracer
 	${GENERATED_DIR}
 	PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}
-	${INCLUDE_DIR}
+	${SRC_DIR}
 	${STB_DIR}
 	${YAMLCPPDIR})
 

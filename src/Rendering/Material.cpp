@@ -1,7 +1,7 @@
 #include "Rendering/Material.hpp"
 
 #include "Scene/Object.hpp"
-#include "version.hpp"
+#include "Version.hpp"
 
 namespace Raytracer {
 

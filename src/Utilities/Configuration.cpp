@@ -1,6 +1,6 @@
 #include "Utilities/Configuration.hpp"
 
-#include "version.hpp"
+#include "Version.hpp"
 
 #include <filesystem>
 #include <iostream>

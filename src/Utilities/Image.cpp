@@ -4,7 +4,7 @@
 
 #include "Utilities/Configuration.hpp"
 #include "Utilities/Image.hpp"
-#include "version.hpp"
+#include "Version.hpp"
 
 #include <algorithm>
 #include <cstdint>
