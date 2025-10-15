@@ -1,6 +1,6 @@
 #include "Scene/Rectangle.hpp"
 
-#include "version.hpp"
+#include "Version.hpp"
 
 namespace Raytracer {
 

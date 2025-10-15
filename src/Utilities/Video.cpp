@@ -1,7 +1,7 @@
 #include "Utilities/Video.hpp"
 
 #include "Utilities/Configuration.hpp"
-#include "version.hpp"
+#include "Version.hpp"
 
 #include <filesystem>
 #include <format>

@@ -17,7 +17,7 @@
 #include "Utilities/Configuration.hpp"
 #include "Utilities/Image.hpp"
 #include "Utilities/Vector.hpp"
-#include "version.hpp"
+#include "Version.hpp"
 
 using namespace Raytracer;
 
