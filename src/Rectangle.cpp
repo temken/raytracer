@@ -11,8 +11,8 @@ Rectangle::Rectangle(const std::string& name, const Material& material, const Ve
     // Create two orthogonal vectors in the rectangle plane
     mU = mNormal.Cross(Vector3D({0, 1, 0}));
     if (mU.Norm() < sEpsilon) {
-        mV = mNormal.Cross(Vector3D({1, 0, 0}));
-        mU = mV.Cross(mNormal);
+        mU = mNormal.Cross(Vector3D({1, 0, 0}));
+        mV = mU.Cross(mNormal);
     } else {
         mV = mNormal.Cross(mU);
     }
