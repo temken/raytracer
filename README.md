@@ -66,6 +66,7 @@
 - [x] Move everything into the src files
 - [x] Have a run ID that is consistent across output files.
     - [x] Also save the config yaml files and mark the exact git commit hash in it
+- [x] Camera orbit should not look towards the origin, but just to the z-axis on its given height.
 - [ ] Create some nice images with the new class. Create some interesting images and videos using all the capabilities so far.
 - [ ] Image textures for other objects (Spheres!)
 - [ ] Add more pre-defined colors

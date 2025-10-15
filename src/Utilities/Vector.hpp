@@ -82,7 +82,15 @@ public:
         return std::sqrt(NormSquared());
     }
 
-    Vector Normalized() const {
+    void Normalize() {
+        T n = Norm();
+        if (n == T{}) {
+            throw std::runtime_error("Cannot normalize zero vector");
+        }
+        *this /= n;
+    }
+
+    [[nodiscard]] Vector Normalized() const {
         T n = Norm();
         if (n == T{}) {
             throw std::runtime_error("Cannot normalize zero vector");

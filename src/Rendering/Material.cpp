@@ -189,8 +189,8 @@ double Material::GetRadiance(double distance) const {
     if (mRadiance <= 0.0) {
         return 0.0;
     }
-    // softening distance in scene units; choose to taste
-    constexpr double d0 = 1.0;
+    // Simple inverse-square falloff with distance
+    static constexpr double d0 = 1.0;
     double inv = 1.0 / (1.0 + (distance * distance) / (d0 * d0));
     return mRadiance * inv;
 }
