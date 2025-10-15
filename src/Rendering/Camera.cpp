@@ -50,7 +50,9 @@ void Camera::SetSpin(const Vector3D& spin) {
 }
 
 void Camera::InitializeOrbitTrajectory(double angularVelocity) {
-    mEz = -1.0 * mPosition.Normalized();
+    mEz = -1.0 * mPosition;
+    mEz[2] = 0;
+    mEz.Normalize();
     ConfigureCamera();
 
     // Set angular and spin velocity for orbit around z axis
@@ -272,7 +274,6 @@ void Camera::Evolve(double timeStep) {
     Translate(mVelocity * timeStep);
     Rotate(mAngularVelocity.Norm() * timeStep, mAngularVelocity.Normalized());
     Spin(mSpin.Norm() * timeStep, mSpin.Normalized());
-    ConfigureCamera();
 }
 
 Ray Camera::CreateRay(size_t x, size_t y) const {
