@@ -26,6 +26,9 @@ public:
     void SetRadiance(double radiance);
     void AddRadiance(double radiance);
 
+    size_t GetDepth() const;
+    void IncrementDepth();
+
     Vector3D PointAtParameter(double t) const;
 
     Vector3D operator()(double t) const {
@@ -48,6 +51,8 @@ private:
 
     Color mColor = Color(1.0, 1.0, 1.0);
     double mRadiance = 0.0;
+
+    size_t mDepth = 0;  // Number of interactions
 };
 
 }  // namespace Raytracer

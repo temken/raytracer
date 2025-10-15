@@ -40,6 +40,14 @@ void Ray::AddRadiance(double radiance) {
     mRadiance += radiance;
 }
 
+size_t Ray::GetDepth() const {
+    return mDepth;
+}
+
+void Ray::IncrementDepth() {
+    mDepth++;
+}
+
 Vector3D Ray::PointAtParameter(double t) const {
     return mOrigin + t * mDirection;
 }

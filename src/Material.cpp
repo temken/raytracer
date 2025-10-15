@@ -75,6 +75,7 @@ void Material::Diffuse(Ray& ray, const Intersection& intersection) {
     ray.SetDirection(newDir);
     ray.MultiplyColor(GetColor(intersection));
     ray.AddRadiance(mRadiance);
+    ray.IncrementDepth();
 }
 
 void Material::Reflect(Ray& ray, const Intersection& intersection, bool applyRoughness) {
@@ -88,6 +89,7 @@ void Material::Reflect(Ray& ray, const Intersection& intersection, bool applyRou
     ray.SetDirection(newDir);
     ray.MultiplyColor(mSpecularColor);
     ray.AddRadiance(mRadiance);
+    ray.IncrementDepth();
 }
 
 void Material::Refract(Ray& ray, const Intersection& intersection, bool applyRoughness) {
@@ -133,6 +135,7 @@ void Material::Refract(Ray& ray, const Intersection& intersection, bool applyRou
     ray.SetDirection(refractDir);
     ray.MultiplyColor(mBaseColor);
     ray.AddRadiance(mRadiance);
+    ray.IncrementDepth();
 }
 
 Color Material::GetColor(const Intersection& intersection) const {

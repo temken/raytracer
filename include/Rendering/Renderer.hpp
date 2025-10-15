@@ -28,6 +28,7 @@ public:
 protected:
     Type mType;
     bool mIsDeterministic = false;
+    const size_t kMaximumDepth = 10;  // Maximum recursion depth for rays
     virtual std::optional<Intersection> Intersect(const Ray& ray, const Scene& scene, double epsilon = 1e-6);
 };
 
