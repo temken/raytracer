@@ -72,6 +72,7 @@ void Camera::SetResolution(size_t width, size_t height) {
         throw std::invalid_argument("Resolution must be even numbers.");
     }
     mResolution = {width, height};
+    ConfigureCamera();
 }
 
 void Camera::SetFramesPerSecond(double fps) {

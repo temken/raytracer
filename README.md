@@ -63,23 +63,23 @@
   - [x] Update my config files
   - [x] Test
 - [x] Fix the texture so I can have a brick room for future testing.
-- [ ] Create camera based on aspect ratio and one pixel dimension
-  - [ ] If it persists: Fix the bug that changes the field of view for different resolutions
-- [ ] Add more pre-defined colors
+- [ ] Move everything into the src files
 - [ ] Create some nice images with the new class. Create some interesting images and videos using all the capabilities so far.
+- [ ] Image textures for other objects (Spheres!)
+- [ ] Add more pre-defined colors
 - [ ] Renderer with next event estimation: Create a renderer with deterministic shadows by checking for the closest light source or something.
   - [ ] Could this be a way to solve the black pixel issue?
+- [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
 - [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter
 - [ ] Print preview of image downscaled in terminal
 - [ ] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
-- [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
 - [ ] Check out BSDF
+- [ ] Create camera based on aspect ratio and one pixel dimension
 - [ ] Get debugging to work.
 - [ ] Implement depth of field capability
-
 - [ ] New objects: Cones, Rings
 - [ ] Normal textures especially for glass surfaces, but not just
-- [ ] Image textures for other objects (Spheres!)
+
 
 
 Image ideas:
@@ -87,7 +87,7 @@ Image ideas:
 - Create a series of material comparisons, e.g. roughness, metallicity, glas, ...
 
 Known bugs and issues:
-- [ ] Increasing the resolution sometimes seems to widen the field of view and vice versa
+- [x] Increasing the resolution sometimes seems to widen the field of view and vice versa
 - [ ] Test and debug the image class, import/export a file. Ensure that the image has the same orientation.
 - [x] Debug the rectangle/ box classes. There is something off with the dimensions. This is related to the previous point potentially.
   - [x] Check the brick scene. The texture orientation is different for each wall. It might have to do with the fact that the normals are aligned with an axis -> Swap x,y of the rectangle.
