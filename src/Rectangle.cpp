@@ -46,7 +46,7 @@ Color Rectangle::GetColor(const Vector3D& hitPoint) const {
         auto uv = GetNormalizedTextureCoordinates(hitPoint);
         return mTexture->GetColorAt(uv.first + 0.5, uv.second + 0.5);
     } else {
-        return mMaterial.GetColor();
+        return mMaterial.GetBaseColor();
     }
 }
 

@@ -8,7 +8,7 @@ Color RendererDeterministic::TraceRay(Ray ray, const Scene& scene) {
         Material::InteractionType mostLikelyInteraction = intersection->object->GetMaterial().MostLikelyInteraction();
         switch (mostLikelyInteraction) {
             case Material::InteractionType::DIFFUSE:
-                return intersection->object->GetMaterial().GetColor();
+                return intersection->object->GetMaterial().GetBaseColor();
             case Material::InteractionType::REFLECTIVE:
                 intersection->object->GetMaterial().Reflect(ray, intersection->point, intersection->normal, kApplyRoughness);
                 break;

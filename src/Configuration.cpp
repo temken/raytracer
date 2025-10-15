@@ -245,16 +245,18 @@ Material Configuration::ParseMaterial(const YAML::Node& mat) {
         throw std::runtime_error("Material node must be a map");
     }
 
-    // 1️⃣ Parse color
-    Color color = Color(1.0, 1.0, 1.0);  // default white
-    if (mat["color"]) {
-        color = ParseColor(mat["color"]);
+    // 1️⃣ Parse base color
+    Color baseColor = Color(1.0, 1.0, 1.0);  // default white
+    if (mat["baseColor"]) {
+        baseColor = ParseColor(mat["baseColor"]);
+    } else {
+        throw std::runtime_error("Material must have a base color");
     }
 
     // Optional specular color
-    Color colorSpecular = color;  // default to diffuse color
-    if (mat["colorSpecular"]) {
-        colorSpecular = ParseColor(mat["colorSpecular"]);
+    Color specularColor = baseColor;  // default to base color
+    if (mat["specularColor"]) {
+        specularColor = ParseColor(mat["specularColor"]);
     }
 
     // 2️⃣ Optional scalar properties
@@ -264,8 +266,8 @@ Material Configuration::ParseMaterial(const YAML::Node& mat) {
     double luminance = mat["luminance"] ? mat["luminance"].as<double>() : 0.0;
 
     // 3️⃣ Construct the material
-    Material material(color, roughness, refractiveIndex, meanFreePath, luminance);
-    material.SetColorSpecular(colorSpecular);
+    Material material(baseColor, roughness, refractiveIndex, meanFreePath, luminance);
+    material.SetSpecularColor(specularColor);
 
     // 4️⃣ Optional interaction probabilities
     if (mat["probabilities"] && mat["probabilities"].IsMap()) {
