@@ -67,8 +67,11 @@
 - [x] Have a run ID that is consistent across output files.
     - [x] Also save the config yaml files and mark the exact git commit hash in it
 - [x] Camera orbit should not look towards the origin, but just to the z-axis on its given height.
-- [ ] Create some nice images with the new class. Create some interesting images and videos using all the capabilities so far.
+- [x] Create some nice images with the new class. Create some interesting images and videos using all the capabilities so far.
+- [ ] Implement Fresnel effect and the approximation
+- [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
 - [ ] Image textures for other objects (Spheres!)
+- [ ] Image texture and gradients for the background (spherical background image)
 - [ ] Add more pre-defined colors
 - [ ] Renderer with next event estimation
   - [ ] MCreate a renderer with deterministic shadows by checking for the closest light source or something.
@@ -76,20 +79,21 @@
   - [ ] Could this be a way to solve the black pixel issue?
 - [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
 - [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter
-- [ ] Print preview of image downscaled in terminal
 - [ ] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
-- [ ] Check out BSDF
 - [ ] Create camera based on aspect ratio and one pixel dimension
 - [ ] Get debugging to work.
 - [ ] Implement depth of field capability
-- [ ] New objects: Cones, Rings
+- [ ] New objects: Cones, fix Torus, composite objects
 - [ ] Normal textures especially for glass surfaces, but not just
+- [ ] Check out BSDF
+- [ ] Print preview of image downscaled in terminal
 
 
 
 Image ideas:
-- Light lanterns along a road in the night with nice ambient
-- Create a series of material comparisons, e.g. roughness, metallicity, glas, ...
+- [ ] Light lanterns along a road in the night with nice ambient. Wet road, oncoming car.
+- [x] Create a series of material comparisons, e.g. roughness, metallicity, glas, ...
+- [ ] Recreate that photo I took in the pub.
 
 Known bugs and issues:
 - [x] Increasing the resolution sometimes seems to widen the field of view and vice versa
@@ -100,8 +104,7 @@ Known bugs and issues:
 Other ideas:
 
 - Define trajectories that the camera can follow (time dependence is already ).
-- Enable background gradients/images.
-- Preview images in the terminal
+- Create compositve objects with a physics engine included. Simulate and render a double pendulum in an interesting light ambient.
 - Make a UI with qt or imgui to show the scene and camera, move stuff, render quick images. Simple UI to have some interactive fun.
 
 ## General notes
@@ -118,10 +121,8 @@ Other ideas:
 The included folders are:
 
 - *bin/*: This folder contains the executable after successful installation together with the configuration files.
-- *data/*: Contains additional data necessary for the simulations, e.g. the solar model tables.
 - *external/*: This folder will only be created and filled during the build with CMake.
-- *include/*: All header files of RaytraCer++ can be found here.
-- *results/*: Each run of RaytraCer++ generates result files in a dedicated sub-folder named after the run's simulation ID string, which is specified in the configuration file.
+- *output/*: Each run of RaytraCer++ generates result files in a dedicated sub-folder named after the run's simulation ID string, which is specified in the configuration file.
 - *src/*: Here you find the source code of RaytraCer++.
 - *tests/*: All code and executable files of the unit tests are stored here.
 
@@ -233,35 +234,6 @@ Once SOFTWARENAME is installed, it can run by running the following command from
 - xx.xx.20xx: Release of version 0.1.0
 
 ## Everything else
-
-<details><summary>Citing SOFTWARENAME</summary>
-<p>
-
-If you decide to use this code, please cite the latest archived version,
-
-> Emken, T., 20xx, SOFTWARENAME [Code, v0.1.0], Astrophysics Source Code Library, record [[ascl:xxxx.xxx]](https://ascl.net/xxxx.xxx), [[DOI:10.5281/zenodo.xxxxxxx]](https://doi.org/10.5281/zenodo.xxxxxxx)
-
-Bibtex entry:
-
-```
-@software{SOFTWARENAME,
-  author = {Emken, Timon},
-  title = {{SOFTWARENAME [Code, v0.1.0]}},
-  year         = {20xx},
-  publisher    = {Zenodo},
-  version      = {v0.1.0},
-  doi          = {DOI:10.5281/zenodo.xxxxxxx},
-  url          = {https://doi.org/10.5281/zenodo.xxxxxxx},
-  howpublished={Astrophysics Source Code Library record \href{https://ascl.net/xxxx.xxx}{[ascl:xxxx.xxx]}. The code can be found under \url{https://github.com/temken/SOFTWARENAME}. Version 0.1.1 is archived as \href{https://doi.org/10.5281/zenodo.xxxxxxx}{DOI:10.5281/zenodo.5957388}}
-}
-```
-
-<!-- As well as the original publications,
-
-> authors , year,  **title**, [[arXiv:xxxx.xxxxx]](https://arxiv.org/abs/xxxx.xxxxx). -->
-
-</p>
-</details>
 
 <details><summary>Author & Contact</summary>
 <p>
