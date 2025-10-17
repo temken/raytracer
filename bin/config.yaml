@@ -10,6 +10,8 @@ threads: 6
 #   refractiveIndex: 1.5     # optional, default = 1.0
 #   meanFreePath: 0.1        # optional, default = 0.0
 #   luminance: 5.0           # optional, default = 0.0 (emission)
+#   colorTexture: "texture.png"  # optional, default = no texture
+#   useFresnel: true         # optional, default = true
   
 #   # Optional: probabilities for interactions
 #   probabilities:
@@ -66,8 +68,8 @@ scene:
       position: [0.0, 10.0, 0.0]
       normal: [0.0, -1.0, 0.0]
       dimensions:
-        width: 20.0
-        height: 10.0
+        width: 10.0
+        height: 20.0
       material:
         baseColor: green
 
@@ -77,8 +79,8 @@ scene:
       position: [0.0, -10.0, 0.0]
       normal: [0.0, 1.0, 0.0]
       dimensions:
-        width: 20.0
-        height: 10.0
+        width: 10.0
+        height: 20.0
       material:
         baseColor: red
 
@@ -148,6 +150,7 @@ scene:
       material:
         baseColor: white
         refractiveIndex: 1.5
+        useFresnel: false
         probabilities:
           diffuse: 0.0
           reflective: 0.1

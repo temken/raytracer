@@ -281,6 +281,7 @@ Material Configuration::ParseMaterial(const YAML::Node& mat) {
     double refractiveIndex = mat["refractiveIndex"] ? mat["refractiveIndex"].as<double>() : 1.0;
     double meanFreePath = mat["meanFreePath"] ? mat["meanFreePath"].as<double>() : 0.0;
     double luminance = mat["luminance"] ? mat["luminance"].as<double>() : 0.0;
+    bool useFresnel = mat["useFresnel"] ? mat["useFresnel"].as<bool>() : true;
 
     // 3️⃣ Construct the material
     Material material(baseColor, roughness, refractiveIndex, meanFreePath, luminance);
@@ -288,6 +289,7 @@ Material Configuration::ParseMaterial(const YAML::Node& mat) {
     if (!textureFilename.empty()) {
         material.SetColorTexture(textureFilename);
     }
+    material.SetUseFresnel(useFresnel);
 
     // 4️⃣ Optional interaction probabilities
     if (mat["probabilities"] && mat["probabilities"].IsMap()) {

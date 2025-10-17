@@ -50,6 +50,9 @@ public:
     double GetRadiance(double distance = 0.0) const;
     void SetRadiance(double radiance);
 
+    bool UsesFresnel() const;
+    void SetUseFresnel(bool useFresnel);
+
     void SetInteractionProbabilities(const std::map<InteractionType, double>& probs);
     InteractionType MostLikelyInteraction() const;
 
@@ -64,9 +67,10 @@ private:
     double mRefractiveIndex;  // 1 = vacuum, 1.33 = water, 1.5 = glass
     double mMeanFreePath;     // Average distance a photon travels in the material before interacting
     double mRadiance;         // Brightness of the material if it emits light
+    bool mUseFresnel;
 
     // Probability for each interaction type
-    std::map<InteractionType, double> probabilities;
+    std::map<InteractionType, double> mInteractionProbabilities;
 
     // Random numbers:
     std::mt19937 mGenerator{std::random_device{}()};
@@ -78,6 +82,7 @@ private:
     static constexpr double kEpsilon = 1e-5;
 
     void NormalizeProbabilities();
+    std::map<InteractionType, double> GetFresnelCorrectedProbabilities(double cosThetaI) const;
 
     Vector3D SampleCone(const Vector3D& axis, double angle);
 };

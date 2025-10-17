@@ -13,11 +13,12 @@ Material::Material(const Color& baseColor, double roughness, double refractiveIn
     mRoughness(roughness),
     mRefractiveIndex(refractiveIndex),
     mMeanFreePath(meanFreePath),
-    mRadiance(radiance) {
+    mRadiance(radiance),
+    mUseFresnel(true) {
     // Default probabilities
-    probabilities[InteractionType::DIFFUSE] = 1.0;
-    probabilities[InteractionType::REFLECTIVE] = 0.0;
-    probabilities[InteractionType::REFRACTIVE] = 0.0;
+    mInteractionProbabilities[InteractionType::DIFFUSE] = 1.0;
+    mInteractionProbabilities[InteractionType::REFLECTIVE] = 0.0;
+    mInteractionProbabilities[InteractionType::REFRACTIVE] = 0.0;
     NormalizeProbabilities();
 }
 
@@ -26,6 +27,13 @@ void Material::Interact(Ray& ray, const Intersection& intersection, bool applyRo
     const double r = mDistribution(mGenerator);
 
     double cumulative = 0.0;
+
+    auto probabilities = mInteractionProbabilities;
+    if (mUseFresnel) {
+        double cosThetaI = -intersection.normal.Dot(ray.GetDirection());
+        auto fresnelProbs = GetFresnelCorrectedProbabilities(cosThetaI);
+        probabilities = fresnelProbs;
+    }
 
     // Ensure probabilities sum to 1.0 elsewhere (constructor or setup).
     // Iterate deterministically (use std::map or a fixed array).
@@ -199,8 +207,16 @@ void Material::SetRadiance(double radiance) {
     mRadiance = radiance;
 }
 
+bool Material::UsesFresnel() const {
+    return mUseFresnel;
+}
+
+void Material::SetUseFresnel(bool useFresnel) {
+    mUseFresnel = useFresnel;
+}
+
 void Material::SetInteractionProbabilities(const std::map<InteractionType, double>& probs) {
-    probabilities = probs;
+    mInteractionProbabilities = probs;
     NormalizeProbabilities();
 }
 
@@ -208,7 +224,7 @@ Material::InteractionType Material::MostLikelyInteraction() const {
     double maxProb = 0.0;
     InteractionType mostLikely = InteractionType::DIFFUSE;
 
-    for (const auto& [type, prob] : probabilities) {
+    for (const auto& [type, prob] : mInteractionProbabilities) {
         if (prob > maxProb) {
             maxProb = prob;
             mostLikely = type;
@@ -232,8 +248,9 @@ void Material::PrintInfo() const {
               << "\tRefractive Index:\t" << mRefractiveIndex << std::endl
               << "\tMean Free Path:\t" << mMeanFreePath << std::endl
               << "\tRadiance:\t" << mRadiance << std::endl
+              << "\tUse Fresnel:\t" << (mUseFresnel ? "[x]" : "[ ]") << std::endl
               << "\tInteraction Probabilities:" << std::endl;
-    for (const auto& [type, prob] : probabilities) {
+    for (const auto& [type, prob] : mInteractionProbabilities) {
         std::string typeStr;
         switch (type) {
             case InteractionType::DIFFUSE:
@@ -253,12 +270,39 @@ void Material::PrintInfo() const {
 
 void Material::NormalizeProbabilities() {
     double total = 0.0;
-    for (const auto& pair : probabilities) {
+    for (const auto& pair : mInteractionProbabilities) {
         total += pair.second;
     }
-    for (auto& pair : probabilities) {
+    for (auto& pair : mInteractionProbabilities) {
         pair.second /= total;
     }
+}
+
+std::map<Material::InteractionType, double> Material::GetFresnelCorrectedProbabilities(double cosThetaI) const {
+    double RO = mInteractionProbabilities.at(InteractionType::REFLECTIVE);
+
+    if (RO < kEpsilon) {
+        // No reflective component, nothing to adjust
+        return mInteractionProbabilities;
+    } else if (RO > 1.0 - kEpsilon) {
+        // Perfect mirror, all probability to reflection
+        return {
+            {Material::InteractionType::DIFFUSE, 0.0},
+            {Material::InteractionType::REFLECTIVE, 1.0},
+            {Material::InteractionType::REFRACTIVE, 0.0}};
+    }
+
+    // Schlick's approximation
+    double R = RO + (1.0 - RO) * std::pow(1.0 - cosThetaI, 5);
+
+    // Rescale the other two probabilities
+    double rescaledDiffuseProbability = mInteractionProbabilities.at(InteractionType::DIFFUSE) * (1.0 - R) / (1.0 - RO);
+    double rescaledRefractiveProbability = mInteractionProbabilities.at(InteractionType::REFRACTIVE) * (1.0 - R) / (1.0 - RO);
+
+    return {
+        {Material::InteractionType::DIFFUSE, rescaledDiffuseProbability},
+        {Material::InteractionType::REFLECTIVE, R},
+        {Material::InteractionType::REFRACTIVE, rescaledRefractiveProbability}};
 }
 
 Vector3D Material::SampleCone(const Vector3D& axis, double angle) {
