@@ -17,11 +17,11 @@ Box::Box(const std::string& name, const Material& material, const Vector3D& cent
     mFaces.push_back(bottomFace);
     // Front face
     Vector3D frontCenter = mPosition + Vector3D({0, mWidth / 2, 0});
-    Rectangle frontFace("front", material, frontCenter, Vector3D({0, 1, 0}), mLength, mHeight);
+    Rectangle frontFace("front", material, frontCenter, Vector3D({0, 1, 0}), mHeight, mLength);
     mFaces.push_back(frontFace);
     // Back face
     Vector3D backCenter = mPosition - Vector3D({0, mWidth / 2, 0});
-    Rectangle backFace("back", material, backCenter, Vector3D({0, -1, 0}), mLength, mHeight);
+    Rectangle backFace("back", material, backCenter, Vector3D({0, -1, 0}), mHeight, mLength);
     mFaces.push_back(backFace);
     // Left face
     Vector3D leftCenter = mPosition - Vector3D({mLength / 2, 0, 0});

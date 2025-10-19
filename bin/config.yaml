@@ -34,9 +34,9 @@ camera:
     width: 800
     height: 600
   framesPerSecond: 15
-  antialiasing: false
+  antialiasing: true
   blur_image: false
-  samples_per_pixel: 20
+  samples_per_pixel: 50
 
 scene:
   background_color: black

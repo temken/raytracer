@@ -85,6 +85,8 @@ private:
     std::map<InteractionType, double> GetFresnelCorrectedProbabilities(double cosThetaI) const;
 
     Vector3D SampleCone(const Vector3D& axis, double angle);
+
+    double IncidentAngleCosine(const Ray& ray, const Vector3D& normal) const;
 };
 
 }  // namespace Raytracer

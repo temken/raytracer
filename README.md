@@ -70,15 +70,15 @@
 - [x] Create some nice images with the new class. Create some interesting images and videos using all the capabilities so far.
 - [ ] Implement Fresnel effect and the approximation
 - [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
-- [ ] Image textures for other objects (Spheres!)
-- [ ] Image texture and gradients for the background (spherical background image)
-- [ ] Add more pre-defined colors
 - [ ] Renderer with next event estimation
   - [ ] MCreate a renderer with deterministic shadows by checking for the closest light source or something.
   - [ ] Add a new MC renderer tht uses NEE by sampling points on light sources.
   - [ ] Could this be a way to solve the black pixel issue?
-- [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
 - [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter
+- [ ] Image textures for other objects (Spheres!)
+- [ ] Image texture and gradients for the background (spherical background image)
+- [ ] Add more pre-defined colors
+- [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
 - [ ] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
 - [ ] Create camera based on aspect ratio and one pixel dimension
 - [ ] Get debugging to work.

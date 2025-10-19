@@ -159,8 +159,6 @@ Scene Configuration::ConstructScene() const {
                 scene.AddObject(std::make_unique<Box>(ParseBox(obj)));
             } else if (type == "Cylinder") {
                 scene.AddObject(std::make_unique<Cylinder>(ParseCylinder(obj)));
-            } else if (type == "Ring") {
-                scene.AddObject(std::make_unique<Torus>(ParseTorus(obj)));
             } else {
                 throw std::runtime_error("Unknown object type: " + type);
             }
@@ -408,22 +406,6 @@ Cylinder Configuration::ParseCylinder(const YAML::Node& obj) const {
 
     cylinder.SetVisible(props.visible);
     return cylinder;
-}
-
-Torus Configuration::ParseTorus(const YAML::Node& obj) const {
-    ObjectProperties props = ParseObjectProperties(obj);
-    double innerRadius = obj["inner_radius"].as<double>();
-    double outerRadius = obj["outer_radius"].as<double>();
-
-    // Construct the torus
-    Torus torus(props.id, props.material, props.position, props.normal, innerRadius, outerRadius);
-
-    torus.SetVelocity(props.velocity);
-    torus.SetAngularVelocity(props.angularVelocity);
-    torus.SetSpin(props.spin);
-
-    torus.SetVisible(props.visible);
-    return torus;
 }
 
 std::string Configuration::CreateRunID() const {

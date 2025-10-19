@@ -30,7 +30,7 @@ void Material::Interact(Ray& ray, const Intersection& intersection, bool applyRo
 
     auto probabilities = mInteractionProbabilities;
     if (mUseFresnel) {
-        double cosThetaI = -intersection.normal.Dot(ray.GetDirection());
+        double cosThetaI = IncidentAngleCosine(ray, intersection.normal);
         auto fresnelProbs = GetFresnelCorrectedProbabilities(cosThetaI);
         probabilities = fresnelProbs;
     }
@@ -299,6 +299,10 @@ std::map<Material::InteractionType, double> Material::GetFresnelCorrectedProbabi
     double rescaledDiffuseProbability = mInteractionProbabilities.at(InteractionType::DIFFUSE) * (1.0 - R) / (1.0 - RO);
     double rescaledRefractiveProbability = mInteractionProbabilities.at(InteractionType::REFRACTIVE) * (1.0 - R) / (1.0 - RO);
 
+    // TODO Check the normalization
+    // TODO Check validity when R0 = 0 or 1
+    // TODO Incident angel as function
+
     return {
         {Material::InteractionType::DIFFUSE, rescaledDiffuseProbability},
         {Material::InteractionType::REFLECTIVE, R},
@@ -328,6 +332,14 @@ Vector3D Material::SampleCone(const Vector3D& axis, double angle) {
     Vector3D eY = eZ.Cross(eX);
 
     return (x * eX + y * eY + z * eZ).Normalized();
+}
+
+double Material::IncidentAngleCosine(const Ray& ray, const Vector3D& normal) const {
+    double cosTheta = normal.Normalized().Dot(ray.GetDirection().Normalized());
+    if (cosTheta < 0.0) {
+        cosTheta = -cosTheta;
+    }
+    return cosTheta;
 }
 
 }  // namespace Raytracer

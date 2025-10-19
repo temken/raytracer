@@ -272,8 +272,12 @@ void Camera::Spin(double angle, const Vector3D& axis) {
 
 void Camera::Evolve(double timeStep) {
     Translate(mVelocity * timeStep);
-    Rotate(mAngularVelocity.Norm() * timeStep, mAngularVelocity.Normalized());
-    Spin(mSpin.Norm() * timeStep, mSpin.Normalized());
+    if (mAngularVelocity.Norm() > 0) {
+        Rotate(mAngularVelocity.Norm() * timeStep, mAngularVelocity.Normalized());
+    }
+    if (mSpin.Norm() > 0) {
+        Spin(mSpin.Norm() * timeStep, mSpin.Normalized());
+    }
 }
 
 Ray Camera::CreateRay(size_t x, size_t y) const {

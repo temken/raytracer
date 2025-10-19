@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
     if (renderConfig.renderVideo) {
         std::cout << "\nRendering video..." << std::endl;
         bool printProgressBar = true;
-        camera.InitializeOrbitTrajectory(2 * M_PI / renderConfig.videoDuration);
+        // camera.InitializeOrbitTrajectory(2 * M_PI / renderConfig.videoDuration);
         Video video = camera.RenderVideo(scene, renderConfig.videoDuration, printProgressBar);
         video.PrintInfo();
         video.Save(renderConfig.openOutputFiles);
