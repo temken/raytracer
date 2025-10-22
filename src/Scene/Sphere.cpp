@@ -9,7 +9,10 @@ Sphere::Sphere(const std::string& name, const Material& material, const Vector3D
     Object(name, material, center, Vector3D({0, 0, 1})),
     mRadius(radius) {}
 
-// Ray-sphere intersection
+double Sphere::GetSurfaceArea() const {
+    return 4.0 * M_PI * mRadius * mRadius;
+}
+
 std::optional<Intersection> Sphere::Intersect(const Ray& ray) {
     Vector3D oc = ray.GetOrigin() - mPosition;
 

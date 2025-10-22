@@ -14,6 +14,8 @@ class Rectangle : public Object {
 public:
     Rectangle(const std::string& name, const Material& material, const Vector3D& center, const Vector3D& normal, double width, double height);
 
+    virtual double GetSurfaceArea() const override;
+
     virtual std::optional<Intersection> Intersect(const Ray& ray) override;
 
     virtual std::pair<double, double> GetTextureCoordinates(const Vector3D& hitPoint) const override;

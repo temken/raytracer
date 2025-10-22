@@ -10,6 +10,11 @@ Cylinder::Cylinder(const std::string& name, const Material& material, const Vect
     mBottomDisk("bottom_cap", material, center - (height / 2.0) * mNormal, -1.0 * mNormal, radius) {
 }
 
+double Cylinder::GetSurfaceArea() const {
+    double mantleArea = 2.0 * M_PI * mRadius * mHeight;
+    return mantleArea + mTopDisk.GetSurfaceArea() + mBottomDisk.GetSurfaceArea();
+}
+
 std::optional<Intersection> Cylinder::Intersect(const Ray& ray) {
     auto mantleIntersection = IntersectMantle(ray);
     auto capIntersection = IntersectCaps(ray);

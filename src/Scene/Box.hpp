@@ -16,6 +16,8 @@ public:
     // Constructors for Box with different parameters
     Box(const std::string& name, const Material& material, const Vector3D& center, double length, double width, double height);
 
+    virtual double GetSurfaceArea() const override;
+
     virtual std::optional<Intersection> Intersect(const Ray& ray) override;
 
     virtual void PrintInfo() const override;

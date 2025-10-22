@@ -33,6 +33,10 @@ Box::Box(const std::string& name, const Material& material, const Vector3D& cent
     mFaces.push_back(rightFace);
 }
 
+double Box::GetSurfaceArea() const {
+    return 2.0 * (mLength * mWidth + mWidth * mHeight + mHeight * mLength);
+}
+
 std::optional<Intersection> Box::Intersect(const Ray& ray) {
     std::optional<Intersection> closestIntersection;
     for (auto& face : mFaces) {

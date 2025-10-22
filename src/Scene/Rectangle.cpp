@@ -20,6 +20,10 @@ Rectangle::Rectangle(const std::string& name, const Material& material, const Ve
     mV = mV.Normalized();
 }
 
+double Rectangle::GetSurfaceArea() const {
+    return mWidth * mHeight;
+}
+
 std::optional<Intersection> Rectangle::Intersect(const Ray& ray) {
     double denom = mNormal.Dot(ray.GetDirection());
     if (std::fabs(denom) < sEpsilon) {
@@ -36,7 +40,7 @@ std::optional<Intersection> Rectangle::Intersect(const Ray& ray) {
     std::pair<double, double> uv = GetTextureCoordinates(hitPoint);
 
     if (std::fabs(uv.first) <= 0.5 && std::fabs(uv.second) <= 0.5) {
-        return Intersection{t, hitPoint, (denom < 0) ? mNormal : -1.0 * mNormal, this};
+        return Intersection{t, hitPoint, mNormal, this};
     }
     return std::nullopt;
 }

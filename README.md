@@ -68,12 +68,14 @@
     - [x] Also save the config yaml files and mark the exact git commit hash in it
 - [x] Camera orbit should not look towards the origin, but just to the z-axis on its given height.
 - [x] Create some nice images with the new class. Create some interesting images and videos using all the capabilities so far.
-- [ ] Implement Fresnel effect and the approximation
+- [x] Implement Fresnel effect and the approximation
 - [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
 - [ ] Renderer with next event estimation
   - [ ] MCreate a renderer with deterministic shadows by checking for the closest light source or something.
+  - [ ] The contributions from the deterministic poinst should be averaged 
   - [ ] Add a new MC renderer tht uses NEE by sampling points on light sources.
   - [ ] Could this be a way to solve the black pixel issue?
+- [ ] Implement an ambient factor that will give black pixels a slight color.
 - [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter
 - [ ] Image textures for other objects (Spheres!)
 - [ ] Image texture and gradients for the background (spherical background image)
@@ -87,6 +89,8 @@
 - [ ] Normal textures especially for glass surfaces, but not just
 - [ ] Check out BSDF
 - [ ] Print preview of image downscaled in terminal
+- [ ] Composite object class with std::vector<Object*>. Where Objects are all 2D objects.
+- [ ] Look into ogb mesh files.
 
 
 

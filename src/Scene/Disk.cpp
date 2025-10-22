@@ -8,6 +8,10 @@ Disk::Disk(const std::string& name, const Material& material, const Vector3D& ce
     Object(name, material, center, normal),
     mRadius(radius) {}
 
+double Disk::GetSurfaceArea() const {
+    return M_PI * mRadius * mRadius;
+}
+
 std::optional<Intersection> Disk::Intersect(const Ray& ray) {
     double denom = mNormal.Dot(ray.GetDirection());
     if (std::fabs(denom) < sEpsilon) {
@@ -23,7 +27,7 @@ std::optional<Intersection> Disk::Intersect(const Ray& ray) {
     Vector3D localPoint = hitPoint - mPosition;
 
     if (localPoint.Norm() <= mRadius) {
-        return Intersection{t, hitPoint, (denom < 0) ? mNormal : -1.0 * mNormal, this};
+        return Intersection{t, hitPoint, mNormal, this};
     }
     return std::nullopt;
 }

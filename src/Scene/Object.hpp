@@ -7,7 +7,9 @@
 #include "Utilities/Vector.hpp"
 
 #include <optional>
+#include <random>
 #include <string>
+#include <vector>
 
 namespace Raytracer {
 
@@ -43,6 +45,8 @@ public:
 
     Color GetColor(const Intersection& intersection) const;
     bool EmitsLight() const;
+
+    virtual double GetSurfaceArea() const = 0;
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) = 0;
 
