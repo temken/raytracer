@@ -16,19 +16,22 @@ double Cylinder::GetSurfaceArea() const {
 }
 
 std::optional<Intersection> Cylinder::Intersect(const Ray& ray) {
-    auto mantleIntersection = IntersectMantle(ray);
-    auto capIntersection = IntersectCaps(ray);
+    std::vector<Intersection> intersections;
+    if (auto intersection = mTopDisk.Intersect(ray); intersection && intersection->t > sEpsilon) {
+        intersections.push_back(intersection.value());
+    }
+    if (auto intersection = mBottomDisk.Intersect(ray); intersection && intersection->t > sEpsilon) {
+        intersections.push_back(intersection.value());
+    }
+    if (auto intersection = IntersectMantle(ray); intersection && intersection->t > sEpsilon) {
+        intersections.push_back(intersection.value());
+    }
 
-    std::optional<Intersection> closestIntersection;
-    if (mantleIntersection && mantleIntersection->t > sEpsilon) {
-        closestIntersection = mantleIntersection;
+    if (intersections.empty()) {
+        return std::nullopt;
+    } else {
+        return *std::min_element(intersections.begin(), intersections.end());
     }
-    if (capIntersection && capIntersection->t > sEpsilon) {
-        if (!closestIntersection || capIntersection->t < closestIntersection->t) {
-            closestIntersection = capIntersection;
-        }
-    }
-    return closestIntersection;
 }
 
 void Cylinder::PrintInfo() const {
@@ -37,22 +40,6 @@ void Cylinder::PrintInfo() const {
               << "\tRadius: " << mRadius << std::endl
               << "\tHeight: " << mHeight << std::endl;
     mMaterial.PrintInfo();
-}
-
-std::optional<Intersection> Cylinder::IntersectCaps(const Ray& ray) {
-    auto topIntersection = mTopDisk.Intersect(ray);
-    auto bottomIntersection = mBottomDisk.Intersect(ray);
-
-    std::optional<Intersection> closestIntersection;
-    if (topIntersection && topIntersection->t > sEpsilon) {
-        closestIntersection = topIntersection;
-    }
-    if (bottomIntersection && bottomIntersection->t > sEpsilon) {
-        if (!closestIntersection || bottomIntersection->t < closestIntersection->t) {
-            closestIntersection = bottomIntersection;
-        }
-    }
-    return closestIntersection;
 }
 
 std::optional<Intersection> Cylinder::IntersectMantle(const Ray& ray) {

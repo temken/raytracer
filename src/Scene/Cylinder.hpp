@@ -21,7 +21,6 @@ private:
     Disk mTopDisk;
     Disk mBottomDisk;
 
-    std::optional<Intersection> IntersectCaps(const Ray& ray);
     std::optional<Intersection> IntersectMantle(const Ray& ray);
 };
 
