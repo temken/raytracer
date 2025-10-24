@@ -159,6 +159,8 @@ Scene Configuration::ConstructScene() const {
                 scene.AddObject(std::make_unique<Box>(ParseBox(obj)));
             } else if (type == "Cylinder") {
                 scene.AddObject(std::make_unique<Cylinder>(ParseCylinder(obj)));
+            } else if (type == "CylinderOpen") {
+                scene.AddObject(std::make_unique<CylinderOpen>(ParseCylinderOpen(obj)));
             } else {
                 throw std::runtime_error("Unknown object type: " + type);
             }
@@ -406,6 +408,22 @@ Cylinder Configuration::ParseCylinder(const YAML::Node& obj) const {
 
     cylinder.SetVisible(props.visible);
     return cylinder;
+}
+
+CylinderOpen Configuration::ParseCylinderOpen(const YAML::Node& obj) const {
+    ObjectProperties props = ParseObjectProperties(obj);
+    double radius = obj["radius"].as<double>();
+    double height = obj["height"].as<double>();
+
+    // Construct the open cylinder
+    CylinderOpen cylinderOpen(props.id, props.material, props.position, props.normal, radius, height);
+
+    cylinderOpen.SetVelocity(props.velocity);
+    cylinderOpen.SetAngularVelocity(props.angularVelocity);
+    cylinderOpen.SetSpin(props.spin);
+
+    cylinderOpen.SetVisible(props.visible);
+    return cylinderOpen;
 }
 
 std::string Configuration::CreateRunID() const {
