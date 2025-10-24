@@ -31,6 +31,9 @@ void Material::Interact(Ray& ray, const Intersection& intersection, bool applyRo
     auto probabilities = mInteractionProbabilities;
     if (mUseFresnel) {
         double cosThetaI = IncidentAngleCosine(ray, intersection.normal);
+        if (cosThetaI < 0.0) {
+            cosThetaI = -cosThetaI;
+        }
         auto fresnelProbs = GetFresnelCorrectedProbabilities(cosThetaI);
         probabilities = fresnelProbs;
     }
@@ -62,7 +65,7 @@ void Material::Interact(Ray& ray, const Intersection& intersection, bool applyRo
 void Material::Diffuse(Ray& ray, const Intersection& intersection) {
     // Diffuse surface: random new direction in hemisphere
     // Build ONB around normal
-    Vector3D eZ = intersection.normal;
+    Vector3D eZ = IncidentAngleCosine(ray, intersection.normal) < 0 ? -1.0 * intersection.normal : intersection.normal;
     Vector3D a = (std::fabs(eZ[0]) > 0.707) ? Vector3D({0.0, 1.0, 0.0}) : Vector3D({1.0, 0.0, 0.0});
     Vector3D eX = a.Cross(eZ).Normalized();
     Vector3D eY = eZ.Cross(eX);
@@ -335,10 +338,7 @@ Vector3D Material::SampleCone(const Vector3D& axis, double angle) {
 }
 
 double Material::IncidentAngleCosine(const Ray& ray, const Vector3D& normal) const {
-    double cosTheta = normal.Normalized().Dot(ray.GetDirection().Normalized());
-    if (cosTheta < 0.0) {
-        cosTheta = -cosTheta;
-    }
+    double cosTheta = -normal.Normalized().Dot(ray.GetDirection().Normalized());
     return cosTheta;
 }
 
