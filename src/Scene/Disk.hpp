@@ -14,6 +14,8 @@ public:
     Disk(const std::string& name, const Material& material, const Vector3D& center, const Vector3D& normal, double radius);
 
     virtual double GetSurfaceArea() const override;
+    virtual std::vector<Vector3D> SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const override;
+    virtual std::vector<Vector3D> GetKeyPoints() const override;
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) override;
 

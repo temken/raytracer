@@ -47,6 +47,8 @@ public:
     bool EmitsLight() const;
 
     virtual double GetSurfaceArea() const = 0;
+    virtual std::vector<Vector3D> SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const = 0;
+    virtual std::vector<Vector3D> GetKeyPoints() const = 0;
 
     virtual std::optional<Intersection> Intersect(const Ray& ray) = 0;
 

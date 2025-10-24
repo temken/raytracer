@@ -1,90 +1,38 @@
 #include "Scene/Cylinder.hpp"
 
+#include "Scene/CylinderOpen.hpp"
+#include "Scene/Disk.hpp"
+
+#include <iostream>
+#include <memory>
+
 namespace Raytracer {
 
 Cylinder::Cylinder(const std::string& name, const Material& material, const Vector3D& center, const Vector3D& normal, double radius, double height) :
-    Object(name, material, center, normal),
+    CompositeObject(name, material, center, normal),
     mRadius(radius),
-    mHeight(height),
-    mTopDisk("top_cap", material, center + (height / 2.0) * mNormal, mNormal, radius),
-    mBottomDisk("bottom_cap", material, center - (height / 2.0) * mNormal, -1.0 * mNormal, radius) {
-}
-
-double Cylinder::GetSurfaceArea() const {
-    double mantleArea = 2.0 * M_PI * mRadius * mHeight;
-    return mantleArea + mTopDisk.GetSurfaceArea() + mBottomDisk.GetSurfaceArea();
-}
-
-std::optional<Intersection> Cylinder::Intersect(const Ray& ray) {
-    std::vector<Intersection> intersections;
-    if (auto intersection = mTopDisk.Intersect(ray); intersection && intersection->t > sEpsilon) {
-        intersections.push_back(intersection.value());
-    }
-    if (auto intersection = mBottomDisk.Intersect(ray); intersection && intersection->t > sEpsilon) {
-        intersections.push_back(intersection.value());
-    }
-    if (auto intersection = IntersectMantle(ray); intersection && intersection->t > sEpsilon) {
-        intersections.push_back(intersection.value());
-    }
-
-    if (intersections.empty()) {
-        return std::nullopt;
-    } else {
-        return *std::min_element(intersections.begin(), intersections.end());
-    }
+    mHeight(height) {
+    // mTopDisk("top_cap", material, center + (height / 2.0) * mNormal, mNormal, radius),
+    // mBottomDisk("bottom_cap", material, center - (height / 2.0) * mNormal, -1.0 * mNormal, radius)
+    // Create and add top disk
+    Vector3D topCenter = mPosition + (mHeight / 2.0) * mNormal;
+    auto topDisk = std::make_shared<Disk>("top_cap", material, topCenter, mNormal, mRadius);
+    AddComponent(topDisk);
+    // Create and add bottom disk
+    Vector3D bottomCenter = mPosition - (mHeight / 2.0) * mNormal;
+    auto bottomDisk = std::make_shared<Disk>("bottom_cap", material, bottomCenter, -1.0 * mNormal, mRadius);
+    AddComponent(bottomDisk);
+    // Create and add mantle (open cylinder)
+    auto mantle = std::make_shared<CylinderOpen>("mantle", material, center, normal, radius, height);
+    AddComponent(mantle);
 }
 
 void Cylinder::PrintInfo() const {
-    PrintInfoBase();
+    PrintCompositeInfo();
     std::cout << "Shape:\tCylinder" << std::endl
               << "\tRadius: " << mRadius << std::endl
               << "\tHeight: " << mHeight << std::endl;
     mMaterial.PrintInfo();
-}
-
-std::optional<Intersection> Cylinder::IntersectMantle(const Ray& ray) {
-    Vector3D d = ray.GetDirection();
-    Vector3D oc = ray.GetOrigin() - mPosition;
-
-    double dDotN = d.Dot(mNormal);
-    Vector3D dPerp = d - dDotN * mNormal;
-
-    double ocDotN = oc.Dot(mNormal);
-    Vector3D ocPerp = oc - ocDotN * mNormal;
-
-    double a = dPerp.NormSquared();
-    double b = 2.0 * ocPerp.Dot(dPerp);
-    double c = ocPerp.NormSquared() - mRadius * mRadius;
-
-    double discriminant = b * b - 4 * a * c;
-    if (discriminant < 0.0) {
-        return std::nullopt;
-    }
-
-    double sqrtD = std::sqrt(discriminant);
-    std::array<double, 2> roots = {
-        (-b - sqrtD) / (2.0 * a),
-        (-b + sqrtD) / (2.0 * a)};
-
-    double tCylinder = std::numeric_limits<double>::infinity();
-    for (double r : roots) {
-        if (r > sEpsilon && r < tCylinder) {
-            tCylinder = r;
-        }
-    }
-    if (tCylinder == std::numeric_limits<double>::infinity()) {
-        return std::nullopt;  // No valid root
-    }
-
-    // Check if the intersection point is within the height bounds
-    Vector3D hitPoint = ray(tCylinder);
-    double heightAtHit = (hitPoint - mPosition).Dot(mNormal);
-    if (std::fabs(heightAtHit) <= mHeight / 2.0) {
-        Vector3D normalAtHit = (hitPoint - mPosition - heightAtHit * mNormal).Normalized();
-        return Intersection{tCylinder, hitPoint, normalAtHit, this};
-    }
-
-    return std::nullopt;
 }
 
 }  // namespace Raytracer

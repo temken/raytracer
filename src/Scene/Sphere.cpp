@@ -13,6 +13,33 @@ double Sphere::GetSurfaceArea() const {
     return 4.0 * M_PI * mRadius * mRadius;
 }
 
+std::vector<Vector3D> Sphere::SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const {
+    std::vector<Vector3D> points;
+
+    std::uniform_real_distribution<double> uniformDistribution(0.0, 1.0);
+
+    for (std::size_t i = 0; i < numPoints; ++i) {
+        double u = uniformDistribution(prng);
+        double v = uniformDistribution(prng);
+
+        double phi = 2.0 * M_PI * u;                 // azimuthal angle
+        double cosTheta = std::acos(1.0 - 2.0 * v);  // polar angle
+        double sinTheta = std::sqrt(1.0 - cosTheta * cosTheta);
+
+        Vector3D point = {
+            mRadius * sinTheta * std::cos(phi),
+            mRadius * sinTheta * std::sin(phi),
+            mRadius * cosTheta,
+        };
+
+        points.push_back(mPosition + point);
+    }
+    return points;
+}
+std::vector<Vector3D> Sphere::GetKeyPoints() const {
+    return {mPosition};
+}
+
 std::optional<Intersection> Sphere::Intersect(const Ray& ray) {
     Vector3D oc = ray.GetOrigin() - mPosition;
 

@@ -24,6 +24,30 @@ double Rectangle::GetSurfaceArea() const {
     return mWidth * mHeight;
 }
 
+std::vector<Vector3D> Rectangle::SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const {
+    std::vector<Vector3D> points;
+
+    std::uniform_real_distribution<double> distU(-mWidth / 2.0, mWidth / 2.0);
+    std::uniform_real_distribution<double> distV(-mHeight / 2.0, mHeight / 2.0);
+
+    for (std::size_t i = 0; i < numPoints; ++i) {
+        double u = distU(prng);
+        double v = distV(prng);
+        Vector3D point = mPosition + u * mU + v * mV;
+        points.push_back(point);
+    }
+
+    return points;
+}
+
+std::vector<Vector3D> Rectangle::GetKeyPoints() const {
+    return {mPosition,
+            mPosition - mU * (mWidth / 2.0) - mV * (mHeight / 2.0),
+            mPosition + mU * (mWidth / 2.0) - mV * (mHeight / 2.0),
+            mPosition + mU * (mWidth / 2.0) + mV * (mHeight / 2.0),
+            mPosition - mU * (mWidth / 2.0) + mV * (mHeight / 2.0)};
+}
+
 std::optional<Intersection> Rectangle::Intersect(const Ray& ray) {
     double denom = mNormal.Dot(ray.GetDirection());
     if (std::fabs(denom) < sEpsilon) {

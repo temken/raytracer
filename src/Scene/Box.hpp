@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Rendering/Ray.hpp"
-#include "Scene/Object.hpp"
+#include "Scene/CompositeObject.hpp"
 #include "Scene/Rectangle.hpp"
 #include "Utilities/Color.hpp"
 #include "Utilities/Vector.hpp"
@@ -11,19 +11,14 @@
 
 namespace Raytracer {
 
-class Box : public Object {
+class Box : public CompositeObject {
 public:
     // Constructors for Box with different parameters
     Box(const std::string& name, const Material& material, const Vector3D& center, double length, double width, double height);
 
-    virtual double GetSurfaceArea() const override;
-
-    virtual std::optional<Intersection> Intersect(const Ray& ray) override;
-
     virtual void PrintInfo() const override;
 
 private:
-    std::vector<Rectangle> mFaces = {};
     double mLength, mWidth, mHeight;
 };
 

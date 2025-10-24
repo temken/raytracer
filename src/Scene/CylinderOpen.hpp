@@ -1,26 +1,24 @@
 #pragma once
 
 #include "Scene/Object.hpp"
-#include "Utilities/Color.hpp"
-
-#include <optional>
 
 namespace Raytracer {
 
-class Sphere : public Object {
+class CylinderOpen : public Object {
 public:
-    Sphere(const std::string& name, const Material& material, const Vector3D& center, double radius);
+    CylinderOpen(const std::string& name, const Material& material, const Vector3D& center, const Vector3D& normal, double radius, double height);
 
     virtual double GetSurfaceArea() const override;
     virtual std::vector<Vector3D> SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const override;
     virtual std::vector<Vector3D> GetKeyPoints() const override;
 
-    std::optional<Intersection> Intersect(const Ray& ray) override;
+    virtual std::optional<Intersection> Intersect(const Ray& ray) override;
 
-    void PrintInfo() const override;
+    virtual void PrintInfo() const override;
 
 private:
     double mRadius;
+    double mHeight;
 };
 
 }  // namespace Raytracer
