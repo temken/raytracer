@@ -69,6 +69,7 @@
 - [x] Camera orbit should not look towards the origin, but just to the z-axis on its given height.
 - [x] Create some nice images with the new class. Create some interesting images and videos using all the capabilities so far.
 - [x] Implement Fresnel effect and the approximation
+- [x] Composite object class with std::vector<Object*>. Where Objects are all 2D objects.
 - [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
 - [ ] Renderer with next event estimation
   - [ ] MCreate a renderer with deterministic shadows by checking for the closest light source or something.
@@ -89,7 +90,6 @@
 - [ ] Normal textures especially for glass surfaces, but not just
 - [ ] Check out BSDF
 - [ ] Print preview of image downscaled in terminal
-- [ ] Composite object class with std::vector<Object*>. Where Objects are all 2D objects.
 - [ ] Look into ogb mesh files.
 
 

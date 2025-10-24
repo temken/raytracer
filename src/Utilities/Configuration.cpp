@@ -90,8 +90,8 @@ Camera Configuration::ConstructCamera() const {
     Renderer::Type rendererType;
     if (renderingEngineStr == "SIMPLE") {
         rendererType = Renderer::Type::SIMPLE;
-    } else if (renderingEngineStr == "MONTE_CARLO") {
-        rendererType = Renderer::Type::MONTE_CARLO;
+    } else if (renderingEngineStr == "PATH_TRACER") {
+        rendererType = Renderer::Type::PATH_TRACER;
     } else if (renderingEngineStr == "DETERMINISTIC") {
         rendererType = Renderer::Type::DETERMINISTIC;
     } else {

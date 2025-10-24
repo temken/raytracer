@@ -1,12 +1,12 @@
-#include "Rendering/RendererMC.hpp"
+#include "Rendering/RendererPathTracer.hpp"
 
 namespace Raytracer {
 
-RendererMC::RendererMC() :
-    Renderer(Type::MONTE_CARLO, false) {
+RendererPathTracer::RendererPathTracer() :
+    Renderer(Type::PATH_TRACER, false) {
 }
 
-Color RendererMC::TraceRay(Ray ray, const Scene& scene) {
+Color RendererPathTracer::TraceRay(Ray ray, const Scene& scene) {
     while (ray.GetDepth() < kMaximumDepth) {
         auto intersection = Intersect(ray, scene);
         if (!intersection.has_value()) {

@@ -1,7 +1,7 @@
 #include "Rendering/Camera.hpp"
 
 #include "Rendering/RendererDeterministic.hpp"
-#include "Rendering/RendererMC.hpp"
+#include "Rendering/RendererPathTracer.hpp"
 #include "Rendering/RendererSimple.hpp"
 #include "Utilities/Configuration.hpp"
 
@@ -140,7 +140,7 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
         std::cout << "Saving converging video to: " << filepath << std::endl;
         video->Save(true, false, false, filepath);
     }
-    bool applyPostProcessing = (mRenderer->GetType() == Renderer::Type::MONTE_CARLO && samples > 1);
+    bool applyPostProcessing = (mRenderer->GetType() == Renderer::Type::PATH_TRACER && samples > 1);
     Image image = CreateImage(accumulatedColors, samples, applyPostProcessing);
     double totalDuration = std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - startTime).count();
     if (printProgressBar) {
@@ -181,7 +181,7 @@ Image Camera::CreateImage(const std::vector<std::vector<Color>>& accumulatedColo
             Color accumulatedColor = accumulatedColors[y][x];
             Color colorAverage((accumulatedColor.R() / samples), (accumulatedColor.G() / samples), (accumulatedColor.B() / samples));
 
-            // if (mRenderer->GetType() == Renderer::Type::MONTE_CARLO && samples > 1) {
+            // if (mRenderer->GetType() == Renderer::Type::PATH_TRACER && samples > 1) {
             if (applyPostProcessing && samples > 1) {
                 ApplyPostProcessing(colorAverage);
             }
@@ -315,8 +315,8 @@ std::unique_ptr<Renderer> Camera::CreateRenderer(Renderer::Type type) {
     switch (type) {
         case Renderer::Type::SIMPLE:
             return std::make_unique<RendererSimple>();
-        case Renderer::Type::MONTE_CARLO:
-            return std::make_unique<RendererMC>();
+        case Renderer::Type::PATH_TRACER:
+            return std::make_unique<RendererPathTracer>();
         case Renderer::Type::DETERMINISTIC:
             return std::make_unique<RendererDeterministic>();
         default:

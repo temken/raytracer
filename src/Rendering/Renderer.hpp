@@ -12,7 +12,8 @@ public:
     enum class Type {
         SIMPLE,
         DETERMINISTIC,
-        MONTE_CARLO,
+        RAY_TRACER,
+        PATH_TRACER,
         // Future renderers can be added here
     };
 

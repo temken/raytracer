@@ -18,10 +18,12 @@ std::string Renderer::GetTypeString() const {
     switch (mType) {
         case Type::SIMPLE:
             return "Simple";
-        case Type::MONTE_CARLO:
-            return "Monte Carlo";
-        default:
-            return "Unknown";
+        case Type::DETERMINISTIC:
+            return "Deterministic";
+        case Type::RAY_TRACER:
+            return "Ray Tracer";
+        case Type::PATH_TRACER:
+            return "Path Tracer";
     }
 }
 

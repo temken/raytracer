@@ -1,10 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Rendering/RendererMC.hpp"
+#include "Rendering/RendererPathTracer.hpp"
 
 using namespace Raytracer;
 
-TEST(TestRendererMC, Test1) {
+TEST(TestRendererPathTracer, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

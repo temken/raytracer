@@ -6,9 +6,9 @@
 
 namespace Raytracer {
 
-class RendererMC : public Renderer {
+class RendererPathTracer : public Renderer {
 public:
-    RendererMC();
+    RendererPathTracer();
 
     virtual Color TraceRay(Ray ray, const Scene& scene) override;
 
