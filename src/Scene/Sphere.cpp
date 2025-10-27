@@ -22,8 +22,8 @@ std::vector<Vector3D> Sphere::SampleSurfacePoints(std::size_t numPoints, std::mt
         double u = uniformDistribution(prng);
         double v = uniformDistribution(prng);
 
-        double phi = 2.0 * M_PI * u;                 // azimuthal angle
-        double cosTheta = std::acos(1.0 - 2.0 * v);  // polar angle
+        double phi = 2.0 * M_PI * u;      // azimuthal angle
+        double cosTheta = 1.0 - 2.0 * v;  // polar angle
         double sinTheta = std::sqrt(1.0 - cosTheta * cosTheta);
 
         Vector3D point = {

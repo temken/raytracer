@@ -31,11 +31,9 @@ std::vector<Vector3D> CompositeObject::SampleSurfacePoints(std::size_t numPoints
     std::vector<Vector3D> points;
     // Compute probabilities based on component areas
     std::vector<double> componentAreas;
-    double totalArea = 0.0;
     for (const auto& component : mComponents) {
         double area = component->GetSurfaceArea();
         componentAreas.push_back(area);
-        totalArea += area;
     }
     std::discrete_distribution<std::size_t> componentDist(componentAreas.begin(), componentAreas.end());
     // Sample points
