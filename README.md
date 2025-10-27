@@ -70,13 +70,13 @@
 - [x] Create some nice images with the new class. Create some interesting images and videos using all the capabilities so far.
 - [x] Implement Fresnel effect and the approximation
 - [x] Composite object class with std::vector<Object*>. Where Objects are all 2D objects.
+- [ ] Improve the renderer step by step.
+  - [ ] Implement an ambient factor that will give black pixels a slight color.
+  - [ ] Deterministic renderer with light sampling and ambient light.
+  - [ ] Ray tracing algorithm with correct weighing(with ambient light?)
+  - [ ] Path tracing with correct weighing
+  - [ ] Path tracing with NNE and correct weighing.
 - [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
-- [ ] Renderer with next event estimation
-  - [ ] MCreate a renderer with deterministic shadows by checking for the closest light source or something.
-  - [ ] The contributions from the deterministic poinst should be averaged 
-  - [ ] Add a new MC renderer tht uses NEE by sampling points on light sources.
-  - [ ] Could this be a way to solve the black pixel issue?
-- [ ] Implement an ambient factor that will give black pixels a slight color.
 - [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter
 - [ ] Image textures for other objects (Spheres!)
 - [ ] Image texture and gradients for the background (spherical background image)
