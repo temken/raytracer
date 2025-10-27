@@ -33,6 +33,10 @@ public:
         return Color(r * other.r, g * other.g, b * other.b);
     }
 
+    Color operator/(double scalar) const {
+        return Color(r / scalar, g / scalar, b / scalar);
+    }
+
     Color operator+(const Color& other) const {
         return Color((r + other.r), (g + other.g), (b + other.b));
     }
@@ -41,6 +45,13 @@ public:
         r = r + other.r;
         g = g + other.g;
         b = b + other.b;
+        return *this;
+    }
+
+    Color& operator*=(const Color& other) {
+        r = r * other.r;
+        g = g * other.g;
+        b = b * other.b;
         return *this;
     }
 

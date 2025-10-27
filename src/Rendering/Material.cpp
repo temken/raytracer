@@ -10,10 +10,10 @@ Material::Material() {
 Material::Material(const Color& baseColor, double roughness, double refractiveIndex, double meanFreePath, double radiance) :
     mBaseColor(baseColor),
     mSpecularColor(baseColor),  // Default to same as baseColor
+    mEmission(BLACK),
     mRoughness(roughness),
     mRefractiveIndex(refractiveIndex),
     mMeanFreePath(meanFreePath),
-    mRadiance(radiance),
     mUseFresnel(true) {
     // Default probabilities
     mInteractionProbabilities[InteractionType::DIFFUSE] = 1.0;
@@ -22,7 +22,7 @@ Material::Material(const Color& baseColor, double roughness, double refractiveIn
     NormalizeProbabilities();
 }
 
-void Material::Interact(Ray& ray, const Intersection& intersection, bool applyRoughness) {
+Material::InteractionType Material::Interact(Ray& ray, const Intersection& intersection, bool applyRoughness) {
     // Draw a random number in [0,1)
     const double r = mDistribution(mGenerator);
 
@@ -46,15 +46,18 @@ void Material::Interact(Ray& ray, const Intersection& intersection, bool applyRo
             switch (type) {
                 case InteractionType::DIFFUSE:
                     Diffuse(ray, intersection);
-                    return;
+                    ray.UpdateThroughput(WHITE / prob);
+                    return InteractionType::DIFFUSE;
 
                 case InteractionType::REFLECTIVE:
                     Reflect(ray, intersection, applyRoughness);
-                    return;
+                    ray.UpdateThroughput(WHITE / prob);
+                    return InteractionType::REFLECTIVE;
 
                 case InteractionType::REFRACTIVE:
                     Refract(ray, intersection, applyRoughness);
-                    return;
+                    ray.UpdateThroughput(WHITE / prob);
+                    return InteractionType::REFRACTIVE;
             }
         }
     }
@@ -84,22 +87,27 @@ void Material::Diffuse(Ray& ray, const Intersection& intersection) {
 
     ray.SetOrigin(intersection.point + kEpsilon * newDir);
     ray.SetDirection(newDir);
-    ray.MultiplyColor(GetColor(intersection));
-    ray.AddRadiance(mRadiance);
     ray.IncrementDepth();
+
+    // ---- Physically based energy update ----
+    // f_r = albedo / π, PDF = cosθ / π  ->  throughput *= albedo
+    ray.UpdateThroughput(mBaseColor);
 }
 
 void Material::Reflect(Ray& ray, const Intersection& intersection, bool applyRoughness) {
     Vector3D incomingDir = ray.GetDirection();
     Vector3D newDir = incomingDir - 2 * incomingDir.Dot(intersection.normal) * intersection.normal;
     if (applyRoughness && mRoughness > 0.0) {
-        double maxAngle = mRoughness * (M_PI / 2.0);  // roughness=1 => 90° cone
-        newDir = SampleCone(newDir, maxAngle);
+        double cosThetaMax = std::cos(mRoughness * (M_PI / 2.0));  // roughness=1 => 90° cone
+        newDir = SampleCone(newDir, cosThetaMax);
+        double pdf = 1.0 / (2.0 * M_PI * (1.0 - cosThetaMax));  // Uniform PDF over the cone
+        ray.UpdateThroughput(mSpecularColor / pdf);
+    } else {
+        // Perfect mirror
+        ray.UpdateThroughput(mSpecularColor);
     }
     ray.SetOrigin(intersection.point + kEpsilon * newDir);
     ray.SetDirection(newDir);
-    ray.MultiplyColor(mSpecularColor);
-    ray.AddRadiance(mRadiance);
     ray.IncrementDepth();
 }
 
@@ -108,7 +116,7 @@ void Material::Refract(Ray& ray, const Intersection& intersection, bool applyRou
     Vector3D n = intersection.normal.Normalized();
 
     // Determine if the ray is entering or exiting
-    double cosThetaI = -n.Dot(d);
+    double cosThetaI = IncidentAngleCosine(ray, n);
     bool entering = cosThetaI > 0.0;
     double etaI = 1.0;               // refractive index of incident medium (air)
     double etaT = mRefractiveIndex;  // refractive index of material
@@ -138,14 +146,16 @@ void Material::Refract(Ray& ray, const Intersection& intersection, bool applyRou
 
     // Roughness / glossy refraction
     if (applyRoughness && mRoughness > 0.0) {
-        double maxAngle = mRoughness * (M_PI / 4.0);  // half the reflection roughness
-        refractDir = SampleCone(refractDir, maxAngle);
+        double cosThetaMax = std::cos(mRoughness * (M_PI / 4.0));  // half the reflection roughness
+        refractDir = SampleCone(refractDir, cosThetaMax);
+        double pdf = 1.0 / (2.0 * M_PI * (1.0 - cosThetaMax));  // Uniform PDF over the cone
+        ray.UpdateThroughput(mBaseColor / pdf);
+    } else {
+        // Perfect refraction
+        ray.UpdateThroughput(mBaseColor / (eta * eta));
     }
-
     ray.SetOrigin(intersection.point + kEpsilon * refractDir);
     ray.SetDirection(refractDir);
-    ray.MultiplyColor(mBaseColor);
-    ray.AddRadiance(mRadiance);
     ray.IncrementDepth();
 }
 
@@ -194,20 +204,15 @@ void Material::SetMeanFreePath(double meanFreePath) {
 }
 
 bool Material::EmitsLight() const {
-    return mRadiance > 0.0;
-}
-double Material::GetRadiance(double distance) const {
-    if (mRadiance <= 0.0) {
-        return 0.0;
-    }
-    // Simple inverse-square falloff with distance
-    static constexpr double d0 = 1.0;
-    double inv = 1.0 / (1.0 + (distance * distance) / (d0 * d0));
-    return mRadiance * inv;
+    return mEmission != BLACK;
 }
 
-void Material::SetRadiance(double radiance) {
-    mRadiance = radiance;
+Color Material::GetEmission() const {
+    return mEmission;
+}
+
+void Material::SetEmission(const Color& emission) {
+    mEmission = emission;
 }
 
 bool Material::UsesFresnel() const {
@@ -246,11 +251,11 @@ void Material::PrintInfo() const {
     std::cout << "Material Info:" << std::endl
               << "\tBase Color:\t" << mBaseColor << std::endl
               << "\tSpecular Color:\t" << mSpecularColor << std::endl
+              << "\tEmission:\t" << mEmission << std::endl
               << "\tColor Texture:\t" << (mColorTexture.has_value() ? "[x]" : "[ ]") << std::endl
               << "\tRoughness:\t" << mRoughness << std::endl
               << "\tRefractive Index:\t" << mRefractiveIndex << std::endl
               << "\tMean Free Path:\t" << mMeanFreePath << std::endl
-              << "\tRadiance:\t" << mRadiance << std::endl
               << "\tUse Fresnel:\t" << (mUseFresnel ? "[x]" : "[ ]") << std::endl
               << "\tInteraction Probabilities:" << std::endl;
     for (const auto& [type, prob] : mInteractionProbabilities) {
@@ -312,15 +317,12 @@ std::map<Material::InteractionType, double> Material::GetFresnelCorrectedProbabi
         {Material::InteractionType::REFRACTIVE, rescaledRefractiveProbability}};
 }
 
-Vector3D Material::SampleCone(const Vector3D& axis, double angle) {
-    // Cosine-weighted cone sampling: more rays near the axis
+Vector3D Material::SampleCone(const Vector3D& axis, double cosThetaMax) {
     double u1 = mDistribution(mGenerator);  // ∈ [0,1)
     double u2 = mDistribution(mGenerator);
 
-    // Cosine-weighted theta: theta = acos((1-u1) + u1*cos(maxAngle)) for uniform
-    // For cosine weighting, use:
-    double cosThetaMax = std::cos(angle);
-    double cosTheta = std::pow(u1, 0.5) * (1.0 - cosThetaMax) + cosThetaMax;
+    // Uniform sampling of cos(theta) in [cosThetaMax, 1]
+    double cosTheta = (1.0 - u1) + u1 * cosThetaMax;  // linear interpolation
     double sinTheta = std::sqrt(1.0 - cosTheta * cosTheta);
     double phi = 2.0 * M_PI * u2;
 

@@ -16,6 +16,9 @@ public:
 
 private:
     const bool kApplyRoughness = false;
+    static constexpr double kEpsilon = 1e-6;
+
+    void CollectDirectLighting(Ray& ray, const Scene& scene, const Intersection& intersection);
 };
 
 }  // namespace Raytracer

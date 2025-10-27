@@ -18,13 +18,11 @@ public:
     void SetOrigin(const Vector3D& newOrigin);
     void SetDirection(const Vector3D& newDirection);
 
-    Color GetColor() const;
-    void SetColor(const Color& color);
-    void MultiplyColor(const Color& color);
+    Color GetRadiance() const;
+    void AddRadiance(const Color& contribution);
 
-    double GetRadiance() const;
-    void SetRadiance(double radiance);
-    void AddRadiance(double radiance);
+    Color GetThroughput() const;
+    void UpdateThroughput(const Color& throughput);
 
     size_t GetDepth() const;
     void IncrementDepth();
@@ -49,8 +47,8 @@ private:
     Vector3D mOrigin = Vector3D({0.0, 0.0, 0.0});
     Vector3D mDirection = Vector3D({1.0, 0.0, 0.0});
 
-    Color mColor = Color(1.0, 1.0, 1.0);
-    double mRadiance = 0.0;
+    Color mRadiance = Color(0.0, 0.0, 0.0);    // Accumulated radiance
+    Color mThroughput = Color(1.0, 1.0, 1.0);  // Monte Carlo weighting
 
     size_t mDepth = 0;  // Number of interactions
 };

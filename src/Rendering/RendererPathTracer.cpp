@@ -13,11 +13,12 @@ Color RendererPathTracer::TraceRay(Ray ray, const Scene& scene) {
             return ray.GetColor() * scene.GetBackgroundColor();
         }
 
-        intersection->object->GetMaterial().Interact(ray, intersection.value());
-
         if (intersection->object->GetMaterial().EmitsLight()) {
+            ray.AddRadiance(intersection->object->GetMaterial().GetEmission());
             break;
         }
+
+        intersection->object->GetMaterial().Interact(ray, intersection.value());
 
         // Russian roulette after a few bounces
         if (ray.GetDepth() >= 3) {

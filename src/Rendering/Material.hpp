@@ -22,7 +22,7 @@ public:
     Material();
     Material(const Color& baseColor, double roughness = 1.0, double refractiveIndex = 1.0, double meanFreePath = 0.0, double luminance = 0.0);
 
-    void Interact(Ray& ray, const Intersection& intersection, bool applyRoughness = true);
+    InteractionType Interact(Ray& ray, const Intersection& intersection, bool applyRoughness = true);
 
     void Diffuse(Ray& incomingRay, const Intersection& intersection);
     void Reflect(Ray& incomingRay, const Intersection& intersection, bool applyRoughness);
@@ -47,8 +47,8 @@ public:
     void SetMeanFreePath(double meanFreePath);
 
     bool EmitsLight() const;
-    double GetRadiance(double distance = 0.0) const;
-    void SetRadiance(double radiance);
+    Color GetEmission() const;
+    void SetEmission(const Color& emission);
 
     bool UsesFresnel() const;
     void SetUseFresnel(bool useFresnel);
@@ -63,10 +63,10 @@ public:
 private:
     Color mBaseColor;
     Color mSpecularColor;
+    Color mEmission;
     double mRoughness;        // 0 = perfect mirror, 1 = very rough
     double mRefractiveIndex;  // 1 = vacuum, 1.33 = water, 1.5 = glass
     double mMeanFreePath;     // Average distance a photon travels in the material before interacting
-    double mRadiance;         // Brightness of the material if it emits light
     bool mUseFresnel;
 
     // Probability for each interaction type
@@ -84,7 +84,7 @@ private:
     void NormalizeProbabilities();
     std::map<InteractionType, double> GetFresnelCorrectedProbabilities(double cosThetaI) const;
 
-    Vector3D SampleCone(const Vector3D& axis, double angle);
+    Vector3D SampleCone(const Vector3D& axis, double cosThetaMax);
 
     double IncidentAngleCosine(const Ray& ray, const Vector3D& normal) const;
 };

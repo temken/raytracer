@@ -16,28 +16,20 @@ void Ray::SetDirection(const Vector3D& newDirection) {
     mDirection = newDirection.Normalized();
 }
 
-Color Ray::GetColor() const {
-    return mColor;
-}
-
-void Ray::SetColor(const Color& color) {
-    mColor = color;
-}
-
-void Ray::MultiplyColor(const Color& color) {
-    mColor = mColor * color;
-}
-
-double Ray::GetRadiance() const {
+Color Ray::GetRadiance() const {
     return mRadiance;
 }
 
-void Ray::SetRadiance(double radiance) {
-    mRadiance = radiance;
+void Ray::AddRadiance(const Color& contribution) {
+    mRadiance += contribution;
 }
 
-void Ray::AddRadiance(double radiance) {
-    mRadiance += radiance;
+Color Ray::GetThroughput() const {
+    return mThroughput;
+}
+
+void Ray::UpdateThroughput(const Color& throughput) {
+    mThroughput *= throughput;
 }
 
 size_t Ray::GetDepth() const {
