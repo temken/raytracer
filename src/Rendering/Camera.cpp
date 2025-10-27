@@ -2,6 +2,7 @@
 
 #include "Rendering/RendererDeterministic.hpp"
 #include "Rendering/RendererPathTracer.hpp"
+#include "Rendering/RendererRayTracer.hpp"
 #include "Rendering/RendererSimple.hpp"
 #include "Utilities/Configuration.hpp"
 
@@ -315,6 +316,8 @@ std::unique_ptr<Renderer> Camera::CreateRenderer(Renderer::Type type) {
     switch (type) {
         case Renderer::Type::SIMPLE:
             return std::make_unique<RendererSimple>();
+        case Renderer::Type::RAY_TRACER:
+            return std::make_unique<RendererRayTracer>();
         case Renderer::Type::PATH_TRACER:
             return std::make_unique<RendererPathTracer>();
         case Renderer::Type::DETERMINISTIC:
