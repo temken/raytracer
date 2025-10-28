@@ -70,25 +70,31 @@
 - [x] Create some nice images with the new class. Create some interesting images and videos using all the capabilities so far.
 - [x] Implement Fresnel effect and the approximation
 - [x] Composite object class with std::vector<Object*>. Where Objects are all 2D objects.
+- [x] Get debugging to work.
 - [ ] Improve the renderer step by step.
   - [ ] Implement an ambient factor that will give black pixels a slight color.
   - [ ] Deterministic renderer with light sampling and ambient light.
   - [ ] Ray tracing algorithm with correct weighing(with ambient light?)
   - [ ] Path tracing with correct weighing
   - [ ] Path tracing with NNE and correct weighing.
+  - [ ] Build the raytracer and test the different shaders.
+- [ ] Create a class for an orthonomal basis.
+- [ ] Create a half sphere class
+- [ ] All objects should have their own basis together with mPosition. Then we can have a RecalculateObject positions function using that basis. In rotate functions, we only have to rotate the ONB and rebuild the object. It also gives orientation for textures on spheres. It shoudl probably also be possible to define the orientation in the config file, beyond the normal. Indicating the front (corresponding e.g. to the x axis of the ONB)
 - [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
 - [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter
 - [ ] Image textures for other objects (Spheres!)
 - [ ] Image texture and gradients for the background (spherical background image)
 - [ ] Add more pre-defined colors
+- [ ] Find a better title and make an ascii art header
 - [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
 - [ ] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
 - [ ] Create camera based on aspect ratio and one pixel dimension
-- [ ] Get debugging to work.
 - [ ] Implement depth of field capability
 - [ ] New objects: Cones, fix Torus, composite objects
 - [ ] Normal textures especially for glass surfaces, but not just
 - [ ] Check out BSDF
+- [ ] Create more composite objects (street lamps, desk lamps, spots)
 - [ ] Print preview of image downscaled in terminal
 - [ ] Look into ogb mesh files.
 
