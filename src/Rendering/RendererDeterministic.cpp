@@ -8,12 +8,17 @@ Color RendererDeterministic::TraceRay(Ray ray, const Scene& scene) {
         if (!intersection.has_value()) {
             return scene.GetBackgroundColor();
         }
+
+        const auto& material = intersection->object->GetMaterial();
+        if (material.EmitsLight()) {
+            return ray.GetThroughput() * material.GetEmission();
+        }
+
         Material::InteractionType mostLikelyInteraction = intersection->object->GetMaterial().MostLikelyInteraction();
         switch (mostLikelyInteraction) {
             case Material::InteractionType::DIFFUSE:
                 CollectDirectLighting(ray, scene, intersection.value());
                 return ray.GetRadiance();
-                // return intersection->object->GetMaterial().GetColor(intersection.value());
             case Material::InteractionType::REFLECTIVE:
                 intersection->object->GetMaterial().Reflect(ray, intersection.value(), kApplyRoughness);
                 break;
@@ -30,67 +35,55 @@ void RendererDeterministic::CollectDirectLighting(Ray& ray, const Scene& scene, 
     const Vector3D& x = intersection.point;
     const Vector3D n = intersection.normal.Normalized();
 
-    double totalRadiance = 0.0;  // scalar radiance accumulator (per your design)
-    Color totalColor(0.0, 0.0, 0.0);
+    Color directRadiance(0.0, 0.0, 0.0);
 
     for (const auto& lightSource : scene.GetLightSources()) {
         const double lightArea = lightSource->GetSurfaceArea();
-        const Color lightColor = lightSource->GetMaterial().GetColor(intersection);  // emitted color
-        const double lightRadiance = lightSource->GetMaterial().GetRadiance();       // scalar intensity
 
-        std::vector<Vector3D> lightPoints = lightSource->GetKeyPoints();
+        const Color Le = lightSource->GetMaterial().GetEmission();  // emitted radiance (RGB)
 
-        double radianceSum = 0.0;
+        const std::vector<Vector3D> lightPoints = lightSource->GetKeyPoints();
+
         Color colorSum(0.0, 0.0, 0.0);
 
+        std::size_t lightHits = 0;
         for (const Vector3D& y : lightPoints) {
             Vector3D toLight = y - x;
             const double dist2 = toLight.NormSquared();
-            const double dist = std::sqrt(dist2);
             toLight.Normalize();
 
             Ray shadowRay(x + toLight * kEpsilon, toLight);
-            auto shadowHit = Intersect(shadowRay, scene);  // guaranteed to hit something
-
-            if (shadowHit->object != lightSource.get()) {
-                continue;
+            auto shadowHit = Intersect(shadowRay, scene);
+            if (!shadowHit.has_value() || shadowHit->object != lightSource.get()) {
+                continue;  // occluded or no intersection
             }
 
-            Vector3D nL = shadowHit->normal.Normalized();
+            const Vector3D nL = shadowHit->normal.Normalized();
 
-            double cosSurface = std::max(0.0, n.Dot(toLight));
-            double cosLight = std::max(0.0, nL.Dot(-1.0 * toLight));
+            const double cosSurface = std::max(0.0, n.Dot(toLight));
+            const double cosLight = std::max(0.0, nL.Dot((-1.0) * toLight));
 
             if (cosSurface <= 0.0 || cosLight <= 0.0) {
                 continue;
             }
 
-            // Lambertian BRDF: albedo / pi
-            Color brdf = material.GetColor(intersection) * (1.0 / M_PI);
+            // Lambertian BRDF
+            const Color f_r = material.GetColor(intersection) * (1.0 / M_PI);
 
-            // Geometry term for area sampling:
-            // (cosSurface * cosLight * A) / r^2
-            double geometry = (cosSurface * cosLight * lightArea) / dist2;
+            // Geometry factor (without light area for key points sampling)
+            const double G = (cosSurface * cosLight) / dist2;
 
-            // Scalar radiance contribution (for your scalar accumulator):
-            double radianceContribution = lightRadiance * geometry;
-            radianceSum += radianceContribution;
-
-            // Color contribution (emitted color * brdf * geometry)
-            Color contributionColor = brdf * lightColor * geometry;
-            colorSum += contributionColor;
+            // Direct contribution
+            colorSum += f_r * Le * G * lightArea;
+            lightHits++;
         }
 
-        // Average over samples
-        radianceSum /= static_cast<double>(lightPoints.size());
-        colorSum = 1.0 / static_cast<double>(lightPoints.size()) * colorSum;
-
-        totalRadiance += radianceSum;
-        totalColor += colorSum;
+        // Treat key points as point light approximations (no area scaling)
+        directRadiance += colorSum / static_cast<double>(lightHits);
     }
 
-    ray.MultiplyColor(totalColor);   // modulate ray color by direct color contribution
-    ray.AddRadiance(totalRadiance);  // add scalar radiance
+    // Add this direct lighting contribution scaled by the ray's current throughput
+    ray.AddRadiance(ray.GetThroughput() * directRadiance);
 }
 
 }  // namespace Raytracer
