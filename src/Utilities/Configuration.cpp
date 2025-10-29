@@ -161,8 +161,8 @@ Scene Configuration::ConstructScene() const {
                 scene.AddObject(std::make_unique<Box>(ParseBox(obj)));
             } else if (type == "Cylinder") {
                 scene.AddObject(std::make_unique<Cylinder>(ParseCylinder(obj)));
-            } else if (type == "CylinderOpen") {
-                scene.AddObject(std::make_unique<CylinderOpen>(ParseCylinderOpen(obj)));
+            } else if (type == "Tube") {
+                scene.AddObject(std::make_unique<Tube>(ParseTube(obj)));
             } else {
                 throw std::runtime_error("Unknown object type: " + type);
             }
@@ -412,20 +412,20 @@ Cylinder Configuration::ParseCylinder(const YAML::Node& obj) const {
     return cylinder;
 }
 
-CylinderOpen Configuration::ParseCylinderOpen(const YAML::Node& obj) const {
+Tube Configuration::ParseTube(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double radius = obj["radius"].as<double>();
     double height = obj["height"].as<double>();
 
-    // Construct the open cylinder
-    CylinderOpen cylinderOpen(props.id, props.material, props.position, props.normal, radius, height);
+    // Construct the tube
+    Tube tube(props.id, props.material, props.position, props.normal, radius, height);
 
-    cylinderOpen.SetVelocity(props.velocity);
-    cylinderOpen.SetAngularVelocity(props.angularVelocity);
-    cylinderOpen.SetSpin(props.spin);
+    tube.SetVelocity(props.velocity);
+    tube.SetAngularVelocity(props.angularVelocity);
+    tube.SetSpin(props.spin);
 
-    cylinderOpen.SetVisible(props.visible);
-    return cylinderOpen;
+    tube.SetVisible(props.visible);
+    return tube;
 }
 
 std::string Configuration::CreateRunID() const {

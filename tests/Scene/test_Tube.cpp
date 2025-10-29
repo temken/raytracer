@@ -1,10 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Scene/CylinderOpen.hpp"
+#include "Scene/Tube.hpp"
 
 using namespace Raytracer;
 
-TEST(TestCylinderOpen, Test1)
+TEST(TestTube, Test1)
 {
     // ARRANGE
     // ACT

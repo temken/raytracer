@@ -4,7 +4,7 @@
 #include "Rendering/Material.hpp"
 #include "Scene/Box.hpp"
 #include "Scene/Cylinder.hpp"
-#include "Scene/CylinderOpen.hpp"
+#include "Scene/Tube.hpp"
 #include "Scene/Disk.hpp"
 #include "Scene/Rectangle.hpp"
 #include "Scene/Scene.hpp"
@@ -95,7 +95,7 @@ private:
     Rectangle ParseRectangle(const YAML::Node& obj) const;
     Box ParseBox(const YAML::Node& obj) const;
     Cylinder ParseCylinder(const YAML::Node& obj) const;
-    CylinderOpen ParseCylinderOpen(const YAML::Node& obj) const;
+    Tube ParseTube(const YAML::Node& obj) const;
 
     std::string CreateRunID() const;
     void CreateOutputDirectory() const;

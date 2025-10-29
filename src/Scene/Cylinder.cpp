@@ -1,6 +1,6 @@
 #include "Scene/Cylinder.hpp"
 
-#include "Scene/CylinderOpen.hpp"
+#include "Scene/Tube.hpp"
 #include "Scene/Disk.hpp"
 
 #include <iostream>
@@ -23,7 +23,7 @@ Cylinder::Cylinder(const std::string& name, const Material& material, const Vect
     auto bottomDisk = std::make_shared<Disk>("bottom_cap", material, bottomCenter, -1.0 * mNormal, mRadius);
     AddComponent(bottomDisk);
     // Create and add mantle (open cylinder)
-    auto mantle = std::make_shared<CylinderOpen>("mantle", material, center, normal, radius, height);
+    auto mantle = std::make_shared<Tube>("mantle", material, center, normal, radius, height);
     AddComponent(mantle);
 }
 

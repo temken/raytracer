@@ -71,13 +71,14 @@
 - [x] Implement Fresnel effect and the approximation
 - [x] Composite object class with std::vector<Object*>. Where Objects are all 2D objects.
 - [x] Get debugging to work.
-- [ ] Improve the renderer step by step.
+- [x] Improve the renderer step by step.
   - [ ] Implement an ambient factor that will give black pixels a slight color.
-  - [ ] Deterministic renderer with light sampling and ambient light.
-  - [ ] Ray tracing algorithm with correct weighing(with ambient light?)
-  - [ ] Path tracing with correct weighing
+  - [x] Deterministic renderer with light sampling and ambient light.
+  - [x] Ray tracing algorithm with correct weighing(with ambient light?)
+  - [x] Path tracing with correct weighing
   - [ ] Path tracing with NNE and correct weighing.
   - [ ] Build the raytracer and test the different shaders.
+- [ ] Fix the key points for cylindric light sources (see brick wall.yaml)
 - [ ] Create a class for an orthonomal basis.
 - [ ] Create a half sphere class
 - [ ] All objects should have their own basis together with mPosition. Then we can have a RecalculateObject positions function using that basis. In rotate functions, we only have to rotate the ONB and rebuild the object. It also gives orientation for textures on spheres. It shoudl probably also be possible to define the orientation in the config file, beyond the normal. Indicating the front (corresponding e.g. to the x axis of the ONB)

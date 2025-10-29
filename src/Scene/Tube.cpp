@@ -1,23 +1,23 @@
-#include "Scene/CylinderOpen.hpp"
+#include "Scene/Tube.hpp"
 
 namespace Raytracer {
 
-CylinderOpen::CylinderOpen(const std::string& name, const Material& material, const Vector3D& center, const Vector3D& normal, double radius, double height) :
+Tube::Tube(const std::string& name, const Material& material, const Vector3D& center, const Vector3D& normal, double radius, double length) :
     Object(name, material, center, normal),
     mRadius(radius),
-    mHeight(height) {
+    mLength(length) {
 }
 
-double CylinderOpen::GetSurfaceArea() const {
-    return 2 * M_PI * mRadius * mHeight + 2 * M_PI * mRadius * mRadius;
+double Tube::GetSurfaceArea() const {
+    return 2 * M_PI * mRadius * mLength + 2 * M_PI * mRadius * mRadius;
 }
 
-std::vector<Vector3D> CylinderOpen::SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const {
+std::vector<Vector3D> Tube::SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const {
     std::vector<Vector3D> points;
 
     // Distributions for uniform sampling
     std::uniform_real_distribution<double> angleDist(0.0, 2.0 * M_PI);
-    std::uniform_real_distribution<double> heightDist(-0.5 * mHeight, 0.5 * mHeight);
+    std::uniform_real_distribution<double> lengthDist(-0.5 * mLength, 0.5 * mLength);
 
     // Build an orthonormal basis around the cylinder axis
     Vector3D w = mNormal.Normalized();  // axis direction
@@ -30,7 +30,7 @@ std::vector<Vector3D> CylinderOpen::SampleSurfacePoints(std::size_t numPoints, s
 
     for (std::size_t i = 0; i < numPoints; ++i) {
         double theta = angleDist(prng);
-        double h = heightDist(prng);
+        double h = lengthDist(prng);
 
         // Point on circle of given height
         Vector3D circlePoint = mPosition + w * h + mRadius * (std::cos(theta) * u + std::sin(theta) * v);
@@ -39,17 +39,19 @@ std::vector<Vector3D> CylinderOpen::SampleSurfacePoints(std::size_t numPoints, s
 
     return points;
 }
-std::vector<Vector3D> CylinderOpen::GetKeyPoints() const {
+std::vector<Vector3D> Tube::GetKeyPoints() const {
     // Add center, top, and bottom center points
     std::vector<Vector3D> keyPoints = {
         mPosition,
-        mPosition + (mHeight / 2.0) * mNormal,
-        mPosition - (mHeight / 2.0) * mNormal,
+        mPosition + mLength / 4.0 * mNormal,
+        mPosition - mLength / 4.0 * mNormal,
+        mPosition + (mLength / 2.0) * mNormal,
+        mPosition - (mLength / 2.0) * mNormal,
     };
     return keyPoints;
 }
 
-std::optional<Intersection> CylinderOpen::Intersect(const Ray& ray) {
+std::optional<Intersection> Tube::Intersect(const Ray& ray) {
     Vector3D d = ray.GetDirection();
     Vector3D oc = ray.GetOrigin() - mPosition;
 
@@ -86,7 +88,7 @@ std::optional<Intersection> CylinderOpen::Intersect(const Ray& ray) {
     // Check if the intersection point is within the height bounds
     Vector3D hitPoint = ray(tCylinder);
     double heightAtHit = (hitPoint - mPosition).Dot(mNormal);
-    if (std::fabs(heightAtHit) <= mHeight / 2.0) {
+    if (std::fabs(heightAtHit) <= mLength / 2.0) {
         Vector3D normalAtHit = (hitPoint - mPosition - heightAtHit * mNormal).Normalized();
         return Intersection{tCylinder, hitPoint, normalAtHit, this};
     }
@@ -94,11 +96,11 @@ std::optional<Intersection> CylinderOpen::Intersect(const Ray& ray) {
     return std::nullopt;
 }
 
-void CylinderOpen::PrintInfo() const {
+void Tube::PrintInfo() const {
     PrintInfoBase();
-    std::cout << "Shape:\tOpen Cylinder" << std::endl
+    std::cout << "Shape:\tTube" << std::endl
               << "\tRadius: " << mRadius << std::endl
-              << "\tHeight: " << mHeight << std::endl;
+              << "\tLength: " << mLength << std::endl;
     mMaterial.PrintInfo();
 }
 
