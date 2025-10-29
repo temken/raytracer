@@ -16,6 +16,7 @@ public:
 
 private:
     const bool kApplyRoughness = false;
+    const double kAmbientFactor = 2e-3;
     static constexpr double kEpsilon = 1e-6;
 
     void CollectDirectLighting(Ray& ray, const Scene& scene, const Intersection& intersection);

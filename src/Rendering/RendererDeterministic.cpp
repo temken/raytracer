@@ -9,21 +9,22 @@ Color RendererDeterministic::TraceRay(Ray ray, const Scene& scene) {
             return scene.GetBackgroundColor();
         }
 
-        const auto& material = intersection->object->GetMaterial();
+        auto& material = intersection->object->GetMaterial();
         if (material.EmitsLight()) {
             return ray.GetThroughput() * material.GetEmission();
         }
 
-        Material::InteractionType mostLikelyInteraction = intersection->object->GetMaterial().MostLikelyInteraction();
+        Material::InteractionType mostLikelyInteraction = material.MostLikelyInteraction();
         switch (mostLikelyInteraction) {
             case Material::InteractionType::DIFFUSE:
+                material.Diffuse(ray, intersection.value());
                 CollectDirectLighting(ray, scene, intersection.value());
                 return ray.GetRadiance();
             case Material::InteractionType::REFLECTIVE:
-                intersection->object->GetMaterial().Reflect(ray, intersection.value(), kApplyRoughness);
+                material.Reflect(ray, intersection.value(), kApplyRoughness);
                 break;
             case Material::InteractionType::REFRACTIVE:
-                intersection->object->GetMaterial().Refract(ray, intersection.value(), kApplyRoughness);
+                material.Refract(ray, intersection.value(), kApplyRoughness);
                 break;
         }
     }
@@ -36,6 +37,7 @@ void RendererDeterministic::CollectDirectLighting(Ray& ray, const Scene& scene, 
     const Vector3D n = intersection.normal.Normalized();
 
     Color directRadiance(0.0, 0.0, 0.0);
+    bool anyLightHit = false;
 
     for (const auto& lightSource : scene.GetLightSources()) {
         const double lightArea = lightSource->GetSurfaceArea();
@@ -57,7 +59,7 @@ void RendererDeterministic::CollectDirectLighting(Ray& ray, const Scene& scene, 
             if (!shadowHit.has_value() || shadowHit->object != lightSource.get()) {
                 continue;  // occluded or no intersection
             }
-
+            anyLightHit = true;
             const Vector3D nL = shadowHit->normal.Normalized();
 
             const double cosSurface = std::max(0.0, n.Dot(toLight));
@@ -82,8 +84,12 @@ void RendererDeterministic::CollectDirectLighting(Ray& ray, const Scene& scene, 
         directRadiance += colorSum / static_cast<double>(lightHits);
     }
 
-    // Add this direct lighting contribution scaled by the ray's current throughput
-    ray.AddRadiance(ray.GetThroughput() * directRadiance);
+    if (!anyLightHit) {
+        ray.AddRadiance(kAmbientFactor * ray.GetThroughput());
+    } else {
+        // Add this direct lighting ` scaled by the ray's current throughput
+        ray.AddRadiance(ray.GetThroughput() * directRadiance);
+    }
 }
 
 }  // namespace Raytracer
