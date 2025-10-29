@@ -141,7 +141,8 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
         std::cout << "Saving converging video to: " << filepath << std::endl;
         video->Save(true, false, false, filepath);
     }
-    bool applyPostProcessing = (mRenderer->GetType() == Renderer::Type::PATH_TRACER && samples > 1);
+    // Apply post-processing for all renderers to handle HDR values properly except SIMPLE
+    bool applyPostProcessing = mRenderer->GetType() != Renderer::Type::SIMPLE;
     Image image = CreateImage(accumulatedColors, samples, applyPostProcessing);
     double totalDuration = std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - startTime).count();
     if (printProgressBar) {
@@ -182,8 +183,7 @@ Image Camera::CreateImage(const std::vector<std::vector<Color>>& accumulatedColo
             Color accumulatedColor = accumulatedColors[y][x];
             Color colorAverage((accumulatedColor.R() / samples), (accumulatedColor.G() / samples), (accumulatedColor.B() / samples));
 
-            // if (mRenderer->GetType() == Renderer::Type::PATH_TRACER && samples > 1) {
-            if (applyPostProcessing && samples > 1) {
+            if (applyPostProcessing) {
                 ApplyPostProcessing(colorAverage);
             }
 
