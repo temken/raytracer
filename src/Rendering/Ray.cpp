@@ -32,6 +32,10 @@ void Ray::UpdateThroughput(const Color& throughput) {
     mThroughput *= throughput;
 }
 
+void Ray::UpdateThroughput(double scalar) {
+    mThroughput = mThroughput * scalar;
+}
+
 size_t Ray::GetDepth() const {
     return mDepth;
 }

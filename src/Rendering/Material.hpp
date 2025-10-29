@@ -20,13 +20,13 @@ public:
     };
 
     Material();
-    Material(const Color& baseColor, double roughness = 1.0, double refractiveIndex = 1.0, double meanFreePath = 0.0, double luminance = 0.0);
+    Material(const Color& baseColor, double roughness = 1.0, double refractiveIndex = 1.0, double meanFreePath = 0.0, double radiance = 0.0);
 
     InteractionType Interact(Ray& ray, const Intersection& intersection, bool applyRoughness = true);
 
-    void Diffuse(Ray& incomingRay, const Intersection& intersection);
-    void Reflect(Ray& incomingRay, const Intersection& intersection, bool applyRoughness);
-    void Refract(Ray& incomingRay, const Intersection& intersection, bool applyRoughness);
+    void Diffuse(Ray& incomingRay, const Intersection& intersection, double probability = 1.0);
+    void Reflect(Ray& incomingRay, const Intersection& intersection, bool applyRoughness, double probability = 1.0);
+    void Refract(Ray& incomingRay, const Intersection& intersection, bool applyRoughness, double probability = 1.0);
 
     // Get color at intersection point (with texture if available)
     Color GetColor(const Intersection& intersection) const;

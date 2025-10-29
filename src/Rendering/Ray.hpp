@@ -23,6 +23,7 @@ public:
 
     Color GetThroughput() const;
     void UpdateThroughput(const Color& throughput);
+    void UpdateThroughput(double scalar);
 
     size_t GetDepth() const;
     void IncrementDepth();

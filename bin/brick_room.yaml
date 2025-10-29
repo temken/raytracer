@@ -9,7 +9,7 @@ render:
   open_output_files: true
 
 camera:
-  renderer_type: MONTE_CARLO # Options: SIMPLE, MONTE_CARLO
+  renderer_type: PATH_TRACER # Options: SIMPLE, PATH_TRACER
   fov_deg: 120.0
   position: [5.0, 0.0, 5.0]
   direction: [-1.0, 0.0, 0.0]
@@ -19,7 +19,7 @@ camera:
   framesPerSecond: 30
   antialiasing: false
   blur_image: false
-  samples_per_pixel: 500
+  samples_per_pixel: 10
 
 scene:
   background_color: black
@@ -103,7 +103,7 @@ scene:
       height: 10.0
       material:
         baseColor: white
-        luminance: 2.0
+        radiance: 2.0
 
     - type: Cylinder
       id: ceiling lamp
@@ -114,7 +114,7 @@ scene:
       height: 10.0
       material:
         baseColor: white
-        luminance: 2.0
+        radiance: 2.0
 
     - type: Cylinder
       id: ceiling lamp
@@ -125,7 +125,7 @@ scene:
       height: 10.0
       material:
         baseColor: white
-        luminance: 2.0
+        radiance: 2.0
 
     - type: Cylinder
       id: ceiling lamp
@@ -136,7 +136,7 @@ scene:
       height: 10.0
       material:
         baseColor: white
-        luminance: 2.0
+        radiance: 2.0
 
     - type: Cylinder
       id: ceiling lamp
@@ -147,7 +147,7 @@ scene:
       height: 10.0
       material:
         baseColor: white
-        luminance: 2.0
+        radiance: 2.0
 
     - type: Cylinder
       id: ceiling lamp
@@ -158,7 +158,7 @@ scene:
       height: 10.0
       material:
         baseColor: white
-        luminance: 2.0
+        radiance: 2.0
 
     - type: Cylinder
       id: ceiling lamp
@@ -169,7 +169,7 @@ scene:
       height: 10.0
       material:
         baseColor: white
-        luminance: 2.0
+        radiance: 2.0
 
     - type: Cylinder
       id: ceiling lamp
@@ -180,7 +180,7 @@ scene:
       height: 10.0
       material:
         baseColor: white
-        luminance: 2.0
+        radiance: 2.0
 
     - type: Cylinder
       id: ceiling lamp
@@ -191,4 +191,4 @@ scene:
       height: 10.0
       material:
         baseColor: white
-        luminance: 2.0
+        radiance: 2.0
