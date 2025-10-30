@@ -34,11 +34,14 @@ Color RendererDeterministic::TraceRay(Ray ray, const Scene& scene) {
 void RendererDeterministic::CollectDirectLighting(Ray& ray, const Scene& scene, const Intersection& intersection) {
     const auto& material = intersection.object->GetMaterial();
     const Vector3D& x = intersection.point;
-    const Vector3D n = intersection.normal.Normalized();
+    Vector3D n = intersection.normal.Normalized();
 
-    Color directRadiance(0.0, 0.0, 0.0);
+    if (ray.IsEntering(n)) {
+        n = -1.0 * n;
+    }
+
     bool anyLightHit = false;
-
+    Color directRadiance(0.0, 0.0, 0.0);
     for (const auto& lightSource : scene.GetLightSources()) {
         const double lightArea = lightSource->GetSurfaceArea();
 
@@ -72,16 +75,17 @@ void RendererDeterministic::CollectDirectLighting(Ray& ray, const Scene& scene, 
             // Lambertian BRDF
             const Color f_r = material.GetColor(intersection) * (1.0 / M_PI);
 
-            // Geometry factor (without light area for key points sampling)
-            const double G = (cosSurface * cosLight) / dist2;
+            // Geometry factor
+            const double G = cosSurface * cosLight * lightArea / dist2;
 
             // Direct contribution
-            colorSum += f_r * Le * G * lightArea;
+            colorSum += f_r * Le * G;
             lightHits++;
         }
 
-        // Treat key points as point light approximations (no area scaling)
-        directRadiance += colorSum / static_cast<double>(lightHits);
+        if (lightHits > 0) {
+            directRadiance += colorSum / static_cast<double>(lightHits);
+        }
     }
 
     if (!anyLightHit) {

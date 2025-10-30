@@ -1,6 +1,6 @@
 id: brick-room
 
-threads: 8
+threads: 1
 
 render:
   image: true
@@ -9,9 +9,9 @@ render:
   open_output_files: true
 
 camera:
-  renderer_type: PATH_TRACER # Options: SIMPLE, PATH_TRACER
+  renderer_type: DETERMINISTIC # Options: SIMPLE, DETERMINISTIC, RAY_TRACER, PATH_TRACER
   fov_deg: 120.0
-  position: [5.0, 0.0, 5.0]
+  position: [4.9, 0.0, 5.0]
   direction: [-1.0, 0.0, 0.0]
   resolution:
     width: 800
@@ -19,7 +19,7 @@ camera:
   framesPerSecond: 30
   antialiasing: false
   blur_image: false
-  samples_per_pixel: 10
+  samples_per_pixel: 1
 
 scene:
   background_color: black
@@ -50,7 +50,7 @@ scene:
       id: back-wall
       visible: true
       position: [-5.0, 0.0, 5.0]
-      normal: [1.0, 0.0, 0.0]
+      normal: [-1.0, 0.0, 0.0]
       dimensions:
         width: 10.0
         height: 20.0
@@ -95,7 +95,7 @@ scene:
         colorTexture: bricks.jpg
 
     - type: Cylinder
-      id: ceiling lamp
+      id: ceiling lamp 1
       visible: true
       position: [0.0, 8.0, 9.9]
       normal: [1.0, 0.0, 0.0]
@@ -106,7 +106,7 @@ scene:
         radiance: 2.0
 
     - type: Cylinder
-      id: ceiling lamp
+      id: ceiling lamp 2
       visible: true
       position: [0.0, 6.0, 9.9]
       normal: [1.0, 0.0, 0.0]
@@ -117,7 +117,7 @@ scene:
         radiance: 2.0
 
     - type: Cylinder
-      id: ceiling lamp
+      id: ceiling lamp 3
       visible: true
       position: [0.0, 4.0, 9.9]
       normal: [1.0, 0.0, 0.0]
@@ -128,7 +128,7 @@ scene:
         radiance: 2.0
 
     - type: Cylinder
-      id: ceiling lamp
+      id: ceiling lamp 4
       visible: true
       position: [0.0, 2.0, 9.9]
       normal: [1.0, 0.0, 0.0]
@@ -139,7 +139,7 @@ scene:
         radiance: 2.0
 
     - type: Cylinder
-      id: ceiling lamp
+      id: ceiling lamp 5
       visible: true
       position: [0.0, 0.0, 9.9]
       normal: [1.0, 0.0, 0.0]
@@ -150,7 +150,7 @@ scene:
         radiance: 2.0
 
     - type: Cylinder
-      id: ceiling lamp
+      id: ceiling lamp 6
       visible: true
       position: [0.0, -2.0, 9.9]
       normal: [1.0, 0.0, 0.0]
@@ -161,7 +161,7 @@ scene:
         radiance: 2.0
 
     - type: Cylinder
-      id: ceiling lamp
+      id: ceiling lamp 7
       visible: true
       position: [0.0, -4.0, 9.9]
       normal: [1.0, 0.0, 0.0]
@@ -172,7 +172,7 @@ scene:
         radiance: 2.0
 
     - type: Cylinder
-      id: ceiling lamp
+      id: ceiling lamp 8
       visible: true
       position: [0.0, -6.0, 9.9]
       normal: [1.0, 0.0, 0.0]
@@ -183,7 +183,7 @@ scene:
         radiance: 2.0
 
     - type: Cylinder
-      id: ceiling lamp
+      id: ceiling lamp 9
       visible: true
       position: [0.0, -8.0, 9.9]
       normal: [1.0, 0.0, 0.0]
