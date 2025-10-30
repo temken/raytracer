@@ -26,7 +26,7 @@ render:
   open_output_files: true
 
 camera:
-  renderer_type: PATH_TRACER # Options: SIMPLE, DETERMINISTIC, RAY_TRACER PATH_TRACER
+  renderer_type: RAY_TRACER # Options: SIMPLE, DETERMINISTIC, RAY_TRACER PATH_TRACER
   fov_deg: 120.0
   position: [9.0, 0.2, 0.0]
   direction: [-1.0, 0.0, 0.0]
@@ -36,7 +36,7 @@ camera:
   framesPerSecond: 15
   antialiasing: true
   blur_image: false
-  samples_per_pixel: 50
+  samples_per_pixel: 1
 
 scene:
   background_color: black
@@ -44,7 +44,7 @@ scene:
     - type: Sphere
       id: ceiling-lamp
       visible: true
-      position: [0.0, 0.0, 5.0]
+      position: [0.0, 0.0, 4.0]
       velocity: [0.0, 0.0, -2.0]
       radius: 1.0
       material:
@@ -145,7 +145,7 @@ scene:
     - type: Sphere
       id: glass-ball
       visible: true
-      position: [3.0, 4.0, 2.0]
+      position: [3.0, 4.0, 0.0]
       radius: 2.0
       material:
         baseColor: white

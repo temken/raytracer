@@ -34,7 +34,10 @@ Color RendererRayTracer::TraceRay(Ray ray, const Scene& scene) {
 void RendererRayTracer::CollectDirectLighting(Ray& ray, const Scene& scene, const Intersection& intersection) {
     const auto& material = intersection.object->GetMaterial();
     const Vector3D& x = intersection.point;
-    const Vector3D n = intersection.normal.Normalized();
+    Vector3D n = intersection.normal.Normalized();
+    if (ray.IsEntering(n)) {
+        n = -1.0 * n;
+    }
 
     Color directRadiance(0.0, 0.0, 0.0);
 
@@ -72,7 +75,7 @@ void RendererRayTracer::CollectDirectLighting(Ray& ray, const Scene& scene, cons
             const Color f_r = material.GetColor(intersection) * (1.0 / M_PI);
 
             // Geometry factor
-            const double G = (cosSurface * cosLight) / dist2;
+            const double G = cosSurface * cosLight * lightArea / dist2;
 
             // Direct contribution (include area weighting for Monte Carlo sampling)
             colorSum += f_r * Le * G;
@@ -80,7 +83,9 @@ void RendererRayTracer::CollectDirectLighting(Ray& ray, const Scene& scene, cons
         }
 
         // Monte Carlo integration: (Area/N) * Σ(contributions)
-        directRadiance += (colorSum * lightArea) / static_cast<double>(lightHits);
+        if (lightHits > 0) {
+            directRadiance += colorSum / static_cast<double>(lightHits);
+        }
     }
 
     // Add this direct lighting contribution (throughput already modified by material interaction)
