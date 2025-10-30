@@ -31,7 +31,7 @@ Material::InteractionType Material::Interact(Ray& ray, const Intersection& inter
 
     auto probabilities = mInteractionProbabilities;
     if (mUseFresnel) {
-        double cosThetaI = IncidentAngleCosine(ray, intersection.normal);
+        double cosThetaI = ray.IncidentAngleCosine(intersection.normal);
         if (cosThetaI < 0.0) {
             cosThetaI = -cosThetaI;
         }
@@ -66,7 +66,7 @@ Material::InteractionType Material::Interact(Ray& ray, const Intersection& inter
 void Material::Diffuse(Ray& ray, const Intersection& intersection, double probability) {
     // Diffuse surface: random new direction in hemisphere
     // Build ONB around normal
-    Vector3D eZ = IncidentAngleCosine(ray, intersection.normal) < 0 ? -1.0 * intersection.normal : intersection.normal;
+    Vector3D eZ = ray.IsEntering(intersection.normal) ? intersection.normal : -1.0 * intersection.normal;
     Vector3D a = (std::fabs(eZ[0]) > 0.707) ? Vector3D({0.0, 1.0, 0.0}) : Vector3D({1.0, 0.0, 0.0});
     Vector3D eX = a.Cross(eZ).Normalized();
     Vector3D eY = eZ.Cross(eX);
@@ -114,7 +114,7 @@ void Material::Refract(Ray& ray, const Intersection& intersection, bool applyRou
     Vector3D n = intersection.normal.Normalized();
 
     // Determine if the ray is entering or exiting
-    double cosThetaI = IncidentAngleCosine(ray, n);
+    double cosThetaI = ray.IncidentAngleCosine(n);
     bool entering = cosThetaI > 0.0;
     double etaI = 1.0;               // refractive index of incident medium (air)
     double etaT = mRefractiveIndex;  // refractive index of material
@@ -335,11 +335,6 @@ Vector3D Material::SampleCone(const Vector3D& axis, double cosThetaMax) {
     Vector3D eY = eZ.Cross(eX);
 
     return (x * eX + y * eY + z * eZ).Normalized();
-}
-
-double Material::IncidentAngleCosine(const Ray& ray, const Vector3D& normal) const {
-    double cosTheta = -normal.Normalized().Dot(ray.GetDirection().Normalized());
-    return cosTheta;
 }
 
 }  // namespace Raytracer

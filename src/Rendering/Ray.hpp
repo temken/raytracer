@@ -30,6 +30,9 @@ public:
 
     Vector3D PointAtParameter(double t) const;
 
+    double IncidentAngleCosine(const Vector3D& normal) const;
+    bool IsEntering(const Vector3D& normal) const;
+
     Vector3D operator()(double t) const {
         return PointAtParameter(t);
     }

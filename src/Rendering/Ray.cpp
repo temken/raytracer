@@ -48,4 +48,12 @@ Vector3D Ray::PointAtParameter(double t) const {
     return mOrigin + t * mDirection;
 }
 
+double Ray::IncidentAngleCosine(const Vector3D& normal) const {
+    return -1.0 * mDirection.Dot(normal.Normalized());
+}
+
+bool Ray::IsEntering(const Vector3D& normal) const {
+    return IncidentAngleCosine(normal) > 0.0;
+}
+
 }  // namespace Raytracer
