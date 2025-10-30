@@ -80,6 +80,10 @@
   - [ ] Build the raytracer and test the different shaders.
 - [ ] Fix the key points for cylindric light sources (see brick wall.yaml)
 - [ ] Create a class for an orthonomal basis.
+- [ ] Separate geometric and physical objects. There are two options, either have the PhysicalObject (that inherits from GeometricObject or rather its child classes) have a member mMaterial (like now) or have it inherit from Material directly.
+    - This is also since some algorithms (like hierarchical bounding boxes) will only need geometric objects, no need for them to have a material.
+    - The geometric objects should have a ONB handling its orientation in 3D space.
+- [ ] Rename and fix Box -> AxisAlignedBox. Ensure that rotations and translations work with the new ONB.
 - [ ] Create a half sphere class
 - [ ] All objects should have their own basis together with mPosition. Then we can have a RecalculateObject positions function using that basis. In rotate functions, we only have to rotate the ONB and rebuild the object. It also gives orientation for textures on spheres. It shoudl probably also be possible to define the orientation in the config file, beyond the normal. Indicating the front (corresponding e.g. to the x axis of the ONB)
 - [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
