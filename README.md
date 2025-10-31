@@ -11,7 +11,7 @@
   - [x] CollectDirectLight should be implemented only once here. (Ensure that the ray tracer image does not change!!!)
   - [x] Implement an ambient factor that will give black pixels a slight color. At least for deterministic, maybe also raytracer
 - [ ] Illustrate the different shaders on an interesting scene.
-- [ ] Create a class for an orthonomal basis.
+- [x] Create a class for an orthonomal basis.
 - [ ] Separate geometric and physical objects. There are two options, either have the PhysicalObject (that inherits from GeometricObject or rather its child classes) have a member mMaterial (like now) or have it inherit from Material directly.
     - This is also since some algorithms (like hierarchical bounding boxes) will only need geometric objects, no need for them to have a material.
     - The geometric objects should have a ONB handling its orientation in 3D space.
@@ -25,7 +25,6 @@
 - [ ] Image textures for other objects (Spheres!)
 - [ ] Image texture and gradients for the background (spherical background image)
 - [ ] Add more pre-defined colors
-- [ ] Allow to run ALL renderes and store the renderer type in the file name.
 - [x] I removed the 1/pdf scaling in the material class for roughness. Ensure that this was PBR correct.
 - [ ] Find a better title and make an ascii art header
 - [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
@@ -35,6 +34,7 @@
 - [ ] New objects: Cones, Torus
 - [ ] Normal textures especially for glass surfaces, but not just
 - [ ] Check out texture resources.
+- [ ] Allow to run ALL renderes and store the renderer type in the file name. (?)
 - [ ] Height textures
 - [ ] Print preview of image downscaled in terminal
 - [ ] Look into ogb mesh files.
