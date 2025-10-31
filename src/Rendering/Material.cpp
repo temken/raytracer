@@ -98,8 +98,8 @@ void Material::Reflect(Ray& ray, const Intersection& intersection, bool applyRou
     if (applyRoughness && mRoughness > 0.0) {
         double cosThetaMax = std::cos(mRoughness * (M_PI / 2.0));  // roughness=1 => 90° cone
         newDir = SampleCone(newDir, cosThetaMax);
-        double pdf = 1.0 / (2.0 * M_PI * (1.0 - cosThetaMax));  // Uniform PDF over the cone
-        ray.UpdateThroughput(mSpecularColor / pdf / probability);
+        // double pdf = 1.0 / (2.0 * M_PI * (1.0 - cosThetaMax));  // Uniform PDF over the cone
+        ray.UpdateThroughput(mSpecularColor / probability);
     } else {
         // Perfect mirror
         ray.UpdateThroughput(mSpecularColor / probability);
@@ -146,8 +146,8 @@ void Material::Refract(Ray& ray, const Intersection& intersection, bool applyRou
     if (applyRoughness && mRoughness > 0.0) {
         double cosThetaMax = std::cos(mRoughness * (M_PI / 4.0));  // half the reflection roughness
         refractDir = SampleCone(refractDir, cosThetaMax);
-        double pdf = 1.0 / (2.0 * M_PI * (1.0 - cosThetaMax));  // Uniform PDF over the cone
-        ray.UpdateThroughput(GetColor(intersection) / pdf / probability);
+        // For roughness, just add scattering without PDF correction - treat as surface roughness, not importance sampling
+        ray.UpdateThroughput(GetColor(intersection) / probability);
     } else {
         // Perfect refraction
         ray.UpdateThroughput(GetColor(intersection) / probability);
