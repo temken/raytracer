@@ -7,6 +7,57 @@
 
 ## To do
 
+- [x] Extend the Renderer base class
+  - [x] CollectDirectLight should be implemented only once here. (Ensure that the ray tracer image does not change!!!)
+  - [x] Implement an ambient factor that will give black pixels a slight color. At least for deterministic, maybe also raytracer
+- [ ] Illustrate the different shaders on an interesting scene.
+- [ ] Create a class for an orthonomal basis.
+- [ ] Separate geometric and physical objects. There are two options, either have the PhysicalObject (that inherits from GeometricObject or rather its child classes) have a member mMaterial (like now) or have it inherit from Material directly.
+    - This is also since some algorithms (like hierarchical bounding boxes) will only need geometric objects, no need for them to have a material.
+    - The geometric objects should have a ONB handling its orientation in 3D space.
+- [ ] Rename and fix Box -> AxisAlignedBox. Ensure that rotations and translations work with the new ONB.
+- [ ] All objects should have their own basis together with mPosition. Then we can have a RecalculateObject positions function using that basis. In rotate functions, we only have to rotate the ONB and rebuild the object. It also gives orientation for textures on spheres. It shoudl probably also be possible to define the orientation in the config file, beyond the normal. Indicating the front (corresponding e.g. to the x axis of the ONB)
+- [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
+- [ ] Create a half sphere class
+- [ ] Create more composite objects (street lamps, desk lamps, spots)
+- [ ] New renderer: Path tracing with NNE.
+- [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter
+- [ ] Image textures for other objects (Spheres!)
+- [ ] Image texture and gradients for the background (spherical background image)
+- [ ] Add more pre-defined colors
+- [ ] Allow to run ALL renderes and store the renderer type in the file name.
+- [x] I removed the 1/pdf scaling in the material class for roughness. Ensure that this was PBR correct.
+- [ ] Find a better title and make an ascii art header
+- [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
+- [ ] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
+- [ ] Create camera based on aspect ratio and one pixel dimension
+- [ ] Implement depth of field capability
+- [ ] New objects: Cones, Torus
+- [ ] Normal textures especially for glass surfaces, but not just
+- [ ] Check out texture resources.
+- [ ] Height textures
+- [ ] Print preview of image downscaled in terminal
+- [ ] Look into ogb mesh files.
+
+### Image ideas:
+- [ ] Light lanterns along a road in the night with nice ambient. Wet road, oncoming car.
+- [x] Create a series of material comparisons, e.g. roughness, metallicity, glas, ...
+- [ ] Recreate that photo I took in the pub.
+
+### Known bugs and issues:
+- [x] Increasing the resolution sometimes seems to widen the field of view and vice versa
+- [ ] Test and debug the image class, import/export a file. Ensure that the image has the same orientation.
+- [x] Debug the rectangle/ box classes. There is something off with the dimensions. This is related to the previous point potentially.
+  - [x] Check the brick scene. The texture orientation is different for each wall. It might have to do with the fact that the normals are aligned with an axis -> Swap x,y of the rectangle.
+
+### Other ideas
+
+- Define trajectories that the camera can follow (time dependence is already ).
+- Create compositve objects with a physics engine included. Simulate and render a double pendulum in an interesting light ambient.
+- Make a UI with qt or imgui to show the scene and camera, move stuff, render quick images. Simple UI to have some interactive fun.
+
+### Done tasks
+
 - [x] Vector class
 - [x] Ray class
 - [x] Color class
@@ -77,55 +128,6 @@
   - [x] Path tracing with correct weighing
   - [x] Build the raytracer and test the different shaders.
 - [x] Fix the key points for cylindric light sources (see brick wall.yaml)
-- [ ] Extend the Renderer base class
-  - [ ] CollectDirectLight should be implemented only once here. (Ensure that the ray tracer image does not change!!!)
-  - [ ] Implement an ambient factor that will give black pixels a slight color. At least for deterministic, maybe also raytracer
-  - [ ] Random number generation should also be handled differently. Maybe in the base class, where we can throw an error if we are in a deterministic shader
-- [ ] Illustrate the different shaders on an interesting scene.
-- [ ] Create a class for an orthonomal basis.
-- [ ] Separate geometric and physical objects. There are two options, either have the PhysicalObject (that inherits from GeometricObject or rather its child classes) have a member mMaterial (like now) or have it inherit from Material directly.
-    - This is also since some algorithms (like hierarchical bounding boxes) will only need geometric objects, no need for them to have a material.
-    - The geometric objects should have a ONB handling its orientation in 3D space.
-- [ ] Rename and fix Box -> AxisAlignedBox. Ensure that rotations and translations work with the new ONB.
-- [ ] All objects should have their own basis together with mPosition. Then we can have a RecalculateObject positions function using that basis. In rotate functions, we only have to rotate the ONB and rebuild the object. It also gives orientation for textures on spheres. It shoudl probably also be possible to define the orientation in the config file, beyond the normal. Indicating the front (corresponding e.g. to the x axis of the ONB)
-- [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
-- [ ] Create a half sphere class
-- [ ] Create more composite objects (street lamps, desk lamps, spots)
-- [ ] New renderer: Path tracing with NNE.
-- [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter
-- [ ] Image textures for other objects (Spheres!)
-- [ ] Image texture and gradients for the background (spherical background image)
-- [ ] Add more pre-defined colors
-- [ ] Find a better title and make an ascii art header
-- [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
-- [ ] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
-- [ ] Create camera based on aspect ratio and one pixel dimension
-- [ ] Implement depth of field capability
-- [ ] New objects: Cones, Torus
-- [ ] Normal textures especially for glass surfaces, but not just
-- [ ] Check out texture resources.
-- [ ] Height textures
-- [ ] Print preview of image downscaled in terminal
-- [ ] Look into ogb mesh files.
-
-
-
-Image ideas:
-- [ ] Light lanterns along a road in the night with nice ambient. Wet road, oncoming car.
-- [x] Create a series of material comparisons, e.g. roughness, metallicity, glas, ...
-- [ ] Recreate that photo I took in the pub.
-
-Known bugs and issues:
-- [x] Increasing the resolution sometimes seems to widen the field of view and vice versa
-- [ ] Test and debug the image class, import/export a file. Ensure that the image has the same orientation.
-- [x] Debug the rectangle/ box classes. There is something off with the dimensions. This is related to the previous point potentially.
-  - [x] Check the brick scene. The texture orientation is different for each wall. It might have to do with the fact that the normals are aligned with an axis -> Swap x,y of the rectangle.
-
-Other ideas:
-
-- Define trajectories that the camera can follow (time dependence is already ).
-- Create compositve objects with a physics engine included. Simulate and render a double pendulum in an interesting light ambient.
-- Make a UI with qt or imgui to show the scene and camera, move stuff, render quick images. Simple UI to have some interactive fun.
 
 ## General notes
 
