@@ -1,11 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Geometry/Disk.hpp"
+#include "Geometry/Shapes/Sphere.hpp"
 
 using namespace Raytracer;
 
-TEST(TestDisk, Test1)
-{
+TEST(TestSphere, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

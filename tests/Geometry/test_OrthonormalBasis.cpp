@@ -1,11 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Geometry/Rectangle.hpp"
+#include "Geometry/OrthonormalBasis.hpp"
 
 using namespace Raytracer;
 
-TEST(TestRectangle, Test1)
-{
+TEST(TestOrthonormalBasis, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

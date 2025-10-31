@@ -1,11 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Geometry/BoxAxisAligned.hpp"
+#include "Geometry/Shapes/Disk.hpp"
 
 using namespace Raytracer;
 
-TEST(TestBoxAxisAligned, Test1)
-{
+TEST(TestDisk, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

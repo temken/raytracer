@@ -1,4 +1,4 @@
-#include "Utilities/OrthonormalBasis.hpp"
+#include "Geometry/OrthonormalBasis.hpp"
 
 namespace Raytracer {
 

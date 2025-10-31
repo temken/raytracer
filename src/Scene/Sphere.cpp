@@ -36,6 +36,7 @@ std::vector<Vector3D> Sphere::SampleSurfacePoints(std::size_t numPoints, std::mt
     }
     return points;
 }
+
 std::vector<Vector3D> Sphere::GetKeyPoints() const {
     return {mPosition};
 }

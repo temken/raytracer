@@ -2,15 +2,11 @@
 
 #include "Geometry/Shape.hpp"
 
-#include <memory>
-
 namespace Raytracer::Geometry {
 
-class CompositeShape : public Shape {
+class Disk : public Shape {
 public:
-    CompositeShape(const Vector3D& position, const Vector3D& normal, const Vector3D);
-
-    void AddComponent(std::shared_ptr<Shape> component);
+    Disk(const Vector3D& position, const Vector3D& normal, double radius);
 
     std::optional<Intersection> Intersect(const Line& line) const;
 
@@ -18,13 +14,11 @@ public:
     virtual std::vector<Vector3D> SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const override;
 
     virtual std::vector<Vector3D> GetKeyPoints() const override;
+    virtual std::pair<double, double> SurfaceParameters(const Vector3D& point) const override;
 
     virtual void PrintInfo() const override;
 
 private:
-    std::vector<std::shared_ptr<Shape>> mComponents;
-
-    void PrintInfoCompositeBase() const;
 };
 
 }  // namespace Raytracer::Geometry

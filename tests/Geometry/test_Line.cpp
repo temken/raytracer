@@ -1,10 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Geometry/CompositeShape.hpp"
+#include "Geometry/Line.hpp"
 
 using namespace Raytracer;
 
-TEST(TestCompositeShape, Test1) {
+TEST(TestRay, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

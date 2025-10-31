@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Geometry/Vector.hpp"
 #include "Utilities/Color.hpp"
-#include "Utilities/Vector.hpp"
 
 namespace Raytracer {
 

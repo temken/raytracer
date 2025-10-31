@@ -1,10 +1,10 @@
 #pragma once
 
+#include "Geometry/Vector.hpp"
 #include "Rendering/Ray.hpp"
 #include "Scene/CompositeObject.hpp"
 #include "Scene/Rectangle.hpp"
 #include "Utilities/Color.hpp"
-#include "Utilities/Vector.hpp"
 
 #include <optional>
 #include <vector>

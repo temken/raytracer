@@ -4,8 +4,7 @@
 
 using namespace Raytracer;
 
-TEST(TestShape, Test1)
-{
+TEST(TestShape, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

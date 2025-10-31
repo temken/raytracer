@@ -1,11 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Geometry/Box.hpp"
+#include "Geometry/Shapes/Tube.hpp"
 
 using namespace Raytracer;
 
-TEST(TestBox, Test1)
-{
+TEST(TestTube, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

@@ -1,9 +1,9 @@
 #pragma once
 
+#include "Geometry/Vector.hpp"
 #include "Rendering/Ray.hpp"
 #include "Scene/Object.hpp"
 #include "Utilities/Color.hpp"
-#include "Utilities/Vector.hpp"
 
 #include <optional>
 

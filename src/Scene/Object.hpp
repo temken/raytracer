@@ -1,10 +1,10 @@
 #pragma once
 
+#include "Geometry/Vector.hpp"
 #include "Rendering/Material.hpp"
 #include "Rendering/Ray.hpp"
 #include "Utilities/Color.hpp"
 #include "Utilities/Intersection.hpp"
-#include "Utilities/Vector.hpp"
 
 #include <optional>
 #include <random>

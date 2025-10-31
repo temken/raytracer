@@ -1,11 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Geometry/GeometricObject.hpp"
+#include "Geometry/Shapes/Box.hpp"
 
 using namespace Raytracer;
 
-TEST(TestGeometricObject, Test1)
-{
+TEST(TestBox, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

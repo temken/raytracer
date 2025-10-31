@@ -6,6 +6,7 @@
 #include <iostream>
 #include <memory>
 
+#include "Geometry/Vector.hpp"
 #include "Rendering/Camera.hpp"
 #include "Rendering/Ray.hpp"
 #include "Scene/Box.hpp"
@@ -16,7 +17,6 @@
 #include "Utilities/Color.hpp"
 #include "Utilities/Configuration.hpp"
 #include "Utilities/Image.hpp"
-#include "Utilities/Vector.hpp"
 #include "Version.hpp"
 
 using namespace Raytracer;
