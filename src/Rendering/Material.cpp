@@ -147,10 +147,10 @@ void Material::Refract(Ray& ray, const Intersection& intersection, bool applyRou
         double cosThetaMax = std::cos(mRoughness * (M_PI / 4.0));  // half the reflection roughness
         refractDir = SampleCone(refractDir, cosThetaMax);
         double pdf = 1.0 / (2.0 * M_PI * (1.0 - cosThetaMax));  // Uniform PDF over the cone
-        ray.UpdateThroughput(mBaseColor / pdf / probability);
+        ray.UpdateThroughput(GetColor(intersection) / pdf / probability);
     } else {
         // Perfect refraction
-        ray.UpdateThroughput(mBaseColor / (eta * eta) / probability);
+        ray.UpdateThroughput(GetColor(intersection) / probability);
     }
     ray.SetOrigin(intersection.point + kEpsilon * refractDir);
     ray.SetDirection(refractDir);

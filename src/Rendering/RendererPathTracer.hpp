@@ -13,7 +13,6 @@ public:
     virtual Color TraceRay(Ray ray, const Scene& scene) override;
 
 private:
-    std::mt19937 mGenerator{std::random_device{}()};
     std::uniform_real_distribution<double> mDistribution{0.0, 1.0};
 };
 
