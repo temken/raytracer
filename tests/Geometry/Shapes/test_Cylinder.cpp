@@ -1,11 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Geometry/Rectangle.hpp"
+#include "Geometry/Shapes/Cylinder.hpp"
 
 using namespace Raytracer;
 
-TEST(TestRectangle, Test1)
-{
+TEST(TestCylinder, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

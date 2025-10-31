@@ -1,13 +1,6 @@
-#pragma once
+#include "Geometry/Intersection.hpp"
 
 namespace Raytracer {
-
-class Disk {
-public:
-
-private:
-
-};
 
 } // namespace Raytracer
 

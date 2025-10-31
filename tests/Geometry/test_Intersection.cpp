@@ -1,10 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Geometry/Tube.hpp"
+#include "Geometry/Intersection.hpp"
 
 using namespace Raytracer;
 
-TEST(TestTube, Test1)
+TEST(TestIntersection, Test1)
 {
     // ARRANGE
     // ACT

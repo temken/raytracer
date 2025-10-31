@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Rendering/Material.hpp"
 #include "Utilities/Vector.hpp"
+
+#include <limits>
 
 namespace Raytracer {
 
