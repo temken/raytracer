@@ -6,7 +6,7 @@ namespace Raytracer::Geometry {
 
 class Tube : public Shape {
 public:
-    Tube(const Vector3D& position, const Vector3D& orientation, double radius);
+    Tube(const Vector3D& position, const Vector3D& orientation, double radius, double length);
 
     std::optional<Intersection> Intersect(const Line& line) const;
 
@@ -20,6 +20,7 @@ public:
 
 private:
     double mRadius;
+    double mLength;
 };
 
 }  // namespace Raytracer::Geometry
