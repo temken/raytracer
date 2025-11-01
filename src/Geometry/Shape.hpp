@@ -44,7 +44,7 @@ public:
     virtual std::vector<Vector3D> GetKeyPoints() const = 0;
 
     // Parametrize the surface in range [-0.5, 0.5]
-    virtual std::pair<double, double> SurfaceParameters(const Vector3D& point) const;
+    virtual std::pair<double, double> GetSurfaceParameters(const Vector3D& point) const;
 
     virtual void PrintInfo() const;
 
@@ -52,7 +52,8 @@ protected:
     Type mType;
     Vector3D mPosition;
     OrthonormalBasis mOrthonormalBasis;
-    std::vector<Vector3D> mKeyPointsCache;
+
+    static constexpr double sEpsilon = 1e-6;
 
     void Rotate(double angle, const Vector3D& axis);
     void Spin(double angle, OrthonormalBasis::BasisVector axis = OrthonormalBasis::BasisVector::eZ);

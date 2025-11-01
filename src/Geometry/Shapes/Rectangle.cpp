@@ -31,7 +31,8 @@ std::vector<Vector3D> Rectangle::SampleSurfacePoints(std::size_t numPoints, std:
 
 std::vector<Vector3D> Rectangle::GetKeyPoints() const {
 }
-std::pair<double, double> Rectangle::SurfaceParameters(const Vector3D& point) const {
+
+std::pair<double, double> Rectangle::GetSurfaceParameters(const Vector3D& point) const {
 }
 
 void Rectangle::PrintInfo() const {

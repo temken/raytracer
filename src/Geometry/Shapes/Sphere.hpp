@@ -14,7 +14,7 @@ public:
     virtual std::vector<Vector3D> SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const override;
 
     virtual std::vector<Vector3D> GetKeyPoints() const override;
-    virtual std::pair<double, double> SurfaceParameters(const Vector3D& point) const override;
+    virtual std::pair<double, double> GetSurfaceParameters(const Vector3D& point) const override;
 
     virtual void PrintInfo() const override;
 

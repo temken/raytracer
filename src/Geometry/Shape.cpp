@@ -16,7 +16,7 @@ Vector3D Shape::GetOrientation() const {
     return mOrthonormalBasis.GetBasisVector(OrthonormalBasis::BasisVector::eZ);
 }
 
-std::pair<double, double> Shape::SurfaceParameters(const Vector3D& point) const {
+std::pair<double, double> Shape::GetSurfaceParameters(const Vector3D& point) const {
     return {0.0, 0.0};
 }
 

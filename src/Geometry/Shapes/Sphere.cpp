@@ -72,7 +72,7 @@ std::vector<Vector3D> Sphere::GetKeyPoints() const {
     return {mPosition};
 }
 
-std::pair<double, double> Sphere::SurfaceParameters(const Vector3D& point) const {
+std::pair<double, double> Sphere::GetSurfaceParameters(const Vector3D& point) const {
     // TODO: Implement preojection
     return {0.0, 0.0};
 }
