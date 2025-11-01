@@ -19,6 +19,7 @@ public:
     virtual void PrintInfo() const override;
 
 private:
+    double mRadius;
 };
 
 }  // namespace Raytracer::Geometry
