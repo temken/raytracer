@@ -9,7 +9,7 @@ Tube::Tube(const std::string& name, const Material& material, const Vector3D& ce
 }
 
 double Tube::GetSurfaceArea() const {
-    return 2 * M_PI * mRadius * mLength + 2 * M_PI * mRadius * mRadius;
+    return 2 * M_PI * mRadius * mLength;
 }
 
 std::vector<Vector3D> Tube::SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const {
@@ -40,7 +40,6 @@ std::vector<Vector3D> Tube::SampleSurfacePoints(std::size_t numPoints, std::mt19
     return points;
 }
 std::vector<Vector3D> Tube::GetKeyPoints() const {
-    // Add center, top, and bottom center points
     std::vector<Vector3D> keyPoints = {
         mPosition,
         mPosition + mLength / 4.0 * mNormal,

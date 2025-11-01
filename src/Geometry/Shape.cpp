@@ -8,8 +8,8 @@ Shape::Shape(Type type, const Vector3D& position, const Vector3D& orientation, c
     mOrthonormalBasis(orientation, referenceDirection) {
 }
 
-const OrthonormalBasis& Shape::GetOrthonormalBasis() const {
-    return mOrthonormalBasis;
+Vector3D Shape::GetBasisVector(OrthonormalBasis::BasisVector axis) const {
+    return mOrthonormalBasis.GetBasisVector(axis);
 }
 
 Vector3D Shape::GetOrientation() const {

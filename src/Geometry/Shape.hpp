@@ -35,7 +35,7 @@ public:
     virtual std::optional<Intersection> Intersect(const Line& line) const = 0;
 
     Type GetType() const;
-    const OrthonormalBasis& GetOrthonormalBasis() const;
+    Vector3D GetBasisVector(OrthonormalBasis::BasisVector axis) const;
     Vector3D GetOrientation() const;
 
     virtual double SurfaceArea() const = 0;

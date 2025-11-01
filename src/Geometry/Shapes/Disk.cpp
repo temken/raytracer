@@ -8,7 +8,7 @@ Disk::Disk(const Vector3D& position, const Vector3D& normal, double radius) :
 }
 
 std::optional<Intersection> Disk::Intersect(const Line& line) const {
-    const Vector3D& normal = GetOrthonormalBasis()[2];
+    const Vector3D& normal = GetBasisVector(OrthonormalBasis::BasisVector::eZ);
     double denom = normal.Dot(line.GetDirection());
     if (std::fabs(denom) < sEpsilon) {
         return std::nullopt;

@@ -9,7 +9,7 @@ Rectangle::Rectangle(const Vector3D& center, const Vector3D& normal, const Vecto
 }
 
 std::optional<Intersection> Rectangle::Intersect(const Line& line) const {
-    const Vector3D& normal = GetOrthonormalBasis()[2];
+    const Vector3D& normal = GetBasisVector(OrthonormalBasis::BasisVector::eZ);
     double denom = normal.Dot(line.GetDirection());
     if (std::fabs(denom) < sEpsilon) {
         return std::nullopt;  // Ray is parallel to the rectangle plane
@@ -24,7 +24,7 @@ std::optional<Intersection> Rectangle::Intersect(const Line& line) const {
 
     std::pair<double, double> uv = GetSurfaceParameters(hitPoint);
 
-    if (std::fabs(uv.first) <= 0.5 && std::fabs(uv.second) <= 0.5) {
+    if (std::abs(uv.first) <= 0.5 && std::abs(uv.second) <= 0.5) {
         return Intersection{t, hitPoint, normal};
     }
     return std::nullopt;
@@ -43,7 +43,7 @@ std::vector<Vector3D> Rectangle::SampleSurfacePoints(std::size_t numPoints, std:
     for (std::size_t i = 0; i < numPoints; ++i) {
         double u = distU(prng);
         double v = distV(prng);
-        Vector3D point = mPosition + u * GetOrthonormalBasis()[0] + v * GetOrthonormalBasis()[1];
+        Vector3D point = mPosition + u * GetBasisVector(OrthonormalBasis::BasisVector::eX) + v * GetBasisVector(OrthonormalBasis::BasisVector::eY);
         points.push_back(point);
     }
 
@@ -51,8 +51,8 @@ std::vector<Vector3D> Rectangle::SampleSurfacePoints(std::size_t numPoints, std:
 }
 
 std::vector<Vector3D> Rectangle::GetKeyPoints() const {
-    const Vector3D& u = GetOrthonormalBasis()[0];
-    const Vector3D& v = GetOrthonormalBasis()[1];
+    const Vector3D& u = GetBasisVector(OrthonormalBasis::BasisVector::eX);
+    const Vector3D& v = GetBasisVector(OrthonormalBasis::BasisVector::eY);
     return {mPosition,
             mPosition - u * (mWidth / 2.0) - v * (mHeight / 2.0),
             mPosition + u * (mWidth / 2.0) - v * (mHeight / 2.0),
@@ -64,8 +64,8 @@ std::pair<double, double> Rectangle::GetSurfaceParameters(const Vector3D& point)
     // Relative to center
     Vector3D localPoint = point - mPosition;
 
-    double uCoord = localPoint.Dot(GetOrthonormalBasis()[0]);
-    double vCoord = localPoint.Dot(GetOrthonormalBasis()[1]);
+    double uCoord = localPoint.Dot(GetBasisVector(OrthonormalBasis::BasisVector::eX));
+    double vCoord = localPoint.Dot(GetBasisVector(OrthonormalBasis::BasisVector::eY));
 
     // Map to [-0.5, 0.5]
     double u = uCoord / mWidth;
