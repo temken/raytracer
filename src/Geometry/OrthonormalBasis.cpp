@@ -7,6 +7,8 @@ OrthonormalBasis::OrthonormalBasis(Vector3D eZ, Vector3D eX) {
     if (eX.NormSquared() < 1e-8) {
         Vector3D a = (std::fabs(eZ[0]) > 0.707) ? Vector3D{0.0, 1.0, 0.0} : Vector3D{1.0, 0.0, 0.0};
         eX = eZ.Cross(a);
+    } else if (eX.Dot(eZ) > 1e-8) {
+        throw std::runtime_error("Provided eX is not orthogonal to eZ");
     }
     eX.Normalize();
     Vector3D eY = eZ.Cross(eX).Normalized();
