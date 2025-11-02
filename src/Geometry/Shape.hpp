@@ -16,7 +16,6 @@ namespace Raytracer::Geometry {
 class Shape {
 public:
     enum class Type {
-        BASE,
         BOX,
         BOX_AXIS_ALIGNED,
         CYLINDER,

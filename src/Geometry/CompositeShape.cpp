@@ -8,8 +8,8 @@
 
 namespace Raytracer::Geometry {
 
-CompositeShape::CompositeShape(const Vector3D& position, const Vector3D& normal, const Vector3D) :
-    Shape(Type::BASE, position, normal) {
+CompositeShape::CompositeShape(Type type, const Vector3D& position, const Vector3D& orientation, const Vector3D& referenceDirection) :
+    Shape(type, position, orientation, referenceDirection) {
 }
 
 void CompositeShape::AddComponent(std::shared_ptr<Shape> component) {

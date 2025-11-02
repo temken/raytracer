@@ -8,7 +8,7 @@ namespace Raytracer::Geometry {
 
 class CompositeShape : public Shape {
 public:
-    CompositeShape(const Vector3D& position, const Vector3D& normal, const Vector3D);
+    CompositeShape(Type type, const Vector3D& position, const Vector3D& orientation, const Vector3D& referenceDirection = Vector3D({0.0, 0.0, 0.0}));
 
     void AddComponent(std::shared_ptr<Shape> component);
 
@@ -21,7 +21,7 @@ public:
 
     virtual void PrintInfo() const override;
 
-private:
+protected:
     std::vector<std::shared_ptr<Shape>> mComponents;
 
     void PrintInfoCompositeBase() const;
