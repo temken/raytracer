@@ -42,6 +42,8 @@ std::string Shape::TypeToString(Type type) {
             return "Cylinder";
         case Type::DISK:
             return "Disk";
+        case Type::HALF_SPHERE:
+            return "Half Sphere";
         case Type::PLANE:
             return "Plane";
         case Type::RECTANGLE:

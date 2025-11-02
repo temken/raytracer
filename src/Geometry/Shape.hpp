@@ -20,6 +20,7 @@ public:
         BOX_AXIS_ALIGNED,
         CYLINDER,
         DISK,
+        HALF_SPHERE,
         PLANE,
         RECTANGLE,
         SPHERE,
