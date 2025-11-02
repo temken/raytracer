@@ -8,7 +8,7 @@ class Tube : public Shape {
 public:
     Tube(const Vector3D& position, const Vector3D& orientation, double radius, double length);
 
-    std::optional<Intersection> Intersect(const Line& line) const;
+    virtual std::optional<Intersection> Intersect(const Line& line) const override;
 
     virtual double SurfaceArea() const override;
     virtual std::vector<Vector3D> SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const override;

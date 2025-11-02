@@ -8,7 +8,7 @@ class Sphere : public Shape {
 public:
     Sphere(const Vector3D& position, const double radius, const Vector3D& orientation = Vector3D({0.0, 0.0, 1.0}));
 
-    std::optional<Intersection> Intersect(const Line& line) const;
+    virtual std::optional<Intersection> Intersect(const Line& line) const override;
 
     virtual double SurfaceArea() const override;
     virtual std::vector<Vector3D> SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const override;
