@@ -1,6 +1,6 @@
 #include "Geometry/OrthonormalBasis.hpp"
 
-namespace Raytracer {
+namespace Raytracer::Geometry {
 
 OrthonormalBasis::OrthonormalBasis(Vector3D eZ, Vector3D eX) {
     eZ.Normalize();
@@ -55,4 +55,4 @@ void OrthonormalBasis::PrintInfo() const {
     std::cout << "\teZ: " << GetBasisVector(BasisVector::eZ) << std::endl;
 }
 
-}  // namespace Raytracer
+}  // namespace Raytracer::Geometry

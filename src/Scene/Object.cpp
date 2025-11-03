@@ -1,12 +1,16 @@
 #include "Scene/Object.hpp"
 
+#include "Geometry/OrthonormalBasis.hpp"
+
+#include <stdexcept>
+
 namespace Raytracer {
 
-Object::Object(const std::string& name, const Material& material, const Vector3D& position, const Vector3D& normal) :
+Object::Object(const std::string& name, const Vector3D& position, const Material& material, std::shared_ptr<Geometry::Shape> shape) :
     mName(name),
     mMaterial(material),
-    mPosition(position),
-    mNormal(normal.Normalized()) {
+    mShape(std::move(shape)) {
+    mShape->SetPosition(position);
 }
 
 std::string Object::GetName() const {
@@ -29,24 +33,21 @@ void Object::SetMaterial(const Material& material) {
     mMaterial = material;
 }
 
-Vector3D Object::GetPosition() const {
-    return mPosition;
+std::shared_ptr<Geometry::Shape> Object::GetShape() const {
+    return mShape;
 }
 
-void Object::SetPosition(const Vector3D& position) {
-    mPosition = position;
+void Object::SetShape(const std::shared_ptr<Geometry::Shape>& shape) {
+    mShape = shape;
 }
 
-Vector3D Object::GetNormal() const {
-    return mNormal;
+Color Object::GetColor(const HitRecord& hitRecord) const {
+    return mMaterial.GetColor(hitRecord);
 }
 
-void Object::SetNormal(const Vector3D& normal) {
-    mNormal = normal;
-}
-
-Color Object::GetColor(const Intersection& intersection) const {
-    return mMaterial.GetColor(intersection);
+Vector3D Object::GetNormal(const HitRecord& hitRecord) const {
+    // TODO: Normal texturing
+    return hitRecord.normal;
 }
 
 bool Object::EmitsLight() const {
@@ -77,10 +78,6 @@ void Object::SetSpin(const Vector3D& spin) {
     mSpin = spin;
 }
 
-std::pair<double, double> Object::GetTextureCoordinates(const Vector3D& hitPoint) const {
-    return {0.0, 0.0};
-}
-
 void Object::Evolve(double timeStep) {
     if (timeStep <= 0) {
         throw std::invalid_argument("Time step must be positive");
@@ -98,25 +95,26 @@ void Object::Evolve(double timeStep) {
 
 void Object::PrintInfo() const {
     PrintInfoBase();
-    mMaterial.PrintInfo();
 }
 
 void Object::Translate(const Vector3D& translation) {
-    mPosition += translation;
+    mShape->SetPosition(mShape->GetPosition() + translation);
 }
+
 void Object::Rotate(double angle, const Vector3D& axis) {
-    // Implement rotation logic
+    // TODO: This should actually be a rotation around a line
+    mShape->Rotate(angle, axis);
 }
 
 void Object::Spin(double angle, const Vector3D& axis) {
-    // Implement spin logic
+    mShape->Spin(angle, Geometry::OrthonormalBasis::BasisVector::eZ);
 }
 
 void Object::PrintInfoBase() const {
     std::cout << "Object:" << mName << std::endl
-              << "\tVisible:\t" << (mVisible ? "[x]" : "[ ]") << std::endl
-              << "\tPosition:\t" << mPosition << std::endl
-              << "\tNormal:\t" << mNormal << std::endl;
+              << "\tVisible:\t" << (mVisible ? "[x]" : "[ ]") << std::endl;
+    mShape->PrintInfo();
+    mMaterial.PrintInfo();
 
     if (mVelocity.Norm() > sEpsilon || mAngularVelocity.Norm() > sEpsilon || mSpin.Norm() > sEpsilon) {
         std::cout << "\tDynamic properties:" << std::endl

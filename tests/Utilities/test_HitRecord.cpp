@@ -1,10 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Utilities/Intersection.hpp"
+#include "Utilities/HitRecord.hpp"
 
 using namespace Raytracer;
 
-TEST(TestIntersection, Test1) {
+TEST(TestHitRecord, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

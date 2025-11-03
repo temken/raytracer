@@ -1,5 +1,7 @@
 #include "Rendering/Renderer.hpp"
 
+#include "Utilities/HitRecord.hpp"
+
 namespace Raytracer {
 
 Renderer::Renderer(Type type, bool deterministic) :
@@ -27,26 +29,26 @@ std::string Renderer::GetTypeString() const {
     }
 }
 
-std::optional<Intersection> Renderer::Intersect(const Ray& ray, const Scene& scene) {
-    std::optional<Intersection> closestIntersection;
+std::optional<HitRecord> Renderer::Intersect(const Ray& ray, const Scene& scene) {
+    std::optional<HitRecord> closestHit;
     for (const auto& object : scene.GetObjects()) {
         if (!object || !object->IsVisible()) {
             continue;
         }
 
         if (auto intersection = object->Intersect(ray)) {
-            if (intersection->t > kEpsilon && (!closestIntersection || intersection->t < closestIntersection->t)) {
-                closestIntersection.emplace(*intersection);
+            if (intersection->t > kEpsilon && (!closestHit || intersection->t < closestHit->t)) {
+                closestHit.emplace(*intersection);
             }
         }
     }
-    return closestIntersection;
+    return closestHit;
 }
 
-void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const Intersection& intersection, std::size_t numLightSamples) {
-    const auto& material = intersection.object->GetMaterial();
-    const Vector3D& x = intersection.point;
-    Vector3D n = intersection.normal.Normalized();
+void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const HitRecord& hitRecord, std::size_t numLightSamples) {
+    const auto& material = hitRecord.object->GetMaterial();
+    const Vector3D& x = hitRecord.point;
+    Vector3D n = hitRecord.normal.Normalized();
 
     if (ray.IsEntering(n)) {
         n = -1.0 * n;
@@ -55,11 +57,11 @@ void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const Interse
     bool anyLightHit = false;
     Color directRadiance(0.0, 0.0, 0.0);
     for (const auto& lightSource : scene.GetLightSources()) {
-        const double lightArea = lightSource->GetSurfaceArea();
+        const double lightArea = lightSource->GetShape()->SurfaceArea();
 
         const Color Le = lightSource->GetMaterial().GetEmission();  // emitted radiance (RGB)
 
-        const std::vector<Vector3D> lightPoints = mIsDeterministic ? lightSource->GetKeyPoints() : lightSource->SampleSurfacePoints(numLightSamples, mGenerator);
+        const std::vector<Vector3D> lightPoints = mIsDeterministic ? lightSource->GetShape()->GetKeyPoints() : lightSource->GetShape()->SampleSurfacePoints(numLightSamples, mGenerator);
 
         Color colorSum(0.0, 0.0, 0.0);
 
@@ -85,7 +87,7 @@ void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const Interse
             }
 
             // Lambertian BRDF
-            const Color f_r = material.GetColor(intersection) * (1.0 / M_PI);
+            const Color f_r = material.GetColor(hitRecord) * (1.0 / M_PI);
 
             // Geometry factor
             const double G = cosSurface * cosLight * lightArea / dist2;

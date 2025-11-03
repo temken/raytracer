@@ -23,7 +23,7 @@ Material::Material(const Color& baseColor, double roughness, double refractiveIn
     NormalizeProbabilities();
 }
 
-Material::InteractionType Material::Interact(Ray& ray, const Intersection& intersection, bool applyRoughness) {
+Material::InteractionType Material::Interact(Ray& ray, const HitRecord& hitRecord, bool applyRoughness) {
     // Draw a random number in [0,1)
     const double r = mDistribution(mGenerator);
 
@@ -31,7 +31,7 @@ Material::InteractionType Material::Interact(Ray& ray, const Intersection& inter
 
     auto probabilities = mInteractionProbabilities;
     if (mUseFresnel) {
-        double cosThetaI = ray.IncidentAngleCosine(intersection.normal);
+        double cosThetaI = ray.IncidentAngleCosine(hitRecord.normal);
         if (cosThetaI < 0.0) {
             cosThetaI = -cosThetaI;
         }
@@ -46,15 +46,15 @@ Material::InteractionType Material::Interact(Ray& ray, const Intersection& inter
         if (r <= cumulative) {
             switch (type) {
                 case InteractionType::DIFFUSE:
-                    Diffuse(ray, intersection, prob);
+                    Diffuse(ray, hitRecord, prob);
                     return InteractionType::DIFFUSE;
 
                 case InteractionType::REFLECTIVE:
-                    Reflect(ray, intersection, applyRoughness, prob);
+                    Reflect(ray, hitRecord, applyRoughness, prob);
                     return InteractionType::REFLECTIVE;
 
                 case InteractionType::REFRACTIVE:
-                    Refract(ray, intersection, applyRoughness, prob);
+                    Refract(ray, hitRecord, applyRoughness, prob);
                     return InteractionType::REFRACTIVE;
             }
         }
@@ -63,10 +63,10 @@ Material::InteractionType Material::Interact(Ray& ray, const Intersection& inter
     throw std::runtime_error("Material::Interact: No interaction type selected; check probabilities.");
 }
 
-void Material::Diffuse(Ray& ray, const Intersection& intersection, double probability) {
+void Material::Diffuse(Ray& ray, const HitRecord& hitRecord, double probability) {
     // Diffuse surface: random new direction in hemisphere
     // Build ONB around normal
-    Vector3D eZ = ray.IsEntering(intersection.normal) ? intersection.normal : -1.0 * intersection.normal;
+    Vector3D eZ = ray.IsEntering(hitRecord.normal) ? hitRecord.normal : -1.0 * hitRecord.normal;
     Vector3D a = (std::fabs(eZ[0]) > 0.707) ? Vector3D({0.0, 1.0, 0.0}) : Vector3D({1.0, 0.0, 0.0});
     Vector3D eX = a.Cross(eZ).Normalized();
     Vector3D eY = eZ.Cross(eX);
@@ -83,18 +83,18 @@ void Material::Diffuse(Ray& ray, const Intersection& intersection, double probab
     // Transform to world and normalize
     Vector3D newDir = (x * eX + y * eY + cosTheta * eZ).Normalized();
 
-    ray.SetOrigin(intersection.point + kEpsilon * newDir);
+    ray.SetOrigin(hitRecord.point + kEpsilon * newDir);
     ray.SetDirection(newDir);
     ray.IncrementDepth();
 
     // ---- Physically based energy update ----
     // f_r = albedo / π, PDF = cosθ / π  ->  throughput *= albedo
-    ray.UpdateThroughput(GetColor(intersection) / probability);
+    ray.UpdateThroughput(GetColor(hitRecord) / probability);
 }
 
-void Material::Reflect(Ray& ray, const Intersection& intersection, bool applyRoughness, double probability) {
+void Material::Reflect(Ray& ray, const HitRecord& hitRecord, bool applyRoughness, double probability) {
     Vector3D incomingDir = ray.GetDirection();
-    Vector3D newDir = incomingDir - 2 * incomingDir.Dot(intersection.normal) * intersection.normal;
+    Vector3D newDir = incomingDir - 2 * incomingDir.Dot(hitRecord.normal) * hitRecord.normal;
     if (applyRoughness && mRoughness > 0.0) {
         double cosThetaMax = std::cos(mRoughness * (M_PI / 2.0));  // roughness=1 => 90° cone
         newDir = SampleCone(newDir, cosThetaMax);
@@ -104,14 +104,14 @@ void Material::Reflect(Ray& ray, const Intersection& intersection, bool applyRou
         // Perfect mirror
         ray.UpdateThroughput(mSpecularColor / probability);
     }
-    ray.SetOrigin(intersection.point + kEpsilon * newDir);
+    ray.SetOrigin(hitRecord.point + kEpsilon * newDir);
     ray.SetDirection(newDir);
     ray.IncrementDepth();
 }
 
-void Material::Refract(Ray& ray, const Intersection& intersection, bool applyRoughness, double probability) {
+void Material::Refract(Ray& ray, const HitRecord& hitRecord, bool applyRoughness, double probability) {
     Vector3D d = ray.GetDirection().Normalized();
-    Vector3D n = intersection.normal.Normalized();
+    Vector3D n = hitRecord.normal.Normalized();
 
     // Determine if the ray is entering or exiting
     double cosThetaI = ray.IncidentAngleCosine(n);
@@ -130,9 +130,9 @@ void Material::Refract(Ray& ray, const Intersection& intersection, bool applyRou
 
     // Handle total internal reflection
     if (sin2ThetaT > 1.0) {
-        Intersection tmpIntersection = intersection;
-        tmpIntersection.normal = n;  // Use the correct normal for reflection
-        Reflect(ray, tmpIntersection, applyRoughness, probability);
+        HitRecord tmpHitRecord = hitRecord;
+        tmpHitRecord.normal = n;  // Use the correct normal for reflection
+        Reflect(ray, tmpHitRecord, applyRoughness, probability);
         return;
     }
 
@@ -147,19 +147,19 @@ void Material::Refract(Ray& ray, const Intersection& intersection, bool applyRou
         double cosThetaMax = std::cos(mRoughness * (M_PI / 4.0));  // half the reflection roughness
         refractDir = SampleCone(refractDir, cosThetaMax);
         // For roughness, just add scattering without PDF correction - treat as surface roughness, not importance sampling
-        ray.UpdateThroughput(GetColor(intersection) / probability);
+        ray.UpdateThroughput(GetColor(hitRecord) / probability);
     } else {
         // Perfect refraction
-        ray.UpdateThroughput(GetColor(intersection) / probability);
+        ray.UpdateThroughput(GetColor(hitRecord) / probability);
     }
-    ray.SetOrigin(intersection.point + kEpsilon * refractDir);
+    ray.SetOrigin(hitRecord.point + kEpsilon * refractDir);
     ray.SetDirection(refractDir);
     ray.IncrementDepth();
 }
 
-Color Material::GetColor(const Intersection& intersection) const {
+Color Material::GetColor(const HitRecord& hitRecord) const {
     if (mColorTexture) {
-        auto uv = intersection.object->GetTextureCoordinates(intersection.point);
+        auto uv = hitRecord.object->GetShape()->GetSurfaceParameters(hitRecord.point);
         return mColorTexture->GetColorAt(uv.first + 0.5, uv.second + 0.5) * mBaseColor;
     }
     return GetBaseColor();

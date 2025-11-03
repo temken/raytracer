@@ -2,7 +2,7 @@
 
 #include "Rendering/Ray.hpp"
 #include "Scene/Object.hpp"
-#include "Utilities/Intersection.hpp"
+#include "Utilities/HitRecord.hpp"
 
 #include <memory>
 #include <vector>

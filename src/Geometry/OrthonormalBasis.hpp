@@ -4,7 +4,7 @@
 
 #include <array>
 
-namespace Raytracer {
+namespace Raytracer::Geometry {
 
 class OrthonormalBasis {
 public:
@@ -52,4 +52,4 @@ private:
     std::array<Vector3D, 3> mBasisVectors;  // eX, eY, eZ
 };
 
-}  // namespace Raytracer
+}  // namespace Raytracer::Geometry

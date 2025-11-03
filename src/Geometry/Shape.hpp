@@ -38,6 +38,9 @@ public:
     Vector3D GetBasisVector(OrthonormalBasis::BasisVector axis) const;
     Vector3D GetOrientation() const;
 
+    Vector3D GetPosition() const;
+    void SetPosition(const Vector3D& newPosition);
+
     virtual double SurfaceArea() const = 0;
 
     virtual std::vector<Vector3D> SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const = 0;
@@ -45,6 +48,9 @@ public:
 
     // Parametrize the surface in range [-0.5, 0.5]
     virtual std::pair<double, double> GetSurfaceParameters(const Vector3D& point) const;
+
+    void Rotate(double angle, const Vector3D& axis);
+    void Spin(double angle, OrthonormalBasis::BasisVector axis = OrthonormalBasis::BasisVector::eZ);
 
     virtual void PrintInfo() const;
 
@@ -54,9 +60,6 @@ protected:
     OrthonormalBasis mOrthonormalBasis;
 
     static constexpr double sEpsilon = 1e-6;
-
-    void Rotate(double angle, const Vector3D& axis);
-    void Spin(double angle, OrthonormalBasis::BasisVector axis = OrthonormalBasis::BasisVector::eZ);
 
     static std::string TypeToString(Type type);
 

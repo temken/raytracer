@@ -16,12 +16,16 @@ Vector3D Shape::GetOrientation() const {
     return mOrthonormalBasis.GetBasisVector(OrthonormalBasis::BasisVector::eZ);
 }
 
-std::pair<double, double> Shape::GetSurfaceParameters(const Vector3D& point) const {
-    return {0.0, 0.0};
+Vector3D Shape::GetPosition() const {
+    return mPosition;
 }
 
-void Shape::PrintInfo() const {
-    PrintInfoBase();
+void Shape::SetPosition(const Vector3D& newPosition) {
+    mPosition = newPosition;
+}
+
+std::pair<double, double> Shape::GetSurfaceParameters(const Vector3D& point) const {
+    return {0.0, 0.0};
 }
 
 void Shape::Rotate(double angle, const Vector3D& axis) {
@@ -30,6 +34,10 @@ void Shape::Rotate(double angle, const Vector3D& axis) {
 
 void Shape::Spin(double angle, OrthonormalBasis::BasisVector basisVector) {
     mOrthonormalBasis.Rotate(angle, basisVector);
+}
+
+void Shape::PrintInfo() const {
+    PrintInfoBase();
 }
 
 std::string Shape::TypeToString(Type type) {

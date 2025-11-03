@@ -2,7 +2,7 @@
 
 #include "Rendering/Ray.hpp"
 #include "Utilities/Color.hpp"
-#include "Utilities/Intersection.hpp"
+#include "Utilities/HitRecord.hpp"
 #include "Utilities/Texture.hpp"
 
 #include <map>
@@ -22,14 +22,14 @@ public:
     Material();
     Material(const Color& baseColor, double roughness = 1.0, double refractiveIndex = 1.0, double meanFreePath = 0.0, double radiance = 0.0);
 
-    InteractionType Interact(Ray& ray, const Intersection& intersection, bool applyRoughness = true);
+    InteractionType Interact(Ray& ray, const HitRecord& hitRecord, bool applyRoughness = true);
 
-    void Diffuse(Ray& incomingRay, const Intersection& intersection, double probability = 1.0);
-    void Reflect(Ray& incomingRay, const Intersection& intersection, bool applyRoughness, double probability = 1.0);
-    void Refract(Ray& incomingRay, const Intersection& intersection, bool applyRoughness, double probability = 1.0);
+    void Diffuse(Ray& incomingRay, const HitRecord& hitRecord, double probability = 1.0);
+    void Reflect(Ray& incomingRay, const HitRecord& hitRecord, bool applyRoughness, double probability = 1.0);
+    void Refract(Ray& incomingRay, const HitRecord& hitRecord, bool applyRoughness, double probability = 1.0);
 
     // Get color at intersection point (with texture if available)
-    Color GetColor(const Intersection& intersection) const;
+    Color GetColor(const HitRecord& hitRecord) const;
 
     Color GetBaseColor() const;
     void SetBaseColor(const Color& color);

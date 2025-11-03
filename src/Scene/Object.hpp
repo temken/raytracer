@@ -1,11 +1,13 @@
 #pragma once
 
+#include "Geometry/Shape.hpp"
 #include "Geometry/Vector.hpp"
 #include "Rendering/Material.hpp"
 #include "Rendering/Ray.hpp"
 #include "Utilities/Color.hpp"
-#include "Utilities/Intersection.hpp"
+#include "Utilities/HitRecord.hpp"
 
+#include <memory>
 #include <optional>
 #include <random>
 #include <string>
@@ -13,11 +15,9 @@
 
 namespace Raytracer {
 
-struct Intersection;
-
 class Object {
 public:
-    explicit Object(const std::string& name, const Material& material, const Vector3D& position, const Vector3D& normal);
+    explicit Object(const std::string& name, const Vector3D& position, const Material& material, std::shared_ptr<Geometry::Shape> shape);
     virtual ~Object() = default;
 
     std::string GetName() const;
@@ -28,12 +28,15 @@ public:
     Material& GetMaterial();
     void SetMaterial(const Material& material);
 
-    Vector3D GetPosition() const;
-    void SetPosition(const Vector3D& position);
+    std::shared_ptr<Geometry::Shape> GetShape() const;
+    void SetShape(const std::shared_ptr<Geometry::Shape>& shape);
 
-    Vector3D GetNormal() const;
-    void SetNormal(const Vector3D& normal);
+    // Static
+    Color GetColor(const HitRecord& hitRecord) const;
+    Vector3D GetNormal(const HitRecord& hitRecord) const;
+    bool EmitsLight() const;
 
+    // Dynamic
     Vector3D GetVelocity() const;
     void SetVelocity(const Vector3D& velocity);
 
@@ -43,17 +46,7 @@ public:
     Vector3D GetSpin() const;
     void SetSpin(const Vector3D& spin);
 
-    Color GetColor(const Intersection& intersection) const;
-    bool EmitsLight() const;
-
-    virtual double GetSurfaceArea() const = 0;
-    virtual std::vector<Vector3D> SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const = 0;
-    virtual std::vector<Vector3D> GetKeyPoints() const = 0;
-
-    virtual std::optional<Intersection> Intersect(const Ray& ray) = 0;
-
-    // Relative to center, range [-0.5, 0.5]
-    virtual std::pair<double, double> GetTextureCoordinates(const Vector3D& hitPoint) const;
+    virtual std::optional<HitRecord> Intersect(const Ray& ray) const = 0;
 
     void Evolve(double timeStep);
 
@@ -64,11 +57,9 @@ protected:
     bool mVisible = true;
 
     Material mMaterial;
+    std::shared_ptr<Geometry::Shape> mShape;
 
     // Dynamic properties
-    Vector3D mPosition;
-    Vector3D mNormal;
-
     Vector3D mVelocity = Vector3D({0.0, 0.0, 0.0});
     Vector3D mAngularVelocity = Vector3D({0.0, 0.0, 0.0});
     Vector3D mSpin = Vector3D({0.0, 0.0, 0.0});
