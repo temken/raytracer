@@ -10,22 +10,27 @@
 - [x] Extend the Renderer base class
   - [x] CollectDirectLight should be implemented only once here. (Ensure that the ray tracer image does not change!!!)
   - [x] Implement an ambient factor that will give black pixels a slight color. At least for deterministic, maybe also raytracer
-- [ ] Illustrate the different shaders on an interesting scene.
 - [x] Create a class for an orthonomal basis.
-- [ ] Separate geometric and physical objects. There are two options, either have the PhysicalObject (that inherits from GeometricObject or rather its child classes) have a member mMaterial (like now) or have it inherit from Material directly.
+- [x] I removed the 1/pdf scaling in the material class for roughness. Ensure that this was PBR correct.
+- [x] Separate geometric and physical objects. There are two options, either have the PhysicalObject (that inherits from GeometricObject or rather its child classes) have a member mMaterial (like now) or have it inherit from Material directly.
     - This is also since some algorithms (like hierarchical bounding boxes) will only need geometric objects, no need for them to have a material.
     - The geometric objects should have a ONB handling its orientation in 3D space.
-- [ ] Rename and fix Box -> AxisAlignedBox. Ensure that rotations and translations work with the new ONB.
-- [ ] All objects should have their own basis together with mPosition. Then we can have a RecalculateObject positions function using that basis. In rotate functions, we only have to rotate the ONB and rebuild the object. It also gives orientation for textures on spheres. It shoudl probably also be possible to define the orientation in the config file, beyond the normal. Indicating the front (corresponding e.g. to the x axis of the ONB)
+- [x] Rename and fix Box -> AxisAlignedBox. Ensure that rotations and translations work with the new ONB.
+- [x] All objects should have their own basis together with mPosition. Then we can have a RecalculateObject positions function using that basis. In rotate functions, we only have to rotate the ONB and rebuild the object. It also gives orientation for textures on spheres. It shoudl probably also be possible to define the orientation in the config file, beyond the normal. Indicating the front (corresponding e.g. to the x axis of the ONB)
+- [x] Create a half sphere class
+- [ ] Illustrate the different shaders on an interesting scene and make a post.
+- [ ] Figure out how to make composite objects work.
+- [ ] Implement Rotate and Spin functions properly.
+- [ ] Implement a triangle and octahedron.
+- [ ] Test the dynamics functions for all objects, especially the composite models. (spinning octahedron, spinning box, rotating light source ball)
 - [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
-- [ ] Create a half sphere class
-- [ ] Create more composite objects (street lamps, desk lamps, spots)
+- [ ] Create composite objects (street lamps, desk lamps, spots)
 - [ ] New renderer: Path tracing with NNE.
-- [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter
+- [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter Or look at other Denoising algorithms.
 - [ ] Image textures for other objects (Spheres!)
 - [ ] Image texture and gradients for the background (spherical background image)
+- [ ] Scene: Solar system
 - [ ] Add more pre-defined colors
-- [x] I removed the 1/pdf scaling in the material class for roughness. Ensure that this was PBR correct.
 - [ ] Find a better title and make an ascii art header
 - [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
 - [ ] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)

@@ -30,8 +30,8 @@ scene:
       position: [0.0, 0.0, 0.0]
       normal: [0.0, 0.0, 1.0]
       dimensions:
-        width: 10.0
-        height: 20.0
+        width: 20.0
+        height: 10.0
       material:
         baseColor: gray
 
@@ -41,8 +41,8 @@ scene:
       position: [0.0, 0.0, 10.0]
       normal: [0.0, 0.0, -1.0]
       dimensions:
-        width: 10.0
-        height: 20.0
+        width: 20.0
+        height: 10.0
       material:
         baseColor: gray
 
