@@ -82,7 +82,7 @@ std::optional<HitRecord> Object::Intersect(const Ray& ray) {
         return std::nullopt;
     }
 
-    auto intersection = mShape->Intersect(Geometry::Line(ray.GetOrigin(), ray.GetDirection()));
+    auto intersection = mShape->Intersect(ray);
     if (intersection) {
         HitRecord hitRecord;
         hitRecord.t = intersection->t;
