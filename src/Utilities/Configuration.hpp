@@ -2,13 +2,8 @@
 
 #include "Rendering/Camera.hpp"
 #include "Rendering/Material.hpp"
-#include "Scene/Box.hpp"
-#include "Scene/Cylinder.hpp"
-#include "Scene/Tube.hpp"
-#include "Scene/Disk.hpp"
-#include "Scene/Rectangle.hpp"
+#include "Scene/Object.hpp"
 #include "Scene/Scene.hpp"
-#include "Scene/Sphere.hpp"
 
 #include <yaml-cpp/yaml.h>
 
@@ -81,6 +76,7 @@ private:
         // Dynamics
         Vector3D position = Vector3D({0.0, 0.0, 0.0});
         Vector3D normal = Vector3D({0.0, 0.0, 1.0});
+        Vector3D referenceDirection = Vector3D({1.0, 0.0, 0.0});
         Vector3D velocity = Vector3D({0.0, 0.0, 0.0});
         Vector3D angularVelocity = Vector3D({0.0, 0.0, 0.0});
         Vector3D spin = Vector3D({0.0, 0.0, 0.0});
@@ -90,12 +86,14 @@ private:
 
     ObjectProperties ParseObjectProperties(const YAML::Node& obj) const;
 
-    Sphere ParseSphere(const YAML::Node& obj) const;
-    Disk ParseDisk(const YAML::Node& obj) const;
-    Rectangle ParseRectangle(const YAML::Node& obj) const;
-    Box ParseBox(const YAML::Node& obj) const;
-    Cylinder ParseCylinder(const YAML::Node& obj) const;
-    Tube ParseTube(const YAML::Node& obj) const;
+    Object ParseSphere(const YAML::Node& obj) const;
+    Object ParseDisk(const YAML::Node& obj) const;
+    Object ParseRectangle(const YAML::Node& obj) const;
+    Object ParseBox(const YAML::Node& obj) const;
+    Object ParseCylinder(const YAML::Node& obj) const;
+    Object ParseTube(const YAML::Node& obj) const;
+    Object ParseHalfSphere(const YAML::Node& obj) const;
+    Object ParseBoxAxisAligned(const YAML::Node& obj) const;
 
     std::string CreateRunID() const;
     void CreateOutputDirectory() const;

@@ -6,11 +6,10 @@
 
 namespace Raytracer {
 
-Object::Object(const std::string& name, const Vector3D& position, const Material& material, std::shared_ptr<Geometry::Shape> shape) :
+Object::Object(const std::string& name, const Material& material, std::shared_ptr<Geometry::Shape> shape) :
     mName(name),
     mMaterial(material),
     mShape(std::move(shape)) {
-    mShape->SetPosition(position);
 }
 
 std::string Object::GetName() const {
@@ -76,6 +75,23 @@ Vector3D Object::GetSpin() const {
 
 void Object::SetSpin(const Vector3D& spin) {
     mSpin = spin;
+}
+
+std::optional<HitRecord> Object::Intersect(const Ray& ray) {
+    if (!mShape) {
+        return std::nullopt;
+    }
+
+    auto intersection = mShape->Intersect(Geometry::Line(ray.GetOrigin(), ray.GetDirection()));
+    if (intersection) {
+        HitRecord hitRecord;
+        hitRecord.t = intersection->t;
+        hitRecord.point = intersection->point;
+        hitRecord.normal = intersection->normal;
+        hitRecord.object = this;
+        return hitRecord;
+    }
+    return std::nullopt;
 }
 
 void Object::Evolve(double timeStep) {

@@ -53,6 +53,7 @@ std::vector<Vector3D> Disk::GetKeyPoints() const {
 }
 
 std::pair<double, double> Disk::GetSurfaceParameters(const Vector3D& point) const {
+    return {0.0, 0.0};  // Not implemented
 }
 
 void Disk::PrintInfo() const {

@@ -184,7 +184,7 @@ scene:
       material:
         baseColor: blue
 
-    - type: Box
+    - type: BoxAxisAligned
       id: little-box
       visible: true
       position: [0, 7.5, -3.75]

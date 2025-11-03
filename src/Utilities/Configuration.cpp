@@ -1,5 +1,14 @@
 #include "Utilities/Configuration.hpp"
 
+#include "Geometry/Shapes/Box.hpp"
+#include "Geometry/Shapes/BoxAxisAligned.hpp"
+#include "Geometry/Shapes/Cylinder.hpp"
+#include "Geometry/Shapes/Disk.hpp"
+#include "Geometry/Shapes/HalfSphere.hpp"
+#include "Geometry/Shapes/Rectangle.hpp"
+#include "Geometry/Shapes/Sphere.hpp"
+#include "Geometry/Shapes/Tube.hpp"
+#include "Scene/Object.hpp"
 #include "Version.hpp"
 
 #include <chrono>
@@ -152,17 +161,21 @@ Scene Configuration::ConstructScene() const {
             std::string type = obj["type"].as<std::string>();
 
             if (type == "Disk") {
-                scene.AddObject(std::make_unique<Disk>(ParseDisk(obj)));
+                scene.AddObject(std::make_unique<Object>(ParseDisk(obj)));
             } else if (type == "Sphere") {
-                scene.AddObject(std::make_unique<Sphere>(ParseSphere(obj)));
+                scene.AddObject(std::make_unique<Object>(ParseSphere(obj)));
             } else if (type == "Rectangle") {
-                scene.AddObject(std::make_unique<Rectangle>(ParseRectangle(obj)));
+                scene.AddObject(std::make_unique<Object>(ParseRectangle(obj)));
             } else if (type == "Box") {
-                scene.AddObject(std::make_unique<Box>(ParseBox(obj)));
+                scene.AddObject(std::make_unique<Object>(ParseBox(obj)));
             } else if (type == "Cylinder") {
-                scene.AddObject(std::make_unique<Cylinder>(ParseCylinder(obj)));
+                scene.AddObject(std::make_unique<Object>(ParseCylinder(obj)));
             } else if (type == "Tube") {
-                scene.AddObject(std::make_unique<Tube>(ParseTube(obj)));
+                scene.AddObject(std::make_unique<Object>(ParseTube(obj)));
+            } else if (type == "HalfSphere") {
+                scene.AddObject(std::make_unique<Object>(ParseHalfSphere(obj)));
+            } else if (type == "BoxAxisAligned") {
+                scene.AddObject(std::make_unique<Object>(ParseBoxAxisAligned(obj)));
             } else {
                 throw std::runtime_error("Unknown object type: " + type);
             }
@@ -323,6 +336,7 @@ Configuration::ObjectProperties Configuration::ParseObjectProperties(const YAML:
     props.material = obj["material"] ? ParseMaterial(obj["material"]) : Material();
     props.position = obj["position"] ? ParseVector3D(obj["position"]) : Vector3D({0.0, 0.0, 0.0});
     props.normal = obj["normal"] ? ParseVector3D(obj["normal"]) : Vector3D({0.0, 0.0, 1.0});
+    props.referenceDirection = obj["reference_direction"] ? ParseVector3D(obj["reference_direction"]) : Vector3D({0.0, 0.0, 0.0});
 
     // Dynamics
     props.velocity = obj["velocity"] ? ParseVector3D(obj["velocity"]) : Vector3D({0.0, 0.0, 0.0});
@@ -332,12 +346,12 @@ Configuration::ObjectProperties Configuration::ParseObjectProperties(const YAML:
     return props;
 }
 
-Sphere Configuration::ParseSphere(const YAML::Node& obj) const {
+Object Configuration::ParseSphere(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double radius = obj["radius"].as<double>();
 
     // Construct the sphere
-    Sphere sphere(props.id, props.material, props.position, radius);
+    Object sphere = MakeObject<Geometry::Sphere>(props.id, props.material, props.position, radius, props.normal);
 
     sphere.SetVelocity(props.velocity);
     sphere.SetAngularVelocity(props.angularVelocity);
@@ -348,12 +362,12 @@ Sphere Configuration::ParseSphere(const YAML::Node& obj) const {
     return sphere;
 }
 
-Disk Configuration::ParseDisk(const YAML::Node& obj) const {
+Object Configuration::ParseDisk(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double radius = obj["radius"].as<double>();
 
     // Construct the disk
-    Disk disk(props.id, props.material, props.position, props.normal, radius);
+    Object disk = MakeObject<Geometry::Disk>(props.id, props.material, props.position, props.normal, radius);
 
     disk.SetVelocity(props.velocity);
     disk.SetAngularVelocity(props.angularVelocity);
@@ -363,13 +377,14 @@ Disk Configuration::ParseDisk(const YAML::Node& obj) const {
     return disk;
 }
 
-Rectangle Configuration::ParseRectangle(const YAML::Node& obj) const {
+Object Configuration::ParseRectangle(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double width = obj["dimensions"]["width"].as<double>();
     double height = obj["dimensions"]["height"].as<double>();
 
     // Construct the rectangle
-    Rectangle rectangle(props.id, props.material, props.position, props.normal, width, height);
+    Object rectangle = MakeObject<Geometry::Rectangle>(props.id, props.material, props.position, props.normal, props.referenceDirection, width, height);
+
     rectangle.SetVelocity(props.velocity);
     rectangle.SetAngularVelocity(props.angularVelocity);
     rectangle.SetSpin(props.spin);
@@ -377,7 +392,7 @@ Rectangle Configuration::ParseRectangle(const YAML::Node& obj) const {
     return rectangle;
 }
 
-Box Configuration::ParseBox(const YAML::Node& obj) const {
+Object Configuration::ParseBox(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
 
     auto dim = obj["dimensions"];
@@ -386,7 +401,8 @@ Box Configuration::ParseBox(const YAML::Node& obj) const {
     double height = dim["height"].as<double>();
 
     // Construct the box
-    Box box(props.id, props.material, props.position, length, width, height);
+    Object box = MakeObject<Geometry::Box>(props.id, props.material, props.position, props.normal, props.referenceDirection, length, width, height);
+
     box.SetVisible(props.visible);
 
     box.SetVelocity(props.velocity);
@@ -396,13 +412,13 @@ Box Configuration::ParseBox(const YAML::Node& obj) const {
     return box;
 }
 
-Cylinder Configuration::ParseCylinder(const YAML::Node& obj) const {
+Object Configuration::ParseCylinder(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double radius = obj["radius"].as<double>();
     double height = obj["height"].as<double>();
 
     // Construct the cylinder
-    Cylinder cylinder(props.id, props.material, props.position, props.normal, radius, height);
+    Object cylinder = MakeObject<Geometry::Cylinder>(props.id, props.material, props.position, props.normal, radius, height);
 
     cylinder.SetVelocity(props.velocity);
     cylinder.SetAngularVelocity(props.angularVelocity);
@@ -412,13 +428,13 @@ Cylinder Configuration::ParseCylinder(const YAML::Node& obj) const {
     return cylinder;
 }
 
-Tube Configuration::ParseTube(const YAML::Node& obj) const {
+Object Configuration::ParseTube(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double radius = obj["radius"].as<double>();
     double height = obj["height"].as<double>();
 
     // Construct the tube
-    Tube tube(props.id, props.material, props.position, props.normal, radius, height);
+    Object tube = MakeObject<Geometry::Tube>(props.id, props.material, props.position, props.normal, radius, height);
 
     tube.SetVelocity(props.velocity);
     tube.SetAngularVelocity(props.angularVelocity);
@@ -426,6 +442,39 @@ Tube Configuration::ParseTube(const YAML::Node& obj) const {
 
     tube.SetVisible(props.visible);
     return tube;
+}
+
+Object Configuration::ParseHalfSphere(const YAML::Node& obj) const {
+    ObjectProperties props = ParseObjectProperties(obj);
+    double radius = obj["radius"].as<double>();
+
+    // Construct the half-sphere
+    Object halfSphere = MakeObject<Geometry::HalfSphere>(props.id, props.material, props.position, radius, props.normal);
+
+    //
+    halfSphere.SetVelocity(props.velocity);
+    halfSphere.SetAngularVelocity(props.angularVelocity);
+    halfSphere.SetSpin(props.spin);
+    halfSphere.SetVisible(props.visible);
+
+    return halfSphere;
+}
+
+Object Configuration::ParseBoxAxisAligned(const YAML::Node& obj) const {
+    ObjectProperties props = ParseObjectProperties(obj);
+    double length = obj["dimensions"]["length"].as<double>();
+    double width = obj["dimensions"]["width"].as<double>();
+    double height = obj["dimensions"]["height"].as<double>();
+
+    // Construct the axis-aligned box
+    Object boxAA = MakeObject<Geometry::BoxAxisAligned>(props.id, props.material, props.position, length, width, height);
+
+    boxAA.SetVelocity(props.velocity);
+    boxAA.SetAngularVelocity(props.angularVelocity);
+    boxAA.SetSpin(props.spin);
+    boxAA.SetVisible(props.visible);
+
+    return boxAA;
 }
 
 std::string Configuration::CreateRunID() const {

@@ -17,8 +17,8 @@ namespace Raytracer {
 
 class Object {
 public:
-    explicit Object(const std::string& name, const Vector3D& position, const Material& material, std::shared_ptr<Geometry::Shape> shape);
-    virtual ~Object() = default;
+    explicit Object(const std::string& name, const Material& material, std::shared_ptr<Geometry::Shape> shape);
+    ~Object() = default;
 
     std::string GetName() const;
 
@@ -46,11 +46,11 @@ public:
     Vector3D GetSpin() const;
     void SetSpin(const Vector3D& spin);
 
-    virtual std::optional<HitRecord> Intersect(const Ray& ray) const = 0;
+    std::optional<HitRecord> Intersect(const Ray& ray);
 
     void Evolve(double timeStep);
 
-    virtual void PrintInfo() const;
+    void PrintInfo() const;
 
 protected:
     std::string mName;
@@ -66,11 +66,17 @@ protected:
 
     static constexpr double sEpsilon = 1e-6;
 
-    virtual void Translate(const Vector3D& translation);
-    virtual void Rotate(double angle, const Vector3D& axis);
-    virtual void Spin(double angle, const Vector3D& axis);
+    void Translate(const Vector3D& translation);
+    void Rotate(double angle, const Vector3D& axis);
+    void Spin(double angle, const Vector3D& axis);
 
     void PrintInfoBase() const;
 };
+
+template <typename ShapeT, typename... Args>
+Object MakeObject(const std::string& name, const Material& material, Args&&... args) {
+    auto shape = std::make_shared<ShapeT>(std::forward<Args>(args)...);
+    return Object(name, material, shape);
+}
 
 }  // namespace Raytracer
