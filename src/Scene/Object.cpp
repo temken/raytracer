@@ -102,7 +102,8 @@ void Object::Evolve(double timeStep) {
         Translate(mVelocity * timeStep);
     }
     if (mAngularVelocity.Norm() > sEpsilon) {
-        Rotate(mAngularVelocity.Norm() * timeStep, mAngularVelocity.Normalized());
+        // TODO: Right now we only rotate around the world z axis
+        Rotate(mAngularVelocity.Norm() * timeStep);
     }
     if (mSpin.Norm() > sEpsilon) {
         Spin(mSpin.Norm() * timeStep, mSpin.Normalized());
@@ -117,13 +118,13 @@ void Object::Translate(const Vector3D& translation) {
     mShape->SetPosition(mShape->GetPosition() + translation);
 }
 
-void Object::Rotate(double angle, const Vector3D& axis) {
+void Object::Rotate(double angle, const Geometry::Line& axis) {
     // TODO: This should actually be a rotation around a line
     mShape->Rotate(angle, axis);
 }
 
 void Object::Spin(double angle, const Vector3D& axis) {
-    mShape->Spin(angle, Geometry::OrthonormalBasis::BasisVector::eZ);
+    mShape->Spin(angle, mShape->GetOrientation());
 }
 
 void Object::PrintInfoBase() const {

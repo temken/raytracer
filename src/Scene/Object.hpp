@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Geometry/Line.hpp"
 #include "Geometry/Shape.hpp"
 #include "Geometry/Vector.hpp"
 #include "Rendering/Material.hpp"
@@ -67,7 +68,7 @@ protected:
     static constexpr double sEpsilon = 1e-6;
 
     void Translate(const Vector3D& translation);
-    void Rotate(double angle, const Vector3D& axis);
+    void Rotate(double angle, const Geometry::Line& axis = Geometry::Line());
     void Spin(double angle, const Vector3D& axis);
 
     void PrintInfoBase() const;

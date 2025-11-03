@@ -13,7 +13,7 @@ Vector3D Shape::GetBasisVector(OrthonormalBasis::BasisVector axis) const {
 }
 
 Vector3D Shape::GetOrientation() const {
-    return mOrthonormalBasis.GetBasisVector(OrthonormalBasis::BasisVector::eZ);
+    return GetBasisVector(OrthonormalBasis::BasisVector::eZ);
 }
 
 Vector3D Shape::GetPosition() const {
@@ -28,12 +28,27 @@ std::pair<double, double> Shape::GetSurfaceParameters(const Vector3D& point) con
     return {0.0, 0.0};
 }
 
-void Shape::Rotate(double angle, const Vector3D& axis) {
-    mOrthonormalBasis.Rotate(angle, axis);
+void Shape::Rotate(double angle, const Line& axis) {
+    Vector3D axisDirection = axis.GetDirection().Normalized();
+
+    // Vector from a point on the axis to the object's center
+    Vector3D r = GetPosition() - axis.GetOrigin();
+
+    // Rodrigues' rotation formula:
+    Vector3D r_rot =
+        r * std::cos(angle) +
+        axisDirection.Cross(r) * std::sin(angle) +
+        axisDirection * (axisDirection.Dot(r)) * (1.0 - std::cos(angle));
+
+    SetPosition(axis.GetOrigin() + r_rot);
 }
 
-void Shape::Spin(double angle, OrthonormalBasis::BasisVector basisVector) {
-    mOrthonormalBasis.Rotate(angle, basisVector);
+void Shape::Spin(double angle, Vector3D axis) {
+    // Rotate around center without changing position
+    if (axis.Norm() < sEpsilon) {
+        axis = GetBasisVector(OrthonormalBasis::BasisVector::eZ);
+    }
+    mOrthonormalBasis.Rotate(angle, axis);
 }
 
 void Shape::PrintInfo() const {

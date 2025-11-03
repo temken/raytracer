@@ -49,8 +49,11 @@ public:
     // Parametrize the surface in range [-0.5, 0.5]
     virtual std::pair<double, double> GetSurfaceParameters(const Vector3D& point) const;
 
-    void Rotate(double angle, const Vector3D& axis);
-    void Spin(double angle, OrthonormalBasis::BasisVector axis = OrthonormalBasis::BasisVector::eZ);
+    // Rotate around a line without changing orientation
+    void Rotate(double angle, const Line& axis = Line());
+
+    // Rotate around center without changing position
+    void Spin(double angle, Vector3D axis = Vector3D({0.0, 0.0, 0.0}));
 
     virtual void PrintInfo() const;
 

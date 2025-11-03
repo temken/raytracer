@@ -2,6 +2,12 @@
 
 namespace Raytracer::Geometry {
 
+Line::Line() :
+    mOrigin(Vector3D({0.0, 0.0, 0.0})),
+    mDirection(Vector3D({0.0, 0.0, 1.0})),
+    tMin(-std::numeric_limits<double>::infinity()) {
+}
+
 Line::Line(const Vector3D& origin, const Vector3D& direction, double tMin) :
     mOrigin(origin),
     mDirection(direction.Normalized()),

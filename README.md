@@ -18,10 +18,11 @@
 - [x] Rename and fix Box -> AxisAlignedBox. Ensure that rotations and translations work with the new ONB.
 - [x] All objects should have their own basis together with mPosition. Then we can have a RecalculateObject positions function using that basis. In rotate functions, we only have to rotate the ONB and rebuild the object. It also gives orientation for textures on spheres. It shoudl probably also be possible to define the orientation in the config file, beyond the normal. Indicating the front (corresponding e.g. to the x axis of the ONB)
 - [x] Create a half sphere class
+- [x] Implement Rotate and Spin functions properly.
+- [x] Ensure that the Material class does not ever get copied around.
 - [ ] Illustrate the different shaders on an interesting scene and make a post.
 - [ ] Figure out how to make composite objects work.
-- [ ] Implement Rotate and Spin functions properly.
-- [ ] Implement a triangle and octahedron.
+- [ ] Implement a triangle, tetrahedron and octahedron.
 - [ ] Test the dynamics functions for all objects, especially the composite models. (spinning octahedron, spinning box, rotating light source ball)
 - [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
 - [ ] Create composite objects (street lamps, desk lamps, spots)

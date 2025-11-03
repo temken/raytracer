@@ -6,6 +6,10 @@
 namespace Raytracer {
 
 Material::Material() {
+    // Default probabilities
+    mInteractionProbabilities[InteractionType::DIFFUSE] = 1.0;
+    mInteractionProbabilities[InteractionType::REFLECTIVE] = 0.0;
+    mInteractionProbabilities[InteractionType::REFRACTIVE] = 0.0;
 }
 
 Material::Material(const Color& baseColor, double roughness, double refractiveIndex, double meanFreePath, double radiance) :

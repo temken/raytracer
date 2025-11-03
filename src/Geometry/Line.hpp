@@ -9,6 +9,7 @@ namespace Raytracer::Geometry {
 
 class Line {
 public:
+    Line();
     Line(const Vector3D& origin, const Vector3D& direction, double tMin = -std::numeric_limits<double>::infinity());
 
     Vector3D GetOrigin() const;
