@@ -2,20 +2,6 @@
 
 namespace Raytracer {
 
-Vector3D Ray::GetOrigin() const {
-    return mOrigin;
-}
-Vector3D Ray::GetDirection() const {
-    return mDirection;
-}
-
-void Ray::SetOrigin(const Vector3D& newOrigin) {
-    mOrigin = newOrigin;
-}
-void Ray::SetDirection(const Vector3D& newDirection) {
-    mDirection = newDirection.Normalized();
-}
-
 Color Ray::GetRadiance() const {
     return mRadiance;
 }
@@ -42,10 +28,6 @@ size_t Ray::GetDepth() const {
 
 void Ray::IncrementDepth() {
     mDepth++;
-}
-
-Vector3D Ray::PointAtParameter(double t) const {
-    return mOrigin + t * mDirection;
 }
 
 double Ray::IncidentAngleCosine(const Vector3D& normal) const {

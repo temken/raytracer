@@ -9,7 +9,6 @@ namespace Raytracer::Geometry {
 
 class Line {
 public:
-    Line() = default;
     Line(const Vector3D& origin, const Vector3D& direction, double tMin = -std::numeric_limits<double>::infinity());
 
     Vector3D GetOrigin() const;
@@ -25,7 +24,7 @@ public:
     bool operator==(const Line& other) const;
     friend std::ostream& operator<<(std::ostream& os, const Line& line);
 
-private:
+protected:
     Vector3D mOrigin;
     Vector3D mDirection;
     const double tMin;

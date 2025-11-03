@@ -1,22 +1,16 @@
 #pragma once
 
+#include "Geometry/Line.hpp"
 #include "Geometry/Vector.hpp"
 #include "Utilities/Color.hpp"
 
 namespace Raytracer {
 
-class Ray {
+class Ray : public Geometry::Line {
 public:
     Ray() = default;
     Ray(const Vector3D& origin, const Vector3D& direction) :
-        mOrigin(origin),
-        mDirection(direction.Normalized()) {}
-
-    Vector3D GetOrigin() const;
-    Vector3D GetDirection() const;
-
-    void SetOrigin(const Vector3D& newOrigin);
-    void SetDirection(const Vector3D& newDirection);
+        Line(origin, direction.Normalized(), 0.0) {}
 
     Color GetRadiance() const;
     void AddRadiance(const Color& contribution);
@@ -28,29 +22,10 @@ public:
     size_t GetDepth() const;
     void IncrementDepth();
 
-    Vector3D PointAtParameter(double t) const;
-
     double IncidentAngleCosine(const Vector3D& normal) const;
     bool IsEntering(const Vector3D& normal) const;
 
-    Vector3D operator()(double t) const {
-        return PointAtParameter(t);
-    }
-
-    bool operator==(const Ray& other) const {
-        return mOrigin == other.mOrigin && mDirection == other.mDirection;
-    }
-
-    // stream
-    friend std::ostream& operator<<(std::ostream& os, const Ray& ray) {
-        os << ray.mOrigin << " + t * " << ray.mDirection;
-        return os;
-    }
-
 private:
-    Vector3D mOrigin = Vector3D({0.0, 0.0, 0.0});
-    Vector3D mDirection = Vector3D({1.0, 0.0, 0.0});
-
     Color mRadiance = Color(0.0, 0.0, 0.0);    // Accumulated radiance
     Color mThroughput = Color(1.0, 1.0, 1.0);  // Monte Carlo weighting
 
