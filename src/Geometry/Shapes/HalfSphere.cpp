@@ -32,7 +32,9 @@ std::optional<Intersection> HalfSphere::Intersect(const Line& line) const {
         // Half sphere is cut by plane perpendicular to orientation vector passing through center
         Vector3D fromCenter = intersectionPoint - mPosition;
         if (fromCenter.Dot(GetBasisVector(OrthonormalBasis::BasisVector::eZ)) >= 0.0) {  // Keep the hemisphere in the +orientation direction
-            if (r < t) {
+            if (r < line.GetTMin()) {
+                continue;
+            } else if (r < t) {
                 t = r;
             }
         }

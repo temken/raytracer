@@ -15,7 +15,7 @@ std::optional<Intersection> Disk::Intersect(const Line& line) const {
     }
 
     double t = (mPosition - line.GetOrigin()).Dot(normal) / denom;
-    if (t < sEpsilon) {
+    if (t < line.GetTMin()) {
         return std::nullopt;
     }
 

@@ -16,6 +16,10 @@ Vector3D Line::GetDirection() const {
     return mDirection;
 }
 
+double Line::GetTMin() const {
+    return tMin;
+}
+
 void Line::SetOrigin(const Vector3D& newOrigin) {
     mOrigin = newOrigin;
 }

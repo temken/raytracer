@@ -9,8 +9,7 @@ namespace Raytracer {
 class Ray : public Geometry::Line {
 public:
     Ray() = default;
-    Ray(const Vector3D& origin, const Vector3D& direction) :
-        Line(origin, direction.Normalized(), 0.0) {}
+    Ray(const Vector3D& origin, const Vector3D& direction);
 
     Color GetRadiance() const;
     void AddRadiance(const Color& contribution);
@@ -30,6 +29,8 @@ private:
     Color mThroughput = Color(1.0, 1.0, 1.0);  // Monte Carlo weighting
 
     size_t mDepth = 0;  // Number of interactions
+
+    static constexpr double sEpsilon = 1e-6;
 };
 
 }  // namespace Raytracer

@@ -13,6 +13,7 @@ public:
 
     Vector3D GetOrigin() const;
     Vector3D GetDirection() const;
+    double GetTMin() const;
 
     void SetOrigin(const Vector3D& newOrigin);
     void SetDirection(const Vector3D& newDirection);

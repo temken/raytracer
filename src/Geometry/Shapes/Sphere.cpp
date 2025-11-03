@@ -26,7 +26,9 @@ std::optional<Intersection> Sphere::Intersect(const Line& line) const {
 
     double t = std::numeric_limits<double>::infinity();
     for (double r : roots) {
-        if (r < t) {
+        if (r < line.GetTMin()) {
+            continue;
+        } else if (r < t) {
             t = r;
         }
     }

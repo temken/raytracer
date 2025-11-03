@@ -16,7 +16,7 @@ std::optional<Intersection> Rectangle::Intersect(const Line& line) const {
     }
 
     double t = (mPosition - line.GetOrigin()).Dot(normal) / denom;
-    if (t < sEpsilon) {  // Intersection is behind the line origin
+    if (t < line.GetTMin()) {  // Intersection is behind the line origin
         return std::nullopt;
     }
 
