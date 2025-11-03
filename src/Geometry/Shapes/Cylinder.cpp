@@ -12,13 +12,15 @@ Cylinder::Cylinder(const Vector3D& position, const Vector3D& orientation, double
     CompositeShape(Shape::Type::CYLINDER, position, orientation),
     mRadius(radius),
     mHeight(height) {
+    auto cylinderOrientation = GetOrientation();
+
     // Create and add top disk
-    Vector3D topCenter = mPosition + (mHeight / 2.0) * orientation;
-    auto topDisk = std::make_shared<Disk>(topCenter, orientation, mRadius);
+    Vector3D topCenter = mPosition + (mHeight / 2.0) * cylinderOrientation;
+    auto topDisk = std::make_shared<Disk>(topCenter, cylinderOrientation, mRadius);
     AddComponent(topDisk);
     // Create and add bottom disk
-    Vector3D bottomCenter = mPosition - (mHeight / 2.0) * orientation;
-    auto bottomDisk = std::make_shared<Disk>(bottomCenter, -1.0 * orientation, mRadius);
+    Vector3D bottomCenter = mPosition - (mHeight / 2.0) * cylinderOrientation;
+    auto bottomDisk = std::make_shared<Disk>(bottomCenter, -1.0 * cylinderOrientation, mRadius);
     AddComponent(bottomDisk);
     // Create and add mantle (open cylinder)
     auto mantle = std::make_shared<Tube>(position, orientation, radius, height);
