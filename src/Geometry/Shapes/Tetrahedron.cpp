@@ -19,10 +19,11 @@ Tetrahedron::Tetrahedron(const Vector3D& center, const Vector3D& orientation, co
         vertex = mOrthonormalBasis.ToGlobal(vertex) + center;
     }
 
-    AddComponent(std::make_shared<Triangle>(vertices[0], vertices[1], vertices[2]));
-    AddComponent(std::make_shared<Triangle>(vertices[0], vertices[1], vertices[3]));
+    // Create triangles with correct winding for outward-pointing normals
+    AddComponent(std::make_shared<Triangle>(vertices[2], vertices[1], vertices[0]));
+    AddComponent(std::make_shared<Triangle>(vertices[1], vertices[0], vertices[3]));
+    AddComponent(std::make_shared<Triangle>(vertices[2], vertices[1], vertices[3]));
     AddComponent(std::make_shared<Triangle>(vertices[0], vertices[2], vertices[3]));
-    AddComponent(std::make_shared<Triangle>(vertices[1], vertices[2], vertices[3]));
 }
 
 void Tetrahedron::PrintInfo() const {
