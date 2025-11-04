@@ -7,6 +7,7 @@
 #include "Geometry/Shapes/HalfSphere.hpp"
 #include "Geometry/Shapes/Rectangle.hpp"
 #include "Geometry/Shapes/Sphere.hpp"
+#include "Geometry/Shapes/Triangle.hpp"
 #include "Geometry/Shapes/Tube.hpp"
 #include "Scene/Object.hpp"
 #include "Version.hpp"
@@ -170,6 +171,8 @@ Scene Configuration::ConstructScene() const {
                 scene.AddObject(std::make_unique<Object>(ParseBox(obj)));
             } else if (type == "Cylinder") {
                 scene.AddObject(std::make_unique<Object>(ParseCylinder(obj)));
+            } else if (type == "Triangle") {
+                scene.AddObject(std::make_unique<Object>(ParseTriangle(obj)));
             } else if (type == "Tube") {
                 scene.AddObject(std::make_unique<Object>(ParseTube(obj)));
             } else if (type == "HalfSphere") {
@@ -428,6 +431,24 @@ Object Configuration::ParseCylinder(const YAML::Node& obj) const {
     return cylinder;
 }
 
+Object Configuration::ParseTriangle(const YAML::Node& obj) const {
+    ObjectProperties props = ParseObjectProperties(obj);
+    auto vertices = obj["vertices"];
+    Vector3D v1 = ParseVector3D(vertices[0]);
+    Vector3D v2 = ParseVector3D(vertices[1]);
+    Vector3D v3 = ParseVector3D(vertices[2]);
+
+    // Construct the triangle
+    Object triangle = MakeObject<Geometry::Triangle>(props.id, props.material, v1, v2, v3);
+
+    triangle.SetVelocity(props.velocity);
+    triangle.SetAngularVelocity(props.angularVelocity);
+    triangle.SetSpin(props.spin);
+
+    triangle.SetVisible(props.visible);
+    return triangle;
+}
+
 Object Configuration::ParseTube(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double radius = obj["radius"].as<double>();
@@ -451,7 +472,7 @@ Object Configuration::ParseHalfSphere(const YAML::Node& obj) const {
     // Construct the half-sphere
     Object halfSphere = MakeObject<Geometry::HalfSphere>(props.id, props.material, props.position, radius, props.normal);
 
-    //
+    // Dynamics
     halfSphere.SetVelocity(props.velocity);
     halfSphere.SetAngularVelocity(props.angularVelocity);
     halfSphere.SetSpin(props.spin);

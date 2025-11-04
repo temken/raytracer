@@ -194,3 +194,19 @@ scene:
         height: 2.5
       material:
         baseColor: yellow
+
+    - type: Triangle
+      id: tilted-triangle
+      visible: true
+      vertices: [
+                 [5.0, -5.0, -5.0],
+                 [7.0, -3.0, -2.0],
+                 [6.0, -7.0, -1.0]
+               ]
+      material:
+        baseColor: [255, 165, 0]  # orange
+        roughness: 0.5
+        probabilities:
+          diffuse: 0.8
+          reflective: 0.2
+          refractive: 0.0

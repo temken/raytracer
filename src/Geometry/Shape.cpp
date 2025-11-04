@@ -73,6 +73,8 @@ std::string Shape::TypeToString(Type type) {
             return "Rectangle";
         case Type::SPHERE:
             return "Sphere";
+        case Type::TRIANGLE:
+            return "Triangle";
         case Type::TUBE:
             return "Tube";
     }

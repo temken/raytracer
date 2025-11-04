@@ -21,13 +21,15 @@
 - [x] Implement Rotate and Spin functions properly.
 - [x] Ensure that the Material class does not ever get copied around.
 - [x] Illustrate the different shaders on an interesting scene and make a post.
+- [x] Implement a triangle
+- [ ] Implement tetrahedron
+- [ ] Implement octahedoron
+- [ ] Test the dynamics functions for all objects, especially the composite models. (spinning octahedron, spinning box, rotating light source ball)
+- [ ] New renderer: Path tracing with NNE.
 - [ ] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer)
 - [ ] Figure out how to make composite objects work.
-- [ ] Implement a triangle, tetrahedron and octahedron.
-- [ ] Test the dynamics functions for all objects, especially the composite models. (spinning octahedron, spinning box, rotating light source ball)
-- [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
 - [ ] Create composite objects (street lamps, desk lamps, spots)
-- [ ] New renderer: Path tracing with NNE.
+- [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
 - [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter Or look at other Denoising algorithms.
 - [ ] Image textures for other objects (Spheres!)
 - [ ] Image texture and gradients for the background (spherical background image)

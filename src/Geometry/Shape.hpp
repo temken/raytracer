@@ -24,6 +24,7 @@ public:
         PLANE,
         RECTANGLE,
         SPHERE,
+        TRIANGLE,
         TUBE,
     };
 
