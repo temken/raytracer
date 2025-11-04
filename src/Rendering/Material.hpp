@@ -69,6 +69,7 @@ private:
     double mMeanFreePath;     // Average distance a photon travels in the material before interacting
     bool mUseFresnel;
 
+    static constexpr double kEpsilon = 1e-4;  // Increased to prevent refraction loops in glass
     // Probability for each interaction type
     std::map<InteractionType, double> mInteractionProbabilities;
 
@@ -78,8 +79,6 @@ private:
 
     // Optional texture
     std::optional<Texture> mColorTexture = std::nullopt;
-
-    static constexpr double kEpsilon = 1e-5;
 
     void NormalizeProbabilities();
     std::map<InteractionType, double> GetFresnelCorrectedProbabilities(double cosThetaI) const;

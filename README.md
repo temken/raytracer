@@ -20,7 +20,8 @@
 - [x] Create a half sphere class
 - [x] Implement Rotate and Spin functions properly.
 - [x] Ensure that the Material class does not ever get copied around.
-- [ ] Illustrate the different shaders on an interesting scene and make a post.
+- [x] Illustrate the different shaders on an interesting scene and make a post.
+- [ ] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer)
 - [ ] Figure out how to make composite objects work.
 - [ ] Implement a triangle, tetrahedron and octahedron.
 - [ ] Test the dynamics functions for all objects, especially the composite models. (spinning octahedron, spinning box, rotating light source ball)
