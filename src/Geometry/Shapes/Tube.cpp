@@ -35,7 +35,13 @@ std::optional<Intersection> Tube::Intersect(const Line& line) const {
 
     double tCylinder = std::numeric_limits<double>::infinity();
     for (double r : roots) {
-        if (r > sEpsilon && r < tCylinder) {
+        if (r < line.GetTMin()) {
+            continue;
+        }
+        // Check if the intersection point is within the height bounds
+        Vector3D intersectionPoint = line(r);
+        double heightAtIntersection = (intersectionPoint - mPosition).Dot(orientation);
+        if (std::abs(heightAtIntersection) <= mLength / 2.0 && r < tCylinder) {
             tCylinder = r;
         }
     }

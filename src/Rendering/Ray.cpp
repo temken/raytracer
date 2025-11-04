@@ -3,7 +3,7 @@
 namespace Raytracer {
 
 Ray::Ray(const Vector3D& origin, const Vector3D& direction) :
-    Line(origin, direction.Normalized(), sEpsilon) {}
+    Line(origin, direction.Normalized(), 0.0) {}
 
 Color Ray::GetRadiance() const {
     return mRadiance;

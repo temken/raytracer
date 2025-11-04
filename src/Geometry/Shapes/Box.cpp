@@ -22,37 +22,37 @@ Box::Box(const Vector3D& center, const Vector3D& heightDirection, const Vector3D
     AddComponent(std::make_shared<Rectangle>(center + Vector3D({0.0, 0.0, halfHeight}),
                                              eZ,
                                              eX,
-                                             width,
-                                             length));
+                                             length,
+                                             width));
     // Bottom face
     AddComponent(std::make_shared<Rectangle>(center + Vector3D({0.0, 0.0, -halfHeight}),
                                              -1.0 * eZ,
                                              -1.0 * eX,
-                                             width,
-                                             length));
+                                             length,
+                                             width));
     // Left face
     AddComponent(std::make_shared<Rectangle>(center + Vector3D({-halfLength, 0.0, 0.0}),
                                              -1.0 * eX,
                                              -1.0 * eY,
-                                             length,
+                                             width,
                                              height));
     // Right face
     AddComponent(std::make_shared<Rectangle>(center + Vector3D({halfLength, 0.0, 0.0}),
                                              eX,
                                              eY,
-                                             length,
+                                             width,
                                              height));
     // Front face
     AddComponent(std::make_shared<Rectangle>(center + Vector3D({0.0, halfWidth, 0.0}),
                                              eY,
                                              -1.0 * eX,
-                                             width,
+                                             length,
                                              height));
     // Back face
     AddComponent(std::make_shared<Rectangle>(center + Vector3D({0.0, -halfWidth, 0.0}),
                                              -1.0 * eY,
                                              eX,
-                                             width,
+                                             length,
                                              height));
 }
 

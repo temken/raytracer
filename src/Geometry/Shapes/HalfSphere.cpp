@@ -26,17 +26,16 @@ std::optional<Intersection> HalfSphere::Intersect(const Line& line) const {
 
     double t = std::numeric_limits<double>::infinity();
     for (double r : roots) {
+        if (r < line.GetTMin()) {
+            continue;
+        }
         Vector3D intersectionPoint = line(r);
-
-        // Check if intersection is on the correct side of the cutting plane
-        // Half sphere is cut by plane perpendicular to orientation vector passing through center
         Vector3D fromCenter = intersectionPoint - mPosition;
-        if (fromCenter.Dot(GetBasisVector(OrthonormalBasis::BasisVector::eZ)) >= 0.0) {  // Keep the hemisphere in the +orientation direction
-            if (r < line.GetTMin()) {
-                continue;
-            } else if (r < t) {
-                t = r;
-            }
+        if (fromCenter.Dot(GetBasisVector(OrthonormalBasis::BasisVector::eZ)) < 0.0) {  // Keep the hemisphere in the +orientation direction
+            continue;
+        }
+        if (r < t) {
+            t = r;
         }
     }
 
