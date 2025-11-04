@@ -91,6 +91,7 @@ private:
     Object ParseRectangle(const YAML::Node& obj) const;
     Object ParseBox(const YAML::Node& obj) const;
     Object ParseCylinder(const YAML::Node& obj) const;
+    Object ParseTetrahedron(const YAML::Node& obj) const;
     Object ParseTriangle(const YAML::Node& obj) const;
     Object ParseTube(const YAML::Node& obj) const;
     Object ParseHalfSphere(const YAML::Node& obj) const;

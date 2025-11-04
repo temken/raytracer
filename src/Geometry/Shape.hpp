@@ -24,6 +24,7 @@ public:
         PLANE,
         RECTANGLE,
         SPHERE,
+        TETRAHEDRON,
         TRIANGLE,
         TUBE,
     };

@@ -60,7 +60,8 @@ void Box::PrintInfo() const {
     PrintInfoCompositeBase();
     std::cout << "\tLength: " << mLength << std::endl
               << "\tWidth: " << mWidth << std::endl
-              << "\tHeight: " << mHeight << std::endl;
+              << "\tHeight: " << mHeight << std::endl
+              << std::endl;
 }
 
 }  // namespace Raytracer::Geometry

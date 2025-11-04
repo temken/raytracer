@@ -210,3 +210,18 @@ scene:
           diffuse: 0.8
           reflective: 0.2
           refractive: 0.0
+
+    - type: Tetrahedron
+      id: small-tetrahedron
+      visible: true
+      position: [1.0, -6.0, -5.0]
+      normal: [0.0, 0.0, 1.0]
+      reference_direction: [0.0, 1.0, 0.0]  
+      edge_length: 3.0
+      material:
+        baseColor: [128, 0, 128]  # purple
+        roughness: 0.3
+        probabilities:
+          diffuse: 0.8
+          reflective: 0.2
+          refractive: 0.0

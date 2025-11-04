@@ -106,6 +106,8 @@ std::vector<Vector3D> Triangle::GetKeyPoints() const {
 }
 
 std::pair<double, double> Triangle::GetSurfaceParameters(const Vector3D& point) const {
+    // TODO: Implement
+    return {0.0, 0.0};
 }
 
 void Triangle::PrintInfo() const {

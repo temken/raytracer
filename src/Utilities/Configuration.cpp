@@ -7,6 +7,7 @@
 #include "Geometry/Shapes/HalfSphere.hpp"
 #include "Geometry/Shapes/Rectangle.hpp"
 #include "Geometry/Shapes/Sphere.hpp"
+#include "Geometry/Shapes/Tetrahedron.hpp"
 #include "Geometry/Shapes/Triangle.hpp"
 #include "Geometry/Shapes/Tube.hpp"
 #include "Scene/Object.hpp"
@@ -171,6 +172,8 @@ Scene Configuration::ConstructScene() const {
                 scene.AddObject(std::make_unique<Object>(ParseBox(obj)));
             } else if (type == "Cylinder") {
                 scene.AddObject(std::make_unique<Object>(ParseCylinder(obj)));
+            } else if (type == "Tetrahedron") {
+                scene.AddObject(std::make_unique<Object>(ParseTetrahedron(obj)));
             } else if (type == "Triangle") {
                 scene.AddObject(std::make_unique<Object>(ParseTriangle(obj)));
             } else if (type == "Tube") {
@@ -429,6 +432,21 @@ Object Configuration::ParseCylinder(const YAML::Node& obj) const {
 
     cylinder.SetVisible(props.visible);
     return cylinder;
+}
+
+Object Configuration::ParseTetrahedron(const YAML::Node& obj) const {
+    ObjectProperties props = ParseObjectProperties(obj);
+    double edgeLength = obj["edge_length"].as<double>();
+
+    // Construct the tetrahedron
+    Object tetrahedron = MakeObject<Geometry::Tetrahedron>(props.id, props.material, props.position, props.normal, props.referenceDirection, edgeLength);
+
+    tetrahedron.SetVelocity(props.velocity);
+    tetrahedron.SetAngularVelocity(props.angularVelocity);
+    tetrahedron.SetSpin(props.spin);
+
+    tetrahedron.SetVisible(props.visible);
+    return tetrahedron;
 }
 
 Object Configuration::ParseTriangle(const YAML::Node& obj) const {
