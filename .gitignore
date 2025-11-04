@@ -3,6 +3,7 @@
 /build/
 /external/
 /output/
+/textures/
 /.vscode/
 
 *.png
