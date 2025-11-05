@@ -5,6 +5,7 @@
 #include "Geometry/Shapes/Cylinder.hpp"
 #include "Geometry/Shapes/Disk.hpp"
 #include "Geometry/Shapes/HalfSphere.hpp"
+#include "Geometry/Shapes/Octahedron.hpp"
 #include "Geometry/Shapes/Rectangle.hpp"
 #include "Geometry/Shapes/Sphere.hpp"
 #include "Geometry/Shapes/Tetrahedron.hpp"
@@ -174,6 +175,8 @@ Scene Configuration::ConstructScene() const {
                 scene.AddObject(std::make_unique<Object>(ParseCylinder(obj)));
             } else if (type == "Tetrahedron") {
                 scene.AddObject(std::make_unique<Object>(ParseTetrahedron(obj)));
+            } else if (type == "Octahedron") {
+                scene.AddObject(std::make_unique<Object>(ParseOctahedron(obj)));
             } else if (type == "Triangle") {
                 scene.AddObject(std::make_unique<Object>(ParseTriangle(obj)));
             } else if (type == "Tube") {
@@ -447,6 +450,21 @@ Object Configuration::ParseTetrahedron(const YAML::Node& obj) const {
 
     tetrahedron.SetVisible(props.visible);
     return tetrahedron;
+}
+
+Object Configuration::ParseOctahedron(const YAML::Node& obj) const {
+    ObjectProperties props = ParseObjectProperties(obj);
+    double edgeLength = obj["edge_length"].as<double>();
+
+    // Construct the octahedron
+    Object octahedron = MakeObject<Geometry::Octahedron>(props.id, props.material, props.position, props.normal, props.referenceDirection, edgeLength);
+
+    octahedron.SetVelocity(props.velocity);
+    octahedron.SetAngularVelocity(props.angularVelocity);
+    octahedron.SetSpin(props.spin);
+
+    octahedron.SetVisible(props.visible);
+    return octahedron;
 }
 
 Object Configuration::ParseTriangle(const YAML::Node& obj) const {

@@ -26,7 +26,7 @@ render:
   open_output_files: true
 
 camera:
-  renderer_type: RAY_TRACER # Options: SIMPLE, DETERMINISTIC, RAY_TRACER PATH_TRACER
+  renderer_type: DETERMINISTIC # Options: SIMPLE, DETERMINISTIC, RAY_TRACER PATH_TRACER
   fov_deg: 120.0
   position: [9.0, 0.2, 0.0]
   direction: [-1.0, 0.0, 0.0]
@@ -220,7 +220,21 @@ scene:
       edge_length: 3.0
       material:
         baseColor: [128, 0, 128]  # purple
-        roughness: 0.3
+        refractiveIndex: 1.5
+        probabilities:
+          diffuse: 0.9
+          reflective: 0.1
+          refractive: 0.0
+
+    - type: Octahedron
+      id: small-octahedron
+      visible: true
+      position: [3.0, -7.0, -3.0]
+      normal: [0.0, 0.0, 1.0]
+      reference_direction: [1.0, 3.0, 0.0]
+      edge_length: 2.0
+      material:
+        baseColor: orange
         refractiveIndex: 1.5
         probabilities:
           diffuse: 1.0

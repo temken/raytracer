@@ -21,6 +21,7 @@ public:
         CYLINDER,
         DISK,
         HALF_SPHERE,
+        OCTAHEDRON,
         PLANE,
         RECTANGLE,
         SPHERE,

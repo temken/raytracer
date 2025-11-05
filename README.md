@@ -23,7 +23,7 @@
 - [x] Illustrate the different shaders on an interesting scene and make a post.
 - [x] Implement a triangle
 - [x] Implement tetrahedron
-- [ ] Implement octahedoron
+- [x] Implement octahedoron
 - [ ] Test the dynamics functions for all objects, especially the composite models. (spinning octahedron, spinning box, rotating light source ball)
 - [ ] New renderer: Path tracing with NNE.
 - [ ] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer)
