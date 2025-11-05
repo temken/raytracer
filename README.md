@@ -22,13 +22,15 @@
 - [x] Ensure that the Material class does not ever get copied around.
 - [x] Illustrate the different shaders on an interesting scene and make a post.
 - [x] Implement a triangle
-- [ ] Implement tetrahedron
+- [x] Implement tetrahedron
 - [ ] Implement octahedoron
 - [ ] Test the dynamics functions for all objects, especially the composite models. (spinning octahedron, spinning box, rotating light source ball)
 - [ ] New renderer: Path tracing with NNE.
 - [ ] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer)
 - [ ] Figure out how to make composite objects work.
-- [ ] Create composite objects (street lamps, desk lamps, spots)
+- [ ] Maybe textures should not get stretched.
+- [ ] Textures for cubes/other composite objects. (Use only some of the texture? Special textures (t shaped) for cubes for example)
+- [ ] Create composite objects (street lamps, desk lamps, spots, table, Chair)
 - [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
 - [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter Or look at other Denoising algorithms.
 - [ ] Image textures for other objects (Spheres!)
@@ -36,12 +38,13 @@
 - [ ] Scene: Solar system
 - [ ] Add more pre-defined colors
 - [ ] Find a better title and make an ascii art header
+- [ ] Improve the deterministic renderer by modeling mixtures of refraction and reflection. Split the ray in two, weigh each by their probability and propagate them recurseively. This should even reproduce the Fresnel effect.
 - [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
 - [ ] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
 - [ ] Create camera based on aspect ratio and one pixel dimension
 - [ ] Implement depth of field capability
 - [ ] New objects: Cones, Torus
-- [ ] Normal textures especially for glass surfaces, but not just
+- [ ] Normal textures especially for glass surfaces, but not just (who owns the normal texture?)
 - [ ] Check out texture resources.
 - [ ] Allow to run ALL renderes and store the renderer type in the file name. (?)
 - [ ] Height textures
@@ -61,9 +64,12 @@
 
 ### Other ideas
 
+- Replace the RGB colors by a physical spectrum (i.e. a PDF over visible wavelengths). Implement an abstract Color base class, and then RGB and physical spectra can inherit from that.
+  - It should be possible to model rainbows, or split white light on a prism, etc. 
 - Define trajectories that the camera can follow (time dependence is already ).
 - Create compositve objects with a physics engine included. Simulate and render a double pendulum in an interesting light ambient.
 - Make a UI with qt or imgui to show the scene and camera, move stuff, render quick images. Simple UI to have some interactive fun.
+- Look into GPUs, in particular c++ + Vulkan.
 
 ### Done tasks
 
