@@ -11,6 +11,9 @@ void Scene::AddObject(std::shared_ptr<Object> object) {
     if (object->EmitsLight()) {
         mLightSources.push_back(object);
     }
+    if (object->IsDynamic()) {
+        mDynamicObjects.push_back(object);
+    }
 }
 
 const std::vector<std::shared_ptr<Object>>& Scene::GetObjects() const {
@@ -25,8 +28,12 @@ Color Scene::GetBackgroundColor() const {
     return mBackgroundColor;
 }
 
+bool Scene::IsDynamic() const {
+    return !mDynamicObjects.empty();
+}
+
 void Scene::Evolve(double timeStep) {
-    for (auto& object : mObjects) {
+    for (auto& object : mDynamicObjects) {
         object->Evolve(timeStep);
     }
 }
@@ -44,8 +51,11 @@ void Scene::PrintInfo() const {
               << "-------------------" << std::endl
               << "Background Color:\t" << mBackgroundColor << std::endl
               << "Objects in Scene:\t" << NumberOfObjects() << std::endl
-              << "Light Sources in Scene:\t" << NumberOfLightSources() << std::endl
-              << std::endl;
+              << "Light Sources in Scene:\t" << NumberOfLightSources() << std::endl;
+    if (IsDynamic()) {
+        std::cout << "Dynamic Objects in Scene:\t" << mDynamicObjects.size() << std::endl;
+    }
+    std::cout << std::endl;
 }
 
 }  // namespace Raytracer

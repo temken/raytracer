@@ -20,6 +20,7 @@ public:
 
     Color GetBackgroundColor() const;
 
+    bool IsDynamic() const;
     void Evolve(double timeStep);
 
     size_t NumberOfObjects() const;
@@ -30,6 +31,7 @@ public:
 private:
     std::vector<std::shared_ptr<Object>> mObjects;
     std::vector<std::shared_ptr<Object>> mLightSources;
+    std::vector<std::shared_ptr<Object>> mDynamicObjects;
     Color mBackgroundColor;
 };
 
