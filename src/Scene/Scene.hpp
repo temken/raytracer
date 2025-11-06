@@ -23,6 +23,9 @@ public:
     bool IsDynamic() const;
     void Evolve(double timeStep);
 
+    double GetTime() const;
+    void SetTime(double time);
+
     size_t NumberOfObjects() const;
     size_t NumberOfLightSources() const;
 
@@ -33,6 +36,8 @@ private:
     std::vector<std::shared_ptr<Object>> mLightSources;
     std::vector<std::shared_ptr<Object>> mDynamicObjects;
     Color mBackgroundColor;
+
+    double mTime = 0.0;
 };
 
 }  // namespace Raytracer

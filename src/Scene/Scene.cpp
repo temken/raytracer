@@ -36,6 +36,17 @@ void Scene::Evolve(double timeStep) {
     for (auto& object : mDynamicObjects) {
         object->Evolve(timeStep);
     }
+    mTime += timeStep;
+}
+
+double Scene::GetTime() const {
+    return mTime;
+}
+
+void Scene::SetTime(double time) {
+    double deltaTime = time - mTime;
+    Evolve(deltaTime);
+    mTime = time;
 }
 
 size_t Scene::NumberOfObjects() const {
@@ -53,6 +64,7 @@ void Scene::PrintInfo() const {
               << "Objects in Scene:\t" << NumberOfObjects() << std::endl
               << "Light Sources in Scene:\t" << NumberOfLightSources() << std::endl;
     if (IsDynamic()) {
+        std::cout << "Time:\t\t\t" << mTime << std::endl;
         std::cout << "Dynamic Objects in Scene:\t" << mDynamicObjects.size() << std::endl;
     }
     std::cout << std::endl;

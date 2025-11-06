@@ -31,15 +31,16 @@ camera:
   position: [9.0, 0.2, 0.0]
   direction: [-1.0, 0.0, 0.0]
   resolution:
-    width: 800
-    height: 600
+    width: 1600
+    height: 1200
   framesPerSecond: 15
-  antialiasing: true
+  antialiasing: false
   blur_image: false
   samples_per_pixel: 1
-
-scene:
+  
+scene:  
   background_color: black
+  time: 0.0
   objects:
     - type: Sphere
       id: ceiling-lamp
@@ -149,6 +150,7 @@ scene:
       radius: 2.0
       material:
         baseColor: white
+        roughness: 0.3
         refractiveIndex: 1.5
         useFresnel: false
         probabilities:

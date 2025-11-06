@@ -191,6 +191,9 @@ Scene Configuration::ConstructScene() const {
         }
     }
 
+    double time = node["time"] ? node["time"].as<double>() : 0.0;
+    scene.SetTime(time);
+
     return scene;
 }
 
