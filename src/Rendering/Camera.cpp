@@ -50,6 +50,20 @@ void Camera::SetSpin(const Vector3D& spin) {
     mSpin = spin;
 }
 
+bool Camera::IsDynamic() const {
+    return (mVelocity.Norm() > kEpsilon || mAngularVelocity.Norm() > kEpsilon || mSpin.Norm() > kEpsilon);
+}
+
+void Camera::Evolve(double timeStep) {
+    Translate(mVelocity * timeStep);
+    if (mAngularVelocity.Norm() > kEpsilon) {
+        Rotate(mAngularVelocity.Norm() * timeStep, mAngularVelocity.Normalized());
+    }
+    if (mSpin.Norm() > kEpsilon) {
+        Spin(mSpin.Norm() * timeStep, mSpin.Normalized());
+    }
+}
+
 void Camera::InitializeOrbitTrajectory(double angularVelocity) {
     mEz = -1.0 * mPosition;
     mEz[2] = 0;
@@ -237,7 +251,13 @@ void Camera::PrintInfo() const {
               << "Samples/Pixel:\t" << mSamplesPerPixel << std::endl
               << "Anti-Aliasing:\t" << (mUseAntiAliasing ? "[x]" : "[ ]") << std::endl
               << "Blur Image:\t" << (mBlurImage ? "[x]" : "[ ]") << std::endl
-              << std::endl;
+              << "Dynamic:\t" << (IsDynamic() ? "[x]" : "[ ]") << std::endl;
+    if (IsDynamic()) {
+        std::cout << "Velocity:\t" << mVelocity << std::endl
+                  << "Angular Vel.:\t" << mAngularVelocity << std::endl
+                  << "Spin:\t\t" << mSpin << std::endl;
+    }
+    std::cout << std::endl;
 }
 
 void Camera::Translate(const Vector3D& translation) {
@@ -269,16 +289,6 @@ void Camera::Spin(double angle, const Vector3D& axis) {
     Translate(pos);
     mEz = rotatedEz.Normalized();
     ConfigureCamera();
-}
-
-void Camera::Evolve(double timeStep) {
-    Translate(mVelocity * timeStep);
-    if (mAngularVelocity.Norm() > 0) {
-        Rotate(mAngularVelocity.Norm() * timeStep, mAngularVelocity.Normalized());
-    }
-    if (mSpin.Norm() > 0) {
-        Spin(mSpin.Norm() * timeStep, mSpin.Normalized());
-    }
 }
 
 Ray Camera::CreateRay(size_t x, size_t y) const {

@@ -27,6 +27,8 @@ public:
     void SetAngularVelocity(const Vector3D& angularVelocity);
     void SetSpin(const Vector3D& spin);
 
+    bool IsDynamic() const;
+    void Evolve(double timeStep);
     void InitializeOrbitTrajectory(double angularVelocity);
 
     // Settings
@@ -64,11 +66,12 @@ private:
     bool mUseAntiAliasing = false;
     bool mBlurImage = false;
 
+    const double kEpsilon = 1e-6;
+
     // Camera dynamics
     void Translate(const Vector3D& translation);
     void Rotate(double angle, const Vector3D& axis = Vector3D({0, 0, 1}));
     void Spin(double angle, const Vector3D& axis = Vector3D({0, 0, 1}));
-    void Evolve(double timeStep);
 
     Ray CreateRay(size_t x, size_t y) const;
 

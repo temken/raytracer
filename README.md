@@ -27,8 +27,8 @@
 - [ ] Dynamic scenes and camers:
   - [x] Introduce a ÍsDynamic() for Objects.
   - [x] Introduce `bool Scene::IsDynamic()` and `std::vector<ShapePtr> mDynamicObjects` to the Scene class. Give output in PrintInfo, is a scene dynamic, if yes how many objects are dynamic.
-  - [ ] Introcue `double mTime = 0.0` to the Class.
-  - [ ] Introduce `void SetTime` to class that propagates all objects.
+  - [x] IsDynamic in the camera
+  - [ ] Introcue `double mTime = 0.0` amd `void SetTime` to the Class.
   - [ ] Have a `time` parameter in the config file that sets the time of the scene. Careful not to screw up the video rendering afterwards, either video should start at t=0 or the set time.
   - [ ] Similar functionality in the `Camera` class.
   - [ ] Fix Rotate and Spin
@@ -58,6 +58,8 @@
 - [ ] Height textures
 - [ ] Print preview of image downscaled in terminal
 - [ ] Look into ogb mesh files.
+- [ ] Camera/object have dynamics property in common (velocity, Evolve(t), etc). Common Interface?
+- [ ] Camera should have an ONB that handles location and orientation
 
 ### Image ideas:
 - [ ] Light lanterns along a road in the night with nice ambient. Wet road, oncoming car.
