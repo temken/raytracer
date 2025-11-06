@@ -61,6 +61,14 @@ void Object::SetVelocity(const Vector3D& velocity) {
     mVelocity = velocity;
 }
 
+Vector3D Object::GetAcceleration() const {
+    return mAcceleration;
+}
+
+void Object::SetAcceleration(const Vector3D& acceleration) {
+    mAcceleration = acceleration;
+}
+
 Vector3D Object::GetAngularVelocity() const {
     return mAngularVelocity;
 }
@@ -101,8 +109,13 @@ void Object::Evolve(double timeStep) {
     if (mVelocity.Norm() > sEpsilon) {
         Translate(mVelocity * timeStep);
     }
+    if (mAcceleration.Norm() > sEpsilon) {
+        Vector3D deltaV = mAcceleration * timeStep;
+        Translate((mVelocity + deltaV * 0.5) * timeStep);  // Verlet integration
+        mVelocity += deltaV;
+    }
     if (mAngularVelocity.Norm() > sEpsilon) {
-        // TODO: Right now we only rotate around the world z axis
+        // TODO: Right now we only rotate around the world z-axis
         Rotate(mAngularVelocity.Norm() * timeStep);
     }
     if (mSpin.Norm() > sEpsilon) {
@@ -124,7 +137,7 @@ void Object::Rotate(double angle, const Geometry::Line& axis) {
 }
 
 void Object::Spin(double angle, const Vector3D& axis) {
-    mShape->Spin(angle, mShape->GetOrientation());
+    mShape->Spin(angle, axis);
 }
 
 void Object::PrintInfoBase() const {

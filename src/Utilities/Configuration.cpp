@@ -349,6 +349,7 @@ Configuration::ObjectProperties Configuration::ParseObjectProperties(const YAML:
 
     // Dynamics
     props.velocity = obj["velocity"] ? ParseVector3D(obj["velocity"]) : Vector3D({0.0, 0.0, 0.0});
+    props.acceleration = obj["acceleration"] ? ParseVector3D(obj["acceleration"]) : Vector3D({0.0, 0.0, 0.0});
     props.angularVelocity = obj["angular_velocity"] ? ParseVector3D(obj["angular_velocity"]) : Vector3D({0.0, 0.0, 0.0});
     props.spin = obj["spin"] ? ParseVector3D(obj["spin"]) : Vector3D({0.0, 0.0, 0.0});
 
@@ -363,6 +364,7 @@ Object Configuration::ParseSphere(const YAML::Node& obj) const {
     Object sphere = MakeObject<Geometry::Sphere>(props.id, props.material, props.position, radius, props.normal);
 
     sphere.SetVelocity(props.velocity);
+    sphere.SetAcceleration(props.acceleration);
     sphere.SetAngularVelocity(props.angularVelocity);
     sphere.SetSpin(props.spin);
 
@@ -379,6 +381,7 @@ Object Configuration::ParseDisk(const YAML::Node& obj) const {
     Object disk = MakeObject<Geometry::Disk>(props.id, props.material, props.position, props.normal, radius);
 
     disk.SetVelocity(props.velocity);
+    disk.SetAcceleration(props.acceleration);
     disk.SetAngularVelocity(props.angularVelocity);
     disk.SetSpin(props.spin);
 
@@ -395,6 +398,7 @@ Object Configuration::ParseRectangle(const YAML::Node& obj) const {
     Object rectangle = MakeObject<Geometry::Rectangle>(props.id, props.material, props.position, props.normal, props.referenceDirection, width, height);
 
     rectangle.SetVelocity(props.velocity);
+    rectangle.SetAcceleration(props.acceleration);
     rectangle.SetAngularVelocity(props.angularVelocity);
     rectangle.SetSpin(props.spin);
     rectangle.SetVisible(props.visible);
@@ -415,6 +419,7 @@ Object Configuration::ParseBox(const YAML::Node& obj) const {
     box.SetVisible(props.visible);
 
     box.SetVelocity(props.velocity);
+    box.SetAcceleration(props.acceleration);
     box.SetAngularVelocity(props.angularVelocity);
     box.SetSpin(props.spin);
 
@@ -430,6 +435,7 @@ Object Configuration::ParseCylinder(const YAML::Node& obj) const {
     Object cylinder = MakeObject<Geometry::Cylinder>(props.id, props.material, props.position, props.normal, radius, height);
 
     cylinder.SetVelocity(props.velocity);
+    cylinder.SetAcceleration(props.acceleration);
     cylinder.SetAngularVelocity(props.angularVelocity);
     cylinder.SetSpin(props.spin);
 
@@ -445,6 +451,7 @@ Object Configuration::ParseTetrahedron(const YAML::Node& obj) const {
     Object tetrahedron = MakeObject<Geometry::Tetrahedron>(props.id, props.material, props.position, props.normal, props.referenceDirection, edgeLength);
 
     tetrahedron.SetVelocity(props.velocity);
+    tetrahedron.SetAcceleration(props.acceleration);
     tetrahedron.SetAngularVelocity(props.angularVelocity);
     tetrahedron.SetSpin(props.spin);
 
@@ -460,6 +467,7 @@ Object Configuration::ParseOctahedron(const YAML::Node& obj) const {
     Object octahedron = MakeObject<Geometry::Octahedron>(props.id, props.material, props.position, props.normal, props.referenceDirection, edgeLength);
 
     octahedron.SetVelocity(props.velocity);
+    octahedron.SetAcceleration(props.acceleration);
     octahedron.SetAngularVelocity(props.angularVelocity);
     octahedron.SetSpin(props.spin);
 
@@ -478,6 +486,7 @@ Object Configuration::ParseTriangle(const YAML::Node& obj) const {
     Object triangle = MakeObject<Geometry::Triangle>(props.id, props.material, v1, v2, v3);
 
     triangle.SetVelocity(props.velocity);
+    triangle.SetAcceleration(props.acceleration);
     triangle.SetAngularVelocity(props.angularVelocity);
     triangle.SetSpin(props.spin);
 
@@ -494,6 +503,7 @@ Object Configuration::ParseTube(const YAML::Node& obj) const {
     Object tube = MakeObject<Geometry::Tube>(props.id, props.material, props.position, props.normal, radius, height);
 
     tube.SetVelocity(props.velocity);
+    tube.SetAcceleration(props.acceleration);
     tube.SetAngularVelocity(props.angularVelocity);
     tube.SetSpin(props.spin);
 
@@ -510,6 +520,7 @@ Object Configuration::ParseHalfSphere(const YAML::Node& obj) const {
 
     // Dynamics
     halfSphere.SetVelocity(props.velocity);
+    halfSphere.SetAcceleration(props.acceleration);
     halfSphere.SetAngularVelocity(props.angularVelocity);
     halfSphere.SetSpin(props.spin);
     halfSphere.SetVisible(props.visible);
@@ -527,6 +538,7 @@ Object Configuration::ParseBoxAxisAligned(const YAML::Node& obj) const {
     Object boxAA = MakeObject<Geometry::BoxAxisAligned>(props.id, props.material, props.position, length, width, height);
 
     boxAA.SetVelocity(props.velocity);
+    boxAA.SetAcceleration(props.acceleration);
     boxAA.SetAngularVelocity(props.angularVelocity);
     boxAA.SetSpin(props.spin);
     boxAA.SetVisible(props.visible);

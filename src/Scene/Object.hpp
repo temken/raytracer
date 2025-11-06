@@ -41,6 +41,9 @@ public:
     Vector3D GetVelocity() const;
     void SetVelocity(const Vector3D& velocity);
 
+    Vector3D GetAcceleration() const;
+    void SetAcceleration(const Vector3D& acceleration);
+
     Vector3D GetAngularVelocity() const;
     void SetAngularVelocity(const Vector3D& angularVelocity);
 
@@ -62,6 +65,7 @@ protected:
 
     // Dynamic properties
     Vector3D mVelocity = Vector3D({0.0, 0.0, 0.0});
+    Vector3D mAcceleration = Vector3D({0.0, 0.0, 0.0});
     Vector3D mAngularVelocity = Vector3D({0.0, 0.0, 0.0});
     Vector3D mSpin = Vector3D({0.0, 0.0, 0.0});
 

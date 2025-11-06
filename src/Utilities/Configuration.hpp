@@ -78,6 +78,7 @@ private:
         Vector3D normal = Vector3D({0.0, 0.0, 1.0});
         Vector3D referenceDirection = Vector3D({1.0, 0.0, 0.0});
         Vector3D velocity = Vector3D({0.0, 0.0, 0.0});
+        Vector3D acceleration = Vector3D({0.0, 0.0, 0.0});
         Vector3D angularVelocity = Vector3D({0.0, 0.0, 0.0});
         Vector3D spin = Vector3D({0.0, 0.0, 0.0});
 
