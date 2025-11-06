@@ -24,6 +24,14 @@
 - [x] Implement a triangle
 - [x] Implement tetrahedron
 - [x] Implement octahedoron
+- [ ] Dynamic scenes and camers:
+  - [x] Introduce a ÍsDynamic() for Objects.
+  - [ ] Introduce `bool Scene::IsDynamic()` and `std::vector<ShapePtr> mDynamicObjects` to the Scene class. Give output in PrintInfo, is a scene dynamic, if yes how many objects are dynamic.
+  - [ ] Introcue `double mTime = 0.0` to the Class.
+  - [ ] Introduce `void SetTime` to class that propagates all objects.
+  - [ ] Have a `time` parameter in the config file that sets the time of the scene. Careful not to screw up the video rendering afterwards, either video should start at t=0 or the set time.
+  - [ ] Similar functionality in the `Camera` class.
+  - [ ] Fix Rotate and Spin
 - [ ] Test the dynamics functions for all objects, especially the composite models. (spinning octahedron, spinning box, rotating light source ball)
 - [ ] New renderer: Path tracing with NNE.
 - [ ] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer)

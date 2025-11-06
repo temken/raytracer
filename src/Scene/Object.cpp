@@ -102,9 +102,13 @@ std::optional<HitRecord> Object::Intersect(const Ray& ray) {
     return std::nullopt;
 }
 
+bool Object::IsDynamic() const {
+    return (mVelocity.Norm() > sEpsilon || mAcceleration.Norm() > sEpsilon || mAngularVelocity.Norm() > sEpsilon || mSpin.Norm() > sEpsilon);
+}
+
 void Object::Evolve(double timeStep) {
-    if (timeStep <= 0) {
-        throw std::invalid_argument("Time step must be positive");
+    if (!IsDynamic()) {
+        return;
     }
     if (mVelocity.Norm() > sEpsilon) {
         Translate(mVelocity * timeStep);
@@ -146,11 +150,12 @@ void Object::PrintInfoBase() const {
     mShape->PrintInfo();
     mMaterial.PrintInfo();
 
-    if (mVelocity.Norm() > sEpsilon || mAngularVelocity.Norm() > sEpsilon || mSpin.Norm() > sEpsilon) {
+    if (IsDynamic()) {
         std::cout << "\tDynamic properties:" << std::endl
-                  << "\tVelocity:\t" << mVelocity << std::endl
-                  << "\tAngular Velocity:\t" << mAngularVelocity << std::endl
-                  << "\tSpin:\t" << mSpin << std::endl;
+                  << "\t\tVelocity:\t" << mVelocity << std::endl
+                  << "\t\tAcceleration:\t" << mAcceleration << std::endl
+                  << "\t\tAngular Velocity:\t" << mAngularVelocity << std::endl
+                  << "\t\tSpin:\t" << mSpin << std::endl;
     }
     std::cout << std::endl;
 }

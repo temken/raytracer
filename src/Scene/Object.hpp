@@ -52,6 +52,7 @@ public:
 
     std::optional<HitRecord> Intersect(const Ray& ray);
 
+    bool IsDynamic() const;
     void Evolve(double timeStep);
 
     void PrintInfo() const;
