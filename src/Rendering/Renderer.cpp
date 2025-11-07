@@ -80,7 +80,7 @@ void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const HitReco
             const Vector3D nL = shadowHit->normal.Normalized();
 
             const double cosSurface = std::max(0.0, n.Dot(toLight));
-            const double cosLight = std::max(0.0, nL.Dot((-1.0) * toLight));
+            const double cosLight = std::abs(nL.Dot((-1.0) * toLight));
 
             if (cosSurface <= 0.0 || cosLight <= 0.0) {
                 continue;
@@ -89,7 +89,7 @@ void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const HitReco
             // Lambertian BRDF
             const Color f_r = material.GetColor(hitRecord) * (1.0 / M_PI);
 
-            // Geometry factor
+            // Geometry factor (two-sided light source)
             const double G = cosSurface * cosLight * lightArea / dist2;
 
             // Direct contribution
