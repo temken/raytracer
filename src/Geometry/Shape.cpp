@@ -44,10 +44,6 @@ void Shape::Rotate(double angle, const Line& axis) {
 }
 
 void Shape::Spin(double angle, Vector3D axis) {
-    // Rotate around center without changing position
-    if (axis.Norm() < sEpsilon) {
-        axis = GetBasisVector(OrthonormalBasis::BasisVector::eZ);
-    }
     mOrthonormalBasis.Rotate(angle, axis);
 }
 

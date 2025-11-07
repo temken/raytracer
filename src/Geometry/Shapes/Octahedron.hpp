@@ -13,6 +13,8 @@ public:
 
 private:
     double mEdgeLength;
+
+    virtual void ComposeShape() override;
 };
 
 }  // namespace Raytracer::Geometry

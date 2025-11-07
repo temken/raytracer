@@ -7,7 +7,19 @@ namespace Raytracer::Geometry {
 Octahedron::Octahedron(const Vector3D& center, const Vector3D& orientation, const Vector3D& edgeDirection, double edgeLength) :
     CompositeShape(Shape::Type::OCTAHEDRON, center, orientation, edgeDirection),
     mEdgeLength(edgeLength) {
-    const double a = edgeLength / std::sqrt(2.0);
+    ComposeShape();
+}
+
+void Octahedron::PrintInfo() const {
+    PrintInfoCompositeBase();
+    std::cout << "\tEdge Length: " << mEdgeLength << std::endl
+              << std::endl;
+}
+
+void Octahedron::ComposeShape() {
+    mComponents.clear();
+
+    const double a = mEdgeLength / std::sqrt(2.0);
 
     // 6 vertices of a regular octahedron centered at the origin
     std::array<Vector3D, 6> vertices = {
@@ -21,7 +33,7 @@ Octahedron::Octahedron(const Vector3D& center, const Vector3D& orientation, cons
 
     // Transform into world space using your orthonormal basis and center
     for (auto& v : vertices) {
-        v = mOrthonormalBasis.ToGlobal(v) + center;
+        v = mOrthonormalBasis.ToGlobal(v) + mPosition;
     }
 
     // Create triangles (ensure consistent winding for outward normals)
@@ -36,12 +48,6 @@ Octahedron::Octahedron(const Vector3D& center, const Vector3D& orientation, cons
     AddComponent(std::make_shared<Triangle>(vertices[5], vertices[1], vertices[2]));
     AddComponent(std::make_shared<Triangle>(vertices[5], vertices[3], vertices[1]));
     AddComponent(std::make_shared<Triangle>(vertices[5], vertices[0], vertices[3]));
-}
-
-void Octahedron::PrintInfo() const {
-    PrintInfoCompositeBase();
-    std::cout << "\tEdge Length: " << mEdgeLength << std::endl
-              << std::endl;
 }
 
 }  // namespace Raytracer::Geometry

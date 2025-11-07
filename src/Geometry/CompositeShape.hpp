@@ -19,10 +19,18 @@ public:
 
     virtual std::vector<Vector3D> GetKeyPoints() const override;
 
+    // Rotate around a line without changing orientation
+    virtual void Rotate(double angle, const Line& axis = Line()) override;
+
+    // Rotate around center without changing position
+    virtual void Spin(double angle, Vector3D axis = Vector3D({0.0, 0.0, 0.0})) override;
+
     virtual void PrintInfo() const override;
 
 protected:
     std::vector<std::shared_ptr<Shape>> mComponents;
+
+    virtual void ComposeShape() = 0;
 
     void PrintInfoCompositeBase() const;
 };

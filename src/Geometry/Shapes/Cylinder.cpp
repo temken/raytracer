@@ -12,6 +12,17 @@ Cylinder::Cylinder(const Vector3D& position, const Vector3D& orientation, double
     CompositeShape(Shape::Type::CYLINDER, position, orientation),
     mRadius(radius),
     mHeight(height) {
+    ComposeShape();
+}
+
+void Cylinder::PrintInfo() const {
+    PrintInfoCompositeBase();
+    std::cout << "\tRadius: " << mRadius << std::endl
+              << "\tHeight: " << mHeight << std::endl
+              << std::endl;
+}
+
+void Cylinder::ComposeShape() {
     auto cylinderOrientation = GetOrientation();
 
     // Create and add top disk
@@ -23,15 +34,8 @@ Cylinder::Cylinder(const Vector3D& position, const Vector3D& orientation, double
     auto bottomDisk = std::make_shared<Disk>(bottomCenter, -1.0 * cylinderOrientation, mRadius);
     AddComponent(bottomDisk);
     // Create and add mantle (open cylinder)
-    auto mantle = std::make_shared<Tube>(position, orientation, radius, height);
+    auto mantle = std::make_shared<Tube>(mPosition, cylinderOrientation, mRadius, mHeight);
     AddComponent(mantle);
-}
-
-void Cylinder::PrintInfo() const {
-    PrintInfoCompositeBase();
-    std::cout << "\tRadius: " << mRadius << std::endl
-              << "\tHeight: " << mHeight << std::endl
-              << std::endl;
 }
 
 }  // namespace Raytracer::Geometry

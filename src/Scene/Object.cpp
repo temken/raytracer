@@ -1,5 +1,6 @@
 #include "Scene/Object.hpp"
 
+#include "Geometry/Line.hpp"
 #include "Geometry/OrthonormalBasis.hpp"
 
 #include <stdexcept>
@@ -119,8 +120,9 @@ void Object::Evolve(double timeStep) {
         mVelocity += deltaV;
     }
     if (mAngularVelocity.Norm() > sEpsilon) {
-        // TODO: Right now we only rotate around the world z-axis
-        Rotate(mAngularVelocity.Norm() * timeStep);
+        // TODO: Right now we only rotate around lines through the origin
+        Geometry::Line rotationAxis(Vector3D({0.0, 0.0, 0.0}), mAngularVelocity.Normalized());
+        Rotate(mAngularVelocity.Norm() * timeStep, rotationAxis);
     }
     if (mSpin.Norm() > sEpsilon) {
         Spin(mSpin.Norm() * timeStep, mSpin.Normalized());
@@ -135,9 +137,8 @@ void Object::Translate(const Vector3D& translation) {
     mShape->SetPosition(mShape->GetPosition() + translation);
 }
 
-void Object::Rotate(double angle, const Geometry::Line& axis) {
-    // TODO: This should actually be a rotation around a line
-    mShape->Rotate(angle, axis);
+void Object::Rotate(double angle, const Geometry::Line& line) {
+    mShape->Rotate(angle, line);
 }
 
 void Object::Spin(double angle, const Vector3D& axis) {

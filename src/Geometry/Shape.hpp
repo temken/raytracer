@@ -53,10 +53,10 @@ public:
     virtual std::pair<double, double> GetSurfaceParameters(const Vector3D& point) const;
 
     // Rotate around a line without changing orientation
-    void Rotate(double angle, const Line& axis = Line());
+    virtual void Rotate(double angle, const Line& axis = Line());
 
     // Rotate around center without changing position
-    void Spin(double angle, Vector3D axis = Vector3D({0.0, 0.0, 0.0}));
+    virtual void Spin(double angle, Vector3D axis = Vector3D({0.0, 0.0, 0.0}));
 
     virtual void PrintInfo() const;
 

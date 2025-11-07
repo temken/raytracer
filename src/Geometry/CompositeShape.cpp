@@ -74,6 +74,18 @@ std::vector<Vector3D> CompositeShape::GetKeyPoints() const {
     return keyPoints;
 }
 
+// Rotate around a line without changing orientation
+void CompositeShape::Rotate(double angle, const Line& line) {
+    Shape::Rotate(angle, line);
+    ComposeShape();
+}
+
+// Rotate around center without changing position
+void CompositeShape::Spin(double angle, Vector3D axis) {
+    Shape::Spin(angle, axis);
+    ComposeShape();
+}
+
 void CompositeShape::PrintInfo() const {
     PrintInfoCompositeBase();
 }
