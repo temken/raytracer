@@ -7,39 +7,19 @@
 
 ## To do
 
-- [x] Extend the Renderer base class
-  - [x] CollectDirectLight should be implemented only once here. (Ensure that the ray tracer image does not change!!!)
-  - [x] Implement an ambient factor that will give black pixels a slight color. At least for deterministic, maybe also raytracer
-- [x] Create a class for an orthonomal basis.
-- [x] I removed the 1/pdf scaling in the material class for roughness. Ensure that this was PBR correct.
-- [x] Separate geometric and physical objects. There are two options, either have the PhysicalObject (that inherits from GeometricObject or rather its child classes) have a member mMaterial (like now) or have it inherit from Material directly.
-    - This is also since some algorithms (like hierarchical bounding boxes) will only need geometric objects, no need for them to have a material.
-    - The geometric objects should have a ONB handling its orientation in 3D space.
-- [x] Rename and fix Box -> AxisAlignedBox. Ensure that rotations and translations work with the new ONB.
-- [x] All objects should have their own basis together with mPosition. Then we can have a RecalculateObject positions function using that basis. In rotate functions, we only have to rotate the ONB and rebuild the object. It also gives orientation for textures on spheres. It shoudl probably also be possible to define the orientation in the config file, beyond the normal. Indicating the front (corresponding e.g. to the x axis of the ONB)
-- [x] Create a half sphere class
-- [x] Implement Rotate and Spin functions properly.
-- [x] Ensure that the Material class does not ever get copied around.
-- [x] Illustrate the different shaders on an interesting scene and make a post.
-- [x] Implement a triangle
-- [x] Implement tetrahedron
-- [x] Implement octahedoron
-- [ ] Dynamic scenes and camers:
-  - [x] Introduce a ÍsDynamic() for Objects.
-  - [x] Introduce `bool Scene::IsDynamic()` and `std::vector<ShapePtr> mDynamicObjects` to the Scene class. Give output in PrintInfo, is a scene dynamic, if yes how many objects are dynamic.
-  - [x] IsDynamic in the camera
-  - [ ] Introcue `double mTime = 0.0` amd `void SetTime` to the Class.
-  - [ ] Have a `time` parameter in the config file that sets the time of the scene. Careful not to screw up the video rendering afterwards, either video should start at t=0 or the set time.
-  - [ ] Similar functionality in the `Camera` class.
-  - [ ] Fix Rotate and Spin
-- [ ] Test the dynamics functions for all objects, especially the composite models. (spinning octahedron, spinning box, rotating light source ball)
+- [x] Test Translate/Rotate/Spin for simple objects
+- [ ] Test Translate/Rotate/Spin for composite shapes
+- [ ] Make a nice dynamic scene (spinning octahedron, spinning box, rotating light source ball)
 - [ ] New renderer: Path tracing with NNE.
 - [ ] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer)
-- [ ] Figure out how to make composite objects work.
-- [ ] Maybe textures should not get stretched.
-- [ ] Textures for cubes/other composite objects. (Use only some of the texture? Special textures (t shaped) for cubes for example)
-- [ ] Create composite objects (street lamps, desk lamps, spots, table, Chair)
 - [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
+- [ ] Visualize the contributions of N=1,2,3,4,5 scatterings
+- [ ] Figure out how to make composite objects work.
+- [ ] Add a cylinder shell class of finite size.
+- [ ] Maybe textures should not get stretched. How to have unstretched textures on cylinders, boxes, etc.
+  - [ ] Textures for cubes/other composite objects. (Use only some of the texture? Special textures (t shaped) for cubes for example)
+- [ ] Create composite objects (street lamps, desk lamps, spots, table, Chair, glass, filled glass)
+- [ ] Scene: Table see below
 - [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter Or look at other Denoising algorithms.
 - [ ] Image textures for other objects (Spheres!)
 - [ ] Image texture and gradients for the background (spherical background image)
@@ -60,11 +40,13 @@
 - [ ] Look into ogb mesh files.
 - [ ] Camera/object have dynamics property in common (velocity, Evolve(t), etc). Common Interface?
 - [ ] Camera should have an ONB that handles location and orientation
+- [ ] Profile to check for bottlenecks.
 
 ### Image ideas:
 - [ ] Light lanterns along a road in the night with nice ambient. Wet road, oncoming car.
 - [x] Create a series of material comparisons, e.g. roughness, metallicity, glas, ...
 - [ ] Recreate that photo I took in the pub.
+- [ ] Table: Badly lid wooden table with chair: table lamp, two glasses, one filled, one fell over, spilled reflective surfuce of beverage, a globe, a sheet of paper (the liquid can be spilled on parts of it), a pen, a glass ball, etc. Maybe add some fog
 
 ### Known bugs and issues:
 - [x] Increasing the resolution sometimes seems to widen the field of view and vice versa
@@ -153,6 +135,31 @@
   - [x] Path tracing with correct weighing
   - [x] Build the raytracer and test the different shaders.
 - [x] Fix the key points for cylindric light sources (see brick wall.yaml)
+- [x] Extend the Renderer base class
+  - [x] CollectDirectLight should be implemented only once here. (Ensure that the ray tracer image does not change!!!)
+  - [x] Implement an ambient factor that will give black pixels a slight color. At least for deterministic, maybe also raytracer
+- [x] Create a class for an orthonomal basis.
+- [x] I removed the 1/pdf scaling in the material class for roughness. Ensure that this was PBR correct.
+- [x] Separate geometric and physical objects. There are two options, either have the PhysicalObject (that inherits from GeometricObject or rather its child classes) have a member mMaterial (like now) or have it inherit from Material directly.
+    - This is also since some algorithms (like hierarchical bounding boxes) will only need geometric objects, no need for them to have a material.
+    - The geometric objects should have a ONB handling its orientation in 3D space.
+- [x] Rename and fix Box -> AxisAlignedBox. Ensure that rotations and translations work with the new ONB.
+- [x] All objects should have their own basis together with mPosition. Then we can have a RecalculateObject positions function using that basis. In rotate functions, we only have to rotate the ONB and rebuild the object. It also gives orientation for textures on spheres. It shoudl probably also be possible to define the orientation in the config file, beyond the normal. Indicating the front (corresponding e.g. to the x axis of the ONB)
+- [x] Create a half sphere class
+- [x] Implement Rotate and Spin functions properly.
+- [x] Ensure that the Material class does not ever get copied around.
+- [x] Illustrate the different shaders on an interesting scene and make a post.
+- [x] Implement a triangle
+- [x] Implement tetrahedron
+- [x] Implement octahedoron
+- [x] Dynamic scenes and camers:
+  - [x] Introduce a ÍsDynamic() for Objects.
+  - [x] Introduce `bool Scene::IsDynamic()` and `std::vector<ShapePtr> mDynamicObjects` to the Scene class. Give output in PrintInfo, is a scene dynamic, if yes how many objects are dynamic.
+  - [x] IsDynamic in the camera
+  - [x] Introcue `double mTime = 0.0` amd `void SetTime` to the Class.
+  - [x] Have a `time` parameter in the config file that sets the time of the scene. Careful not to screw up the video rendering afterwards, either video should start at t=0 or the set time.
+  - [x] Similar functionality in the `Camera` class.
+
 
 ## General notes
 
