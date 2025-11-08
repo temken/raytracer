@@ -23,6 +23,7 @@ camera:
 
 scene:
   background_color: black
+  time: 0.0
   objects:
     - type: Rectangle
       id: floor
@@ -51,9 +52,10 @@ scene:
       visible: true
       position: [-5.0, 0.0, 5.0]
       normal: [-1.0, 0.0, 0.0]
+      reference_direction: [0.0, 1.0, 0.0]
       dimensions:
-        width: 10.0
-        height: 20.0
+        width: 20.0
+        height: 10.0
       material:
         baseColor: gray
         colorTexture: bricks.jpg
@@ -63,9 +65,10 @@ scene:
       visible: true
       position: [5.0, 0.0, 5.0]
       normal: [-1.0, 0.0, 0.0]
+      reference_direction: [0.0, 1.0, 0.0]
       dimensions:
-        width: 10.0
-        height: 20.0
+        width: 20.0
+        height: 10.0
       material:
         baseColor: gray
         colorTexture: bricks.jpg
@@ -75,6 +78,7 @@ scene:
       visible: true
       position: [0.0, 10.0, 5.0]
       normal: [0.0, 1.0, 0.0]
+      reference_direction: [1.0, 0.0, 0.0]
       dimensions:
         width: 10.0
         height: 10.0
@@ -87,6 +91,7 @@ scene:
       visible: true
       position: [0.0, -10.0, 5.0]
       normal: [0.0, -1.0, 0.0]
+      reference_direction: [1.0, 0.0, 0.0]
       dimensions:
         width: 10.0
         height: 10.0

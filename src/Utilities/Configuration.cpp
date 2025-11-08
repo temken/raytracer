@@ -364,7 +364,7 @@ Object Configuration::ParseSphere(const YAML::Node& obj) const {
     double radius = obj["radius"].as<double>();
 
     // Construct the sphere
-    Object sphere = MakeObject<Geometry::Sphere>(props.id, props.material, props.position, radius, props.normal);
+    Object sphere = MakeObject<Geometry::Sphere>(props.id, props.material, props.position, radius, props.normal, props.referenceDirection);
 
     sphere.SetVelocity(props.velocity);
     sphere.SetAcceleration(props.acceleration);

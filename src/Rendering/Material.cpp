@@ -164,6 +164,7 @@ void Material::Refract(Ray& ray, const HitRecord& hitRecord, bool applyRoughness
 Color Material::GetColor(const HitRecord& hitRecord) const {
     if (mColorTexture) {
         auto uv = hitRecord.object->GetShape()->GetSurfaceParameters(hitRecord.point);
+        // TODO: Do not mix the ranges. Either [-0.5,0.5] everywhere or [0,1] everywhere
         return mColorTexture->GetColorAt(uv.first + 0.5, uv.second + 0.5) * mBaseColor;
     }
     return GetBaseColor();
