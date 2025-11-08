@@ -59,8 +59,6 @@ void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const HitReco
     for (const auto& lightSource : scene.GetLightSources()) {
         const double lightArea = lightSource->GetShape()->SurfaceArea();
 
-        const Color Le = lightSource->GetMaterial().GetEmission();  // emitted radiance (RGB)
-
         const std::vector<Vector3D> lightPoints = mIsDeterministic ? lightSource->GetShape()->GetKeyPoints() : lightSource->GetShape()->SampleSurfacePoints(numLightSamples, mGenerator);
 
         Color colorSum(0.0, 0.0, 0.0);
@@ -85,6 +83,8 @@ void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const HitReco
             if (cosSurface <= 0.0 || cosLight <= 0.0) {
                 continue;
             }
+
+            const Color Le = lightSource->GetMaterial().GetEmission() * lightSource->GetColor(*shadowHit);  // emitted radiance (RGB)
 
             // Lambertian BRDF
             const Color f_r = material.GetColor(hitRecord) * (1.0 / M_PI);
