@@ -8,45 +8,57 @@
 ## To do
 
 - [x] Test Translate/Rotate/Spin for simple objects
-- [ ] Test Translate/Rotate/Spin for composite shapes
-- [ ] Make a nice dynamic scene (spinning octahedron, spinning box, rotating light source ball)
+- [x] Test Translate/Rotate/Spin for composite shapes
+- [x] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
+- [x] Make a nice dynamic scene (spinning octahedron, spinning box, rotating light source ball)
 - [ ] New renderer: Path tracing with NNE.
-- [ ] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer)
+- [ ] Image texture and gradients for the background (spherical background image)
+- [ ] Scene: Solar system
+- [ ] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer). Look up fireflys (try without russian roulette)
 - [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
 - [ ] Visualize the contributions of N=1,2,3,4,5 scatterings
 - [ ] Figure out how to make composite objects work.
 - [ ] Add a cylinder shell class of finite size.
 - [ ] Maybe textures should not get stretched. How to have unstretched textures on cylinders, boxes, etc.
-  - [ ] Textures for cubes/other composite objects. (Use only some of the texture? Special textures (t shaped) for cubes for example)
-- [ ] Create composite objects (street lamps, desk lamps, spots, table, Chair, glass, filled glass)
+  - [ ] Textures for cubes/other composite objects. (Use only some of the texture? Special textures (t shaped) for cubes for example) Or each object uses its own texture.
+- [ ] New shapes:
+  - [ ] Cone (for pen)
+  - [ ] Torus/Ring
+  - [ ] Half Ring? (for globe)
+  - [ ] Thick tube (requires a 2D ring)
+- [ ] Create composite objects (street lamps, desk lamps, pencil, spots, table, Chair, glass, filled glass)
 - [ ] Scene: Table see below
-- [ ] If still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter Or look at other Denoising algorithms.
-- [ ] Image textures for other objects (Spheres!)
-- [ ] Image texture and gradients for the background (spherical background image)
-- [ ] Scene: Solar system
+- [ ] If black pixels or noise still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter Or look at other Denoising algorithms.
+- [ ] Image textures for other objects
+  - [x] Spheres
+  - [ ] Boxes
+  - [ ] Cylinder/Tube
 - [ ] Add more pre-defined colors
 - [ ] Find a better title and make an ascii art header
 - [ ] Improve the deterministic renderer by modeling mixtures of refraction and reflection. Split the ray in two, weigh each by their probability and propagate them recurseively. This should even reproduce the Fresnel effect.
 - [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
-- [ ] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
 - [ ] Create camera based on aspect ratio and one pixel dimension
 - [ ] Implement depth of field capability
-- [ ] New objects: Cones, Torus
 - [ ] Normal textures especially for glass surfaces, but not just (who owns the normal texture?)
 - [ ] Check out texture resources.
 - [ ] Allow to run ALL renderes and store the renderer type in the file name. (?)
-- [ ] Height textures
 - [ ] Print preview of image downscaled in terminal
 - [ ] Look into ogb mesh files.
+- [ ] Create AABB from two points
+- [ ] Shape should return vertices and min/max values to easily create bounding boxes
+- [ ] Split AABB into two boxes along the longest side
+- [ ] Camera effects:
+  - [ ] Motion blur
+  - [ ] Depth/aperture
 - [ ] Camera/object have dynamics property in common (velocity, Evolve(t), etc). Common Interface?
-- [ ] Camera should have an ONB that handles location and orientation
+  - [ ] Camera should have an ONB that handles location and orientation or a 3d motion base class
 - [ ] Profile to check for bottlenecks.
 
 ### Image ideas:
 - [ ] Light lanterns along a road in the night with nice ambient. Wet road, oncoming car.
 - [x] Create a series of material comparisons, e.g. roughness, metallicity, glas, ...
 - [ ] Recreate that photo I took in the pub.
-- [ ] Table: Badly lid wooden table with chair: table lamp, two glasses, one filled, one fell over, spilled reflective surfuce of beverage, a globe, a sheet of paper (the liquid can be spilled on parts of it), a pen, a glass ball, etc. Maybe add some fog
+- [ ] Table: Badly lid wooden table with chair: table lamp, two glasses, one filled, with an icecube, one fell over, spilled reflective surfuce of beverage, a globe, a sheet of paper (the liquid can be spilled on parts of it), a pen, a glass ball, etc. Maybe add some fog
 
 ### Known bugs and issues:
 - [x] Increasing the resolution sometimes seems to widen the field of view and vice versa
