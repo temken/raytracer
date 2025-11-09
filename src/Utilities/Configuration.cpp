@@ -155,9 +155,16 @@ Scene Configuration::ConstructScene() const {
         throw std::runtime_error("Missing scene section");
     }
 
+    // Background
     auto bg = node["background_color"];
     Color backgroundColor = ParseColor(bg);
     Scene scene(backgroundColor);
+
+    // Optional background texture
+    if (node["background_texture"]) {
+        std::string textureFile = node["background_texture"].as<std::string>();
+        scene.SetColorTexture(textureFile);
+    }
 
     if (auto objs = node["objects"]) {
         for (auto obj : objs) {

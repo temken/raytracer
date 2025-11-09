@@ -75,8 +75,12 @@ std::vector<Vector3D> Sphere::GetKeyPoints() const {
 }
 
 std::pair<double, double> Sphere::GetSurfaceParameters(const Vector3D& point) const {
+    return GetSurfaceParameters(point, mPosition, mOrthonormalBasis);
+}
+
+std::pair<double, double> Sphere::GetSurfaceParameters(const Vector3D& point, const Vector3D& sphereCenter, const OrthonormalBasis& basis) {
     // Convert point to the sphere's local coordinates
-    Vector3D localPoint = mOrthonormalBasis.ToLocal(point - mPosition);
+    Vector3D localPoint = basis.ToLocal(point - sphereCenter);
     Vector3D d = localPoint.Normalized();
 
     double phi = std::atan2(d[1], d[0]);  // range [-π, π]

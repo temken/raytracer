@@ -14,6 +14,7 @@ public:
         eZ = 2
     };
 
+    OrthonormalBasis();
     OrthonormalBasis(Vector3D eZ, Vector3D eX = Vector3D({0.0, 0.0, 0.0}));
 
     const Vector3D& GetBasisVector(BasisVector axis) const;

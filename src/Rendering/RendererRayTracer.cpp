@@ -10,7 +10,7 @@ Color RendererRayTracer::TraceRay(Ray ray, const Scene& scene) {
     while (ray.GetDepth() < kMaximumDepth) {
         auto intersection = Intersect(ray, scene);
         if (!intersection.has_value()) {
-            return scene.GetBackgroundColor();
+            return scene.GetBackgroundColor(ray);
         }
 
         auto& material = intersection->object->GetMaterial();

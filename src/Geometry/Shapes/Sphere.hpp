@@ -15,6 +15,9 @@ public:
 
     virtual std::vector<Vector3D> GetKeyPoints() const override;
     virtual std::pair<double, double> GetSurfaceParameters(const Vector3D& point) const override;
+    
+    // Static version of GetSurfaceParameters
+    static std::pair<double, double> GetSurfaceParameters(const Vector3D& point, const Vector3D& sphereCenter, const OrthonormalBasis& basis);
 
     virtual void PrintInfo() const override;
 

@@ -2,6 +2,12 @@
 
 namespace Raytracer::Geometry {
 
+OrthonormalBasis::OrthonormalBasis() {
+    mBasisVectors = {Vector3D({1.0, 0.0, 0.0}),
+                     Vector3D({0.0, 1.0, 0.0}),
+                     Vector3D({0.0, 0.0, 1.0})};
+}
+
 OrthonormalBasis::OrthonormalBasis(Vector3D eZ, Vector3D eX) {
     eZ.Normalize();
     if (eX.NormSquared() < 1e-8) {

@@ -18,7 +18,8 @@ public:
     const std::vector<std::shared_ptr<Object>>& GetObjects() const;
     const std::vector<std::shared_ptr<Object>>& GetLightSources() const;
 
-    Color GetBackgroundColor() const;
+    Color GetBackgroundColor(const Ray& ray) const;
+    void SetColorTexture(std::string filename);
 
     bool IsDynamic() const;
     void Evolve(double timeStep);
@@ -35,7 +36,10 @@ private:
     std::vector<std::shared_ptr<Object>> mObjects;
     std::vector<std::shared_ptr<Object>> mLightSources;
     std::vector<std::shared_ptr<Object>> mDynamicObjects;
+
+    // Background
     Color mBackgroundColor;
+    std::optional<Texture> mBackgroundTexture = std::nullopt;
 
     double mTime = 0.0;
 };

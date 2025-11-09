@@ -1,5 +1,9 @@
 #include "Scene/Scene.hpp"
 
+#include "Geometry/OrthonormalBasis.hpp"
+#include "Geometry/Shapes/Sphere.hpp"
+#include "Version.hpp"
+
 namespace Raytracer {
 
 Scene::Scene(const Color& backgroundColor) :
@@ -24,8 +28,22 @@ const std::vector<std::shared_ptr<Object>>& Scene::GetLightSources() const {
     return mLightSources;
 }
 
-Color Scene::GetBackgroundColor() const {
+Color Scene::GetBackgroundColor(const Ray& ray) const {
+    if (mBackgroundTexture) {
+        Vector3D direction = ray.GetDirection().Normalized();
+        auto uv = Geometry::Sphere::GetSurfaceParameters(direction, Vector3D({0, 0, 0}), Geometry::OrthonormalBasis(Vector3D({0, 0, 1})));
+
+        // Convert from [-0.5, 0.5] range to [0, 1] range and flip horizontal
+        // TODO: Fix different ranges
+        double u = 0.5 - uv.first;  // Flip horizontal direction
+        double v = uv.second + 0.5;
+        return mBackgroundTexture->GetColorAt(u, v);
+    }
     return mBackgroundColor;
+}
+void Scene::SetColorTexture(std::string filename) {
+    std::string filepath = TOP_LEVEL_DIR "/textures/" + filename;
+    mBackgroundTexture = Texture(filepath);
 }
 
 bool Scene::IsDynamic() const {

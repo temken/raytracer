@@ -11,9 +11,9 @@
 - [x] Test Translate/Rotate/Spin for composite shapes
 - [x] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
 - [x] Make a nice dynamic scene (spinning octahedron, spinning box, rotating light source ball)
+- [x] Image texture and gradients for the background (spherical background image)
+- [x] Scene: Solar system
 - [ ] New renderer: Path tracing with NNE.
-- [ ] Image texture and gradients for the background (spherical background image)
-- [ ] Scene: Solar system
 - [ ] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer). Look up fireflys (try without russian roulette)
 - [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
 - [ ] Visualize the contributions of N=1,2,3,4,5 scatterings
@@ -53,6 +53,8 @@
 - [ ] Camera/object have dynamics property in common (velocity, Evolve(t), etc). Common Interface?
   - [ ] Camera should have an ONB that handles location and orientation or a 3d motion base class
 - [ ] Profile to check for bottlenecks.
+- [ ] Organize textures
+  - [ ] Normal, basecolor, specular, normal
 
 ### Image ideas:
 - [ ] Light lanterns along a road in the night with nice ambient. Wet road, oncoming car.

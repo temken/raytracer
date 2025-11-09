@@ -11,7 +11,7 @@ Color RendererPathTracer::TraceRay(Ray ray, const Scene& scene) {
         auto intersection = Intersect(ray, scene);
         if (!intersection.has_value()) {
             // Hit background - multiply background color by current throughput
-            return ray.GetRadiance() + ray.GetThroughput() * scene.GetBackgroundColor();
+            return ray.GetRadiance() + ray.GetThroughput() * scene.GetBackgroundColor(ray);
         }
         auto& material = intersection->object->GetMaterial();
 
