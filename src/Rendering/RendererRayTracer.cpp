@@ -16,6 +16,7 @@ Color RendererRayTracer::TraceRay(Ray ray, const Scene& scene) {
         auto& material = intersection->object->GetMaterial();
 
         if (material.EmitsLight()) {
+            ray.UpdateThroughput(material.GetColor(intersection.value()));
             ray.AddRadiance(ray.GetThroughput() * material.GetEmission());
             break;
         }
