@@ -184,6 +184,8 @@ Scene Configuration::ConstructScene() const {
                 scene.AddObject(std::make_unique<Object>(ParseTetrahedron(obj)));
             } else if (type == "Octahedron") {
                 scene.AddObject(std::make_unique<Object>(ParseOctahedron(obj)));
+            } else if (type == "Ring") {
+                scene.AddObject(std::make_unique<Object>(ParseRing(obj)));
             } else if (type == "Triangle") {
                 scene.AddObject(std::make_unique<Object>(ParseTriangle(obj)));
             } else if (type == "Tube") {
@@ -467,6 +469,23 @@ Object Configuration::ParseTetrahedron(const YAML::Node& obj) const {
 
     tetrahedron.SetVisible(props.visible);
     return tetrahedron;
+}
+
+Object Configuration::ParseRing(const YAML::Node& obj) const {
+    ObjectProperties props = ParseObjectProperties(obj);
+    double innerRadius = obj["inner_radius"].as<double>();
+    double outerRadius = obj["outer_radius"].as<double>();
+
+    // Construct the ring
+    Object ring = MakeObject<Geometry::Ring>(props.id, props.material, props.position, props.normal, innerRadius, outerRadius);
+
+    ring.SetVelocity(props.velocity);
+    ring.SetAcceleration(props.acceleration);
+    ring.SetAngularVelocity(props.angularVelocity);
+    ring.SetSpin(props.spin);
+
+    ring.SetVisible(props.visible);
+    return ring;
 }
 
 Object Configuration::ParseOctahedron(const YAML::Node& obj) const {

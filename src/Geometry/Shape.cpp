@@ -67,6 +67,8 @@ std::string Shape::TypeToString(Type type) {
             return "Plane";
         case Type::RECTANGLE:
             return "Rectangle";
+        case Type::RING:
+            return "Ring";
         case Type::SPHERE:
             return "Sphere";
         case Type::TETRAHEDRON:

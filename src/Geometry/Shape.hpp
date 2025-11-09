@@ -24,6 +24,7 @@ public:
         OCTAHEDRON,
         PLANE,
         RECTANGLE,
+        RING,
         SPHERE,
         TETRAHEDRON,
         TRIANGLE,
