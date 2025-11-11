@@ -19,6 +19,7 @@ public:
         BOX,
         BOX_AXIS_ALIGNED,
         CYLINDER,
+        CYLINDRICAL_SHELL,
         DISK,
         HALF_SPHERE,
         OCTAHEDRON,

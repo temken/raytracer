@@ -13,12 +13,12 @@
 - [x] Make a nice dynamic scene (spinning octahedron, spinning box, rotating light source ball)
 - [x] Image texture and gradients for the background (spherical background image)
 - [x] Scene: Solar system
+- [x] Add a cylinder shell class of finite size.
 - [ ] New renderer: Path tracing with NNE.
 - [ ] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer). Look up fireflys (try without russian roulette)
 - [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
 - [ ] Visualize the contributions of N=1,2,3,4,5 scatterings
 - [ ] Figure out how to make composite objects work.
-- [ ] Add a cylinder shell class of finite size.
 - [ ] Maybe textures should not get stretched. How to have unstretched textures on cylinders, boxes, etc.
   - [ ] Textures for cubes/other composite objects. (Use only some of the texture? Special textures (t shaped) for cubes for example) Or each object uses its own texture.
 - [ ] New shapes:

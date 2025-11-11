@@ -1,6 +1,6 @@
 id: scene-001
 
-threads: 6
+threads: 8
 
 # # Material with all properties set
 # material:
@@ -31,8 +31,8 @@ camera:
   position: [9.0, 0.2, 0.0]
   direction: [-1.0, 0.0, 0.0]
   resolution:
-    width: 1600
-    height: 1200
+    width: 800
+    height: 600
   framesPerSecond: 15
   antialiasing: false
   blur_image: false
@@ -150,7 +150,7 @@ scene:
       radius: 2.0
       material:
         baseColor: white
-        roughness: 0.3
+        # roughness: 0.3
         refractiveIndex: 1.5
         useFresnel: false
         probabilities:
@@ -242,3 +242,24 @@ scene:
           diffuse: 1.0
           reflective: 0.0
           refractive: 0.0
+
+    - type: Ring
+      id: ring
+      visible: true
+      position: [-4.0, 2.0, -4.0]
+      normal: [0.0, 0.0, 1.0]
+      inner_radius: 0.5
+      outer_radius: 1.0
+      material:
+        baseColor: red
+
+    - type: CylindricalShell
+      id: shell-object
+      visible: true
+      position: [3.0, 2.0, -4.5]
+      normal: [0.0, 0.0, 1.0]
+      inner_radius: 1.8
+      outer_radius: 2.0
+      height: 1.0
+      material:
+        baseColor: red

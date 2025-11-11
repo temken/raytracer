@@ -3,6 +3,7 @@
 #include "Geometry/Shapes/Box.hpp"
 #include "Geometry/Shapes/BoxAxisAligned.hpp"
 #include "Geometry/Shapes/Cylinder.hpp"
+#include "Geometry/Shapes/CylindricalShell.hpp"
 #include "Geometry/Shapes/Disk.hpp"
 #include "Geometry/Shapes/HalfSphere.hpp"
 #include "Geometry/Shapes/Octahedron.hpp"
@@ -180,6 +181,8 @@ Scene Configuration::ConstructScene() const {
                 scene.AddObject(std::make_unique<Object>(ParseBox(obj)));
             } else if (type == "Cylinder") {
                 scene.AddObject(std::make_unique<Object>(ParseCylinder(obj)));
+            } else if (type == "CylindricalShell") {
+                scene.AddObject(std::make_unique<Object>(ParseCylindricalShell(obj)));
             } else if (type == "Tetrahedron") {
                 scene.AddObject(std::make_unique<Object>(ParseTetrahedron(obj)));
             } else if (type == "Octahedron") {
@@ -453,6 +456,24 @@ Object Configuration::ParseCylinder(const YAML::Node& obj) const {
 
     cylinder.SetVisible(props.visible);
     return cylinder;
+}
+
+Object Configuration::ParseCylindricalShell(const YAML::Node& obj) const {
+    ObjectProperties props = ParseObjectProperties(obj);
+    double innerRadius = obj["inner_radius"].as<double>();
+    double outerRadius = obj["outer_radius"].as<double>();
+    double height = obj["height"].as<double>();
+
+    // Construct the cylindrical shell
+    Object shell = MakeObject<Geometry::CylindricalShell>(props.id, props.material, props.position, props.normal, innerRadius, outerRadius, height);
+
+    shell.SetVelocity(props.velocity);
+    shell.SetAcceleration(props.acceleration);
+    shell.SetAngularVelocity(props.angularVelocity);
+    shell.SetSpin(props.spin);
+
+    shell.SetVisible(props.visible);
+    return shell;
 }
 
 Object Configuration::ParseTetrahedron(const YAML::Node& obj) const {
