@@ -212,9 +212,9 @@ Image Camera::CreateImage(const std::vector<std::vector<Color>>& accumulatedColo
 }
 
 void Camera::ApplyPostProcessing(Color& color) {
-    ApplyGammaCorrection(color);
-    ReinhardToneMapping(color);
-    LinearToSRGB(color);
+    ReinhardToneMapping(color);   // First: compress HDR values
+    ApplyGammaCorrection(color);  // Second: adjust exposure
+    LinearToSRGB(color);          // Third: gamma correction + sRGB conversion
 }
 
 void Camera::ApplyGammaCorrection(Color& color) {
