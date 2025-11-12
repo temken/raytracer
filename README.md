@@ -14,19 +14,21 @@
 - [x] Image texture and gradients for the background (spherical background image)
 - [x] Scene: Solar system
 - [x] Add a cylinder shell class of finite size.
-- [ ] New renderer: Path tracing with NNE.
-- [ ] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer). Look up fireflys (try without russian roulette)
-- [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
-- [ ] Visualize the contributions of N=1,2,3,4,5 scatterings
+- [x] New renderer: Path tracing with NNE.
+- [x] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer). Look up fireflys (try without russian roulette)
+- [ ] Make a clean simple scene to visualize the contributions of N=1,2,3,4,5 scatterings
 - [ ] Figure out how to make composite objects work.
 - [ ] Maybe textures should not get stretched. How to have unstretched textures on cylinders, boxes, etc.
   - [ ] Textures for cubes/other composite objects. (Use only some of the texture? Special textures (t shaped) for cubes for example) Or each object uses its own texture.
 - [ ] New shapes:
+  - [ ] Conical surface
   - [ ] Cone (for pen)
-  - [ ] Torus/Ring
-  - [ ] Half Ring? (for globe)
-  - [ ] Thick tube (requires a 2D ring)
+  - [ ] Torus
+  - [ ] Half Torus
+  - [ ] Half Ring (for globe): Half torus with two half spheres as caps
+  - [x] Thick tube (requires a 2D ring)
 - [ ] Create composite objects (street lamps, desk lamps, pencil, spots, table, Chair, glass, filled glass)
+- [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
 - [ ] Scene: Table see below
 - [ ] If black pixels or noise still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter Or look at other Denoising algorithms.
 - [ ] Image textures for other objects

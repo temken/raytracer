@@ -102,11 +102,11 @@ void Material::Reflect(Ray& ray, const HitRecord& hitRecord, bool applyRoughness
     if (applyRoughness && mRoughness > 0.0) {
         double cosThetaMax = std::cos(mRoughness * (M_PI / 2.0));  // roughness=1 => 90° cone
         newDir = SampleCone(newDir, cosThetaMax);
-        // double pdf = 1.0 / (2.0 * M_PI * (1.0 - cosThetaMax));  // Uniform PDF over the cone
+        // For rough reflection, divide by probability since it's continuous sampling
         ray.UpdateThroughput(mSpecularColor / probability);
     } else {
-        // Perfect mirror
-        ray.UpdateThroughput(mSpecularColor / probability);
+        // Perfect mirror - no probability compensation for delta function
+        ray.UpdateThroughput(mSpecularColor);
     }
     ray.SetOrigin(hitRecord.point + kEpsilon * newDir);
     ray.SetDirection(newDir);
@@ -150,11 +150,11 @@ void Material::Refract(Ray& ray, const HitRecord& hitRecord, bool applyRoughness
     if (applyRoughness && mRoughness > 0.0) {
         double cosThetaMax = std::cos(mRoughness * (M_PI / 4.0));  // half the reflection roughness
         refractDir = SampleCone(refractDir, cosThetaMax);
-        // For roughness, just add scattering without PDF correction - treat as surface roughness, not importance sampling
+        // For rough refraction, divide by probability since it's continuous sampling
         ray.UpdateThroughput(GetColor(hitRecord) / probability);
     } else {
-        // Perfect refraction
-        ray.UpdateThroughput(GetColor(hitRecord) / probability);
+        // Perfect refraction - no probability compensation for delta function
+        ray.UpdateThroughput(GetColor(hitRecord));
     }
     ray.SetOrigin(hitRecord.point + kEpsilon * refractDir);
     ray.SetDirection(refractDir);
