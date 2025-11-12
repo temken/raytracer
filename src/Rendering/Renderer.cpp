@@ -26,6 +26,8 @@ std::string Renderer::GetTypeString() const {
             return "Ray Tracer";
         case Type::PATH_TRACER:
             return "Path Tracer";
+        case Type::PATH_TRACER_NEE:
+            return "Path Tracer with Next Event Estimation";
     }
 }
 

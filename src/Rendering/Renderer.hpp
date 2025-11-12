@@ -18,6 +18,7 @@ public:
         DETERMINISTIC,
         RAY_TRACER,
         PATH_TRACER,
+        PATH_TRACER_NEE,
         // Future renderers can be added here
     };
 

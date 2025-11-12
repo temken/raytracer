@@ -2,6 +2,7 @@
 
 #include "Rendering/RendererDeterministic.hpp"
 #include "Rendering/RendererPathTracer.hpp"
+#include "Rendering/RendererPathTracerNEE.hpp"
 #include "Rendering/RendererRayTracer.hpp"
 #include "Rendering/RendererSimple.hpp"
 #include "Utilities/Configuration.hpp"
@@ -332,6 +333,8 @@ std::unique_ptr<Renderer> Camera::CreateRenderer(Renderer::Type type) {
             return std::make_unique<RendererPathTracer>();
         case Renderer::Type::DETERMINISTIC:
             return std::make_unique<RendererDeterministic>();
+        case Renderer::Type::PATH_TRACER_NEE:
+            return std::make_unique<RendererPathTracerNEE>();
         default:
             throw std::invalid_argument("Unknown renderer type");
     }

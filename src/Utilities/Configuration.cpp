@@ -109,6 +109,8 @@ Camera Configuration::ConstructCamera() const {
         rendererType = Renderer::Type::PATH_TRACER;
     } else if (renderingEngineStr == "DETERMINISTIC") {
         rendererType = Renderer::Type::DETERMINISTIC;
+    } else if (renderingEngineStr == "PATH_TRACER_NEE") {
+        rendererType = Renderer::Type::PATH_TRACER_NEE;
     } else {
         throw std::invalid_argument("Unknown rendering type: " + renderingEngineStr);
     }
