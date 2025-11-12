@@ -107,9 +107,9 @@ void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const HitReco
     if (!anyLightHit) {
         ray.AddRadiance(kAmbientFactor * ray.GetThroughput());
     } else {
-        ray.AddRadiance(directRadiance);
+        // ray.AddRadiance(directRadiance);
         // It could be that this is actually physically more correct, but it looks less nice.
-        // ray.AddRadiance(ray.GetThroughput() * directRadiance);
+        ray.AddRadiance(ray.GetThroughput() * directRadiance);
     }
 }
 
