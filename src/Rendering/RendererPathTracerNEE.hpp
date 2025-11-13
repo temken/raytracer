@@ -14,7 +14,7 @@ public:
 
 private:
     std::uniform_real_distribution<double> mDistribution{0.0, 1.0};
-    static constexpr size_t kNumLightSamples = 5;
+    static constexpr size_t kNumLightSamples = 2;
 };
 
 }  // namespace Raytracer

@@ -7,19 +7,6 @@
 
 ## To do
 
-- [x] Test Translate/Rotate/Spin for simple objects
-- [x] Test Translate/Rotate/Spin for composite shapes
-- [x] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
-- [x] Make a nice dynamic scene (spinning octahedron, spinning box, rotating light source ball)
-- [x] Image texture and gradients for the background (spherical background image)
-- [x] Scene: Solar system
-- [x] Add a cylinder shell class of finite size.
-- [x] New renderer: Path tracing with NNE.
-- [x] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer). Look up fireflys (try without russian roulette)
-- [ ] Make a clean simple scene to visualize the contributions of N=1,2,3,4,5 scatterings
-- [ ] Figure out how to make composite objects work.
-- [ ] Maybe textures should not get stretched. How to have unstretched textures on cylinders, boxes, etc.
-  - [ ] Textures for cubes/other composite objects. (Use only some of the texture? Special textures (t shaped) for cubes for example) Or each object uses its own texture.
 - [ ] New shapes:
   - [ ] Conical surface
   - [ ] Cone (for pen)
@@ -27,6 +14,11 @@
   - [ ] Half Torus
   - [ ] Half Ring (for globe): Half torus with two half spheres as caps
   - [x] Thick tube (requires a 2D ring)
+- [ ] Add a new interaction: Transparency where teh light passes through unaffected (I need this for windows in walls + transparency textures)
+- [ ] Make a clean simple scene to visualize the contributions of N=1,2,3,4,5 scatterings
+- [ ] Figure out how to make composite objects work.
+- [ ] Maybe textures should not get stretched. How to have unstretched textures on cylinders, boxes, etc.
+  - [ ] Textures for cubes/other composite objects. (Use only some of the texture? Special textures (t shaped) for cubes for example) Or each object uses its own texture.
 - [ ] Create composite objects (street lamps, desk lamps, pencil, spots, table, Chair, glass, filled glass)
 - [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
 - [ ] Scene: Table see below
@@ -56,7 +48,7 @@
   - [ ] Camera should have an ONB that handles location and orientation or a 3d motion base class
 - [ ] Profile to check for bottlenecks.
 - [ ] Organize textures
-  - [ ] Normal, basecolor, specular, normal
+  - [ ] Normal, basecolor, specular, normal, Transparancy
 
 ### Image ideas:
 - [ ] Light lanterns along a road in the night with nice ambient. Wet road, oncoming car.
@@ -175,6 +167,17 @@
   - [x] Introcue `double mTime = 0.0` amd `void SetTime` to the Class.
   - [x] Have a `time` parameter in the config file that sets the time of the scene. Careful not to screw up the video rendering afterwards, either video should start at t=0 or the set time.
   - [x] Similar functionality in the `Camera` class.
+- [x] Test Translate/Rotate/Spin for simple objects
+- [x] Test Translate/Rotate/Spin for composite shapes
+- [x] Test and fix the object orientation and rotations and spin (in particular rectangles and boxes)
+- [x] Make a nice dynamic scene (spinning octahedron, spinning box, rotating light source ball)
+- [x] Image texture and gradients for the background (spherical background image)
+- [x] Scene: Solar system
+- [x] Add a cylinder shell class of finite size.
+- [x] New renderer: Path tracing with NNE.
+- [x] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer). Look up fireflys (try without russian roulette)
+- [ ] Why does one NEE sample of an empty room result in so many fireflys? Test NEE in the empty room. For N=10 I get more fireflies than for N=1
+ -> we double counted direct light even for depth > 0. The fireflies were just the rays that hit the light surface directly.
 
 
 ## General notes
