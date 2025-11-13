@@ -14,7 +14,7 @@ Color RendererPathTracerNEE::TraceRay(Ray ray, const Scene& scene) {
         }
         auto& material = intersection->object->GetMaterial();
 
-        if (material.EmitsLight()) {
+        if (material.EmitsLight() && ray.GetDepth() == 0) {
             // Terminate path to prevent double-counting
             ray.AddRadiance(ray.GetThroughput() * material.GetEmission());
             break;
