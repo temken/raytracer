@@ -8,15 +8,16 @@
 ## To do
 
 - [ ] New shapes:
-  - [ ] Conical surface
-  - [ ] Cone (for pen)
+  - [x] Cone (for pen)
   - [ ] Torus
   - [ ] Half Torus
   - [ ] Half Ring (for globe): Half torus with two half spheres as caps
   - [x] Thick tube (requires a 2D ring)
+- [ ] Figure out how to make composite objects work.
 - [ ] Add a new interaction: Transparency where teh light passes through unaffected (I need this for windows in walls + transparency textures)
 - [ ] Make a clean simple scene to visualize the contributions of N=1,2,3,4,5 scatterings
-- [ ] Figure out how to make composite objects work.
+- [ ] Do I implement NEE correctly? (Reflections/refractions). I feel like this keeping track of the previous interaction type is not right.
+- [ ] Reflections inside the glass sphere? Should I ony reflect from the outside? 
 - [ ] Maybe textures should not get stretched. How to have unstretched textures on cylinders, boxes, etc.
   - [ ] Textures for cubes/other composite objects. (Use only some of the texture? Special textures (t shaped) for cubes for example) Or each object uses its own texture.
 - [ ] Create composite objects (street lamps, desk lamps, pencil, spots, table, Chair, glass, filled glass)
@@ -178,6 +179,8 @@
 - [x] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer). Look up fireflys (try without russian roulette)
 - [ ] Why does one NEE sample of an empty room result in so many fireflys? Test NEE in the empty room. For N=10 I get more fireflies than for N=1
  -> we double counted direct light even for depth > 0. The fireflies were just the rays that hit the light surface directly.
+- [x] Print preview of image downscaled in terminal
+- [x] Print preview of video downscaled in terminal (without scrolling...)
 
 
 ## General notes

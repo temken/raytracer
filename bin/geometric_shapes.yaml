@@ -1,0 +1,256 @@
+id: all-shapes
+
+threads: 8
+
+# # Material with all properties set
+# material:
+#   baseColor: red               # required (can also be [r,g,b] or float/int values)
+#   specularColor: white     # optional, defaults to `baseColor` if omitted
+#   roughness: 0.2           # optional, default = 0.0
+#   refractiveIndex: 1.5     # optional, default = 1.0
+#   meanFreePath: 0.1        # optional, default = 0.0
+#   radiance: 5.0           # optional, default = 0.0 (emission)
+#   colorTexture: "texture.png"  # optional, default = no texture
+#   useFresnel: true         # optional, default = true
+  
+#   # Optional: probabilities for interactions
+#   probabilities:
+#     diffuse: 0.5           # optional, default if not specified
+#     reflective: 0.4        # optional, default if not specified
+#     refractive: 0.1        # optional, default if not specified
+
+render:
+  image: true
+  video: false
+  video_duration: 2.0
+  open_output_files: true
+
+camera:
+  renderer_type: DETERMINISTIC  # Options: SIMPLE, DETERMINISTIC, RAY_TRACER PATH_TRACER PATH_TRACER_NEE
+  fov_deg: 100.0
+  position: [-10, 0, 3.0]
+  direction: [1.0, 0.0, -0.5]
+  resolution:
+    width: 1600
+    height: 1200
+  framesPerSecond: 15
+  antialiasing: false
+  blur_image: false
+  samples_per_pixel: 10
+  
+scene:  
+  background_color: black
+  time: 0.0
+  objects:
+    - type: Rectangle
+      id: floor
+      visible: true
+      position: [0.0, 0.0, -5.0]
+      normal: [0.0, 0.0, 1.0]
+      dimensions:
+        width: 30.0
+        height: 30.0
+      material:
+        baseColor: gray
+
+    - type: Rectangle
+      id: right-wall
+      visible: true
+      position: [0.0, 15.0, 0.0]
+      reference_direction: [1.0, 0.0, 0.0]
+      normal: [0.0, -1.0, 0.0]
+      dimensions:
+        width: 30.0
+        height: 20.0
+      material:
+        baseColor: red
+
+    - type: Rectangle
+      id: left-wall
+      visible: true
+      position: [0.0, -15.0, 0.0]
+      reference_direction: [-1.0, 0.0, 0.0]
+      normal: [0.0, 1.0, 0.0]
+      dimensions:
+        width: 30.0
+        height: 20.0
+      material:
+        baseColor: green
+
+    - type: Rectangle
+      id: ceiling
+      visible: true
+      position: [0.0, 0.0, 5.0]
+      normal: [0.0, 0.0, -1.0]
+      dimensions:
+        width: 30.0
+        height: 30.0
+      material:
+        baseColor: gray
+
+    - type: Rectangle
+      id: back-wall
+      visible: true
+      position: [-15, 0.0, 0.0]
+      reference_direction: [0.0, 1.0, 0.0]
+      normal: [1.0, 0.0, 0.0]
+      dimensions:
+        width: 30.0
+        height: 20.0
+      material:
+        baseColor: gray
+
+    - type: Rectangle
+      id: front-wall
+      visible: true
+      position: [15, 0.0, 0.0]
+      normal: [-1.0, 0.0, 0.0]
+      reference_direction: [0.0, 1.0, 0.0]
+      dimensions:
+        width: 30.0
+        height: 20.0
+      material:
+        baseColor: gray
+
+    - type: Disk
+      id: ceiling-lamp
+      visible: true
+      position: [0, 0.0, 4.999]
+      normal: [0.0, 0.0, -1.0]
+      radius: 1.5
+      material:
+        baseColor: white
+        radiance: 10.0
+
+    - type: Sphere
+      id: ball
+      visible: true
+      position: [-4.0, -6.0, -4]
+      radius: 1.0
+      material:
+        baseColor: white
+
+    - type: Disk
+      id: disk
+      visible: true
+      position: [-4, -2, -4]
+      normal: [-1.0, -1.0, 0.0]
+      radius: 1.0
+      material:
+        baseColor: white
+
+    - type: Cylinder
+      id: cylinder
+      visible: true
+      position: [-4.0, 2, -4.0]
+      normal: [0.0, 0.0, 1.0]
+      radius: 1.0
+      height: 2.0
+      material:
+        baseColor: white
+
+    - type: BoxAxisAligned
+      id: box
+      visible: true
+      position: [-4.0, 6.0, -4.0]
+      dimensions:
+        length: 2.0
+        width: 2.0
+        height: 2.0
+      material:
+        baseColor: white
+
+    - type: Tube
+      id: tube
+      visible: true
+      position: [0.0, -6, -4.0]
+      normal: [0.0, 0.0, 1.0]
+      radius: 1.0
+      height: 2.0
+      material:
+        baseColor: white
+
+    - type: HalfSphere
+      id: half-sphere
+      visible: true
+      position: [0.0, -2.0, -4.0]
+      normal: [0.0, 0.0, -1.0]
+      radius: 1.0
+      material:
+        baseColor: white
+
+    - type: CylindricalShell
+      id: cylindrical-shell
+      visible: true
+      position: [0.0, 2.0, -4.0]
+      normal: [0.0, 0.0, 1.0]
+      outer_radius: 1.0
+      inner_radius: 0.5
+      height: 2.0
+      material:
+        baseColor: white
+
+    - type: Rectangle
+      id: small-rectangle
+      visible: true
+      position: [0.0, 6.0, -4.0]
+      normal: [0.0, 1.0, 0.0]
+      # reference_direction: [1.0, 0.0, 0.0]
+      dimensions:
+        width: 2.0
+        height: 2.0
+      material:
+        baseColor: white
+
+    - type: Triangle
+      id: tilted-triangle
+      visible: true
+      vertices: [
+        [2.0, -6.0, -4.0],
+        [4.0, -6.0, -4.0],
+        [3.0, -4.0, -3.0]
+               ]
+      material:
+        baseColor: white
+
+    - type: Tetrahedron
+      id: small-tetrahedron
+      visible: true
+      position: [4.0, -2.0, -5.0]
+      normal: [0.0, 0.0, 1.0]
+      reference_direction: [0.0, 1.0, 0.0]
+      edge_length: 2.0
+      material:
+        baseColor: white
+
+    - type: Octahedron
+      id: small-octahedron
+      visible: true
+      position: [4.0, 2.0, -4.0]
+      normal: [0.0, 0.0, 1.0]
+      reference_direction: [1.0, 3.0, 0.0]
+      edge_length: 2.0
+      material:
+        baseColor: white
+
+    - type: Ring
+      id: ring
+      visible: true
+      position: [4.0, 6.0, -4.0]
+      normal: [0.0, 1.0, 0.0]
+      inner_radius: 0.5
+      outer_radius: 1.0
+      material:
+        baseColor: white
+
+    - type: Cone
+      id: cone
+      visible: true
+      position: [8.0, 6.0, -3.0]
+      normal: [0.0, 0.0, -1.0]
+      base_radius: 1.0
+      height: 2.0
+      material:
+        baseColor: white
+
+    

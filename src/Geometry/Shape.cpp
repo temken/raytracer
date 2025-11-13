@@ -57,6 +57,8 @@ std::string Shape::TypeToString(Type type) {
             return "Box";
         case Type::BOX_AXIS_ALIGNED:
             return "Box (Axis Aligned)";
+        case Type::CONE:
+            return "Cone";
         case Type::CYLINDER:
             return "Cylinder";
         case Type::CYLINDRICAL_SHELL:

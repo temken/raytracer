@@ -2,6 +2,7 @@
 
 #include "Geometry/Shapes/Box.hpp"
 #include "Geometry/Shapes/BoxAxisAligned.hpp"
+#include "Geometry/Shapes/Cone.hpp"
 #include "Geometry/Shapes/Cylinder.hpp"
 #include "Geometry/Shapes/CylindricalShell.hpp"
 #include "Geometry/Shapes/Disk.hpp"
@@ -181,6 +182,8 @@ Scene Configuration::ConstructScene() const {
                 scene.AddObject(std::make_unique<Object>(ParseRectangle(obj)));
             } else if (type == "Box") {
                 scene.AddObject(std::make_unique<Object>(ParseBox(obj)));
+            } else if (type == "Cone") {
+                scene.AddObject(std::make_unique<Object>(ParseCone(obj)));
             } else if (type == "Cylinder") {
                 scene.AddObject(std::make_unique<Object>(ParseCylinder(obj)));
             } else if (type == "CylindricalShell") {
@@ -476,6 +479,23 @@ Object Configuration::ParseCylindricalShell(const YAML::Node& obj) const {
 
     shell.SetVisible(props.visible);
     return shell;
+}
+
+Object Configuration::ParseCone(const YAML::Node& obj) const {
+    ObjectProperties props = ParseObjectProperties(obj);
+    double baseRadius = obj["base_radius"].as<double>();
+    double height = obj["height"].as<double>();
+
+    // Construct the cone
+    Object cone = MakeObject<Geometry::Cone>(props.id, props.material, props.position, props.normal, baseRadius, height);
+
+    cone.SetVelocity(props.velocity);
+    cone.SetAcceleration(props.acceleration);
+    cone.SetAngularVelocity(props.angularVelocity);
+    cone.SetSpin(props.spin);
+
+    cone.SetVisible(props.visible);
+    return cone;
 }
 
 Object Configuration::ParseTetrahedron(const YAML::Node& obj) const {

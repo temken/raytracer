@@ -88,6 +88,7 @@ private:
     ObjectProperties ParseObjectProperties(const YAML::Node& obj) const;
 
     Object ParseSphere(const YAML::Node& obj) const;
+    Object ParseCone(const YAML::Node& obj) const;
     Object ParseDisk(const YAML::Node& obj) const;
     Object ParseRectangle(const YAML::Node& obj) const;
     Object ParseBox(const YAML::Node& obj) const;

@@ -18,6 +18,7 @@ public:
     enum class Type {
         BOX,
         BOX_AXIS_ALIGNED,
+        CONE,
         CYLINDER,
         CYLINDRICAL_SHELL,
         DISK,
