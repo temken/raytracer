@@ -1,6 +1,13 @@
 #pragma once
 
+#include "Geometry/Intersection.hpp"
+#include "Geometry/Line.hpp"
 #include "Geometry/Shape.hpp"
+#include "Geometry/Vector.hpp"
+
+#include <optional>
+#include <random>
+#include <vector>
 
 namespace Raytracer::Geometry {
 
