@@ -60,6 +60,7 @@ int main(int argc, char** argv) {
         bool printProgressBar = true;
         bool renderImageConvergingVideo = false;
         Image image = camera.RenderImage(scene, printProgressBar, renderImageConvergingVideo);
+        image.PrintToTerminal(60);
         image.PrintInfo();
         image.Save(renderConfig.openOutputFiles);
     }

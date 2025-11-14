@@ -181,6 +181,37 @@ bool Image::Save(bool openFile, std::string filepath) const {
     return ok != 0;
 }
 
+void Image::PrintToTerminal(std::size_t width, double terminalCharAspectRatio) const {
+    if (mWidth == 0 || mHeight == 0 || width == 0) {
+        throw std::runtime_error("Cannot print an empty image to terminal.");
+    }
+    double aspectRatio = static_cast<double>(mWidth) / static_cast<double>(mHeight);
+    double height = static_cast<double>(width) / aspectRatio / terminalCharAspectRatio;
+    double terminalPixelsWidth = static_cast<double>(mWidth) / static_cast<double>(width);
+    double terminalPixelsHeight = static_cast<double>(mHeight) / height;  // Each terminal row represents two image rows
+
+    for (std::size_t ty = 0; ty < height; ty++) {
+        for (std::size_t tx = 0; tx < width; tx++) {
+            Color terminalPixelColor(0.0, 0.0, 0.0);
+            std::size_t pixelCount = 0;
+            for (auto i = 0; i < terminalPixelsHeight; ++i) {
+                for (auto j = 0; j < terminalPixelsWidth; ++j) {
+                    std::size_t imgX = tx * terminalPixelsWidth + j;
+                    std::size_t imgY = ty * terminalPixelsHeight + i;
+                    if (imgX < mWidth && imgY < mHeight) {
+                        terminalPixelColor += GetPixel(imgX, imgY);
+                        pixelCount++;
+                    }
+                }
+            }
+            terminalPixelColor = terminalPixelColor / static_cast<double>(pixelCount);
+            terminalPixelColor.PrintTerminalPixel();
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+}
+
 void Image::CheckBounds(std::size_t x, std::size_t y) const {
     if (x >= mWidth || y >= mHeight) {
         throw std::out_of_range("Pixel coordinate out of bounds");

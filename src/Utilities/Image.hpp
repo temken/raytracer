@@ -24,6 +24,8 @@ public:
 
     bool Save(bool openFile = false, std::string filepath = "") const;
 
+    void PrintToTerminal(std::size_t width, double terminalCharAspectRatio = 18.0 / 7.0) const;
+
     void Clear(const Color& color = Color(0, 0, 0));
 
     void PrintInfo() const;
