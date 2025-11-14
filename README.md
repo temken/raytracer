@@ -7,6 +7,9 @@
 
 ## To do
 
+- [x] Print preview of image downscaled in terminal
+- [ ] Do I implement NEE correctly? (Reflections/refractions). I feel like this keeping track of the previous interaction type is not right.
+- [ ] Reflections inside the glass sphere? Should I ony reflect from the outside? 
 - [ ] New shapes:
   - [x] Cone (for pen)
   - [ ] Torus
@@ -34,10 +37,9 @@
 - [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
 - [ ] Create camera based on aspect ratio and one pixel dimension
 - [ ] Implement depth of field capability
-- [ ] Normal textures especially for glass surfaces, but not just (who owns the normal texture?)
+- [ ] Normal textures especially for glass surfaces, but not just (who owns the normal texture? -> The shape)
 - [ ] Check out texture resources.
 - [ ] Allow to run ALL renderes and store the renderer type in the file name. (?)
-- [ ] Print preview of image downscaled in terminal
 - [ ] Look into ogb mesh files.
 - [ ] Create AABB from two points
 - [ ] Shape should return vertices and min/max values to easily create bounding boxes
@@ -177,7 +179,7 @@
 - [x] Add a cylinder shell class of finite size.
 - [x] New renderer: Path tracing with NNE.
 - [x] Fix the bug of bright pixels in the ray tracer (maybe also pathtracer). Look up fireflys (try without russian roulette)
-- [ ] Why does one NEE sample of an empty room result in so many fireflys? Test NEE in the empty room. For N=10 I get more fireflies than for N=1
+- [x] Why does one NEE sample of an empty room result in so many fireflys? Test NEE in the empty room. For N=10 I get more fireflies than for N=1
  -> we double counted direct light even for depth > 0. The fireflies were just the rays that hit the light surface directly.
 - [x] Print preview of image downscaled in terminal
 - [x] Print preview of video downscaled in terminal (without scrolling...)

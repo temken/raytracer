@@ -20,6 +20,8 @@ public:
 
     std::string GetHexColor() const;
 
+    void PrintTerminalPixel() const;
+
     // Operators
     bool operator==(const Color& other) const {
         return (r == other.r) && (g == other.g) && (b == other.b);

@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 namespace Raytracer {
 
@@ -43,6 +44,14 @@ std::string Color::GetHexColor() const {
         ss << std::setw(2) << rgb[i];
     }
     return ss.str();
+}
+
+void Color::PrintTerminalPixel() const {
+    auto rgb = GetRGB255();
+    std::cout << "\033[38;2;"
+              << rgb[0] << ";" << rgb[1] << ";" << rgb[2] << "m"
+              << "█"
+              << "\033[0m";
 }
 
 }  // namespace Raytracer
