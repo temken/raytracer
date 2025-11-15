@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <format>
 #include <iostream>
+#include <thread>
 
 namespace Raytracer {
 
@@ -93,6 +94,39 @@ void Video::Save(bool openFile, bool showTerminalOutput, bool deleteFrameFiles, 
 #endif
         std::system(command.c_str());
     }
+}
+
+void Video::PlayInTerminal(std::size_t width, bool loop, double terminalCharAspectRatio) const {
+    if (mFrames.empty()) {
+        throw std::runtime_error("No frames to play in terminal.");
+    }
+
+    double frameDuration = 1.0 / mFPS;
+
+    double aspectRatio = static_cast<double>(mWidth) / static_cast<double>(mHeight);
+    double height = static_cast<double>(width) / aspectRatio / terminalCharAspectRatio;
+    std::size_t imageLines = static_cast<std::size_t>(height);
+
+    std::cout << "\033[?25l";  // Hide cursor
+    std::cout << std::endl;
+
+    bool firstFrame = true;
+    bool stop = false;
+    while (!stop) {
+        for (const auto& frame : mFrames) {
+            if (!firstFrame) {
+                // Move cursor up by the number of lines the image occupies and to the start of the line
+                std::cout << "\033[" << imageLines + 1 << "A";
+            }
+            firstFrame = false;
+            frame.PrintToTerminal(width, terminalCharAspectRatio);
+
+            std::this_thread::sleep_for(
+                std::chrono::duration<double>(frameDuration));
+        }
+        stop = !loop;
+    }
+    std::cout << "\033[?25h" << std::endl;  // Show cursor again
 }
 
 void Video::PrintInfo() const {

@@ -19,6 +19,8 @@ public:
     void AddFrame(const Image& image);
     void Save(bool openFile = false, bool showTerminalOutput = false, bool deleteFrameFiles = true, std::string filepath = "");
 
+    void PlayInTerminal(std::size_t width, bool loop = false, double terminalCharAspectRatio = 18.0 / 7.0) const;
+
     void PrintInfo() const;
 
 private:

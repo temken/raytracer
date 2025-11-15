@@ -209,7 +209,6 @@ void Image::PrintToTerminal(std::size_t width, double terminalCharAspectRatio) c
         }
         std::cout << std::endl;
     }
-    std::cout << std::endl;
 }
 
 void Image::CheckBounds(std::size_t x, std::size_t y) const {
