@@ -29,6 +29,7 @@ public:
         RING,
         SPHERE,
         TETRAHEDRON,
+        TORUS,
         TRIANGLE,
         TUBE,
     };

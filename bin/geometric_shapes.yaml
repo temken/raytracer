@@ -195,7 +195,6 @@ scene:
       visible: true
       position: [0.0, 6.0, -4.0]
       normal: [0.0, 1.0, 0.0]
-      # reference_direction: [1.0, 0.0, 0.0]
       dimensions:
         width: 2.0
         height: 2.0
@@ -253,4 +252,14 @@ scene:
       material:
         baseColor: white
 
+    - type: Torus
+      id: torus
+      visible: true
+      position: [8.0, 2.0, -4.0]
+      normal: [0.0, 0.0, 1.0]
+      reference_direction: [1.0, 0.0, 0.0]
+      major_radius: 1.0
+      minor_radius: 0.2
+      material:
+        baseColor: white
     

@@ -11,6 +11,7 @@
 #include "Geometry/Shapes/Rectangle.hpp"
 #include "Geometry/Shapes/Sphere.hpp"
 #include "Geometry/Shapes/Tetrahedron.hpp"
+#include "Geometry/Shapes/Torus.hpp"
 #include "Geometry/Shapes/Triangle.hpp"
 #include "Geometry/Shapes/Tube.hpp"
 #include "Scene/Object.hpp"
@@ -194,6 +195,8 @@ Scene Configuration::ConstructScene() const {
                 scene.AddObject(std::make_unique<Object>(ParseOctahedron(obj)));
             } else if (type == "Ring") {
                 scene.AddObject(std::make_unique<Object>(ParseRing(obj)));
+            } else if (type == "Torus") {
+                scene.AddObject(std::make_unique<Object>(ParseTorus(obj)));
             } else if (type == "Triangle") {
                 scene.AddObject(std::make_unique<Object>(ParseTriangle(obj)));
             } else if (type == "Tube") {
@@ -529,6 +532,23 @@ Object Configuration::ParseRing(const YAML::Node& obj) const {
 
     ring.SetVisible(props.visible);
     return ring;
+}
+
+Object Configuration::ParseTorus(const YAML::Node& obj) const {
+    ObjectProperties props = ParseObjectProperties(obj);
+    double majorRadius = obj["major_radius"].as<double>();
+    double minorRadius = obj["minor_radius"].as<double>();
+
+    // Construct the torus
+    Object torus = MakeObject<Geometry::Torus>(props.id, props.material, props.position, props.normal, majorRadius, minorRadius);
+
+    torus.SetVelocity(props.velocity);
+    torus.SetAcceleration(props.acceleration);
+    torus.SetAngularVelocity(props.angularVelocity);
+    torus.SetSpin(props.spin);
+
+    torus.SetVisible(props.visible);
+    return torus;
 }
 
 Object Configuration::ParseOctahedron(const YAML::Node& obj) const {
