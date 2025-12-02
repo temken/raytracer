@@ -7,15 +7,19 @@
 
 ## To do
 
+- [x] New shapes:
+  - [x] Cone (for pen)
+  - [x] Thick tube (requires a 2D ring)
 - [x] Print preview of image downscaled in terminal
+- [x] Implement torus class
+- [ ] Implement quartic equation solver:
+  - [ ] Exact solution
+  - [x] Approximative: Durand–Kerner method
+- [ ] Compare performance of quartic solvers on the Torus.
+- [ ] New class: Half Torus and Half Ring (for globe): Half torus with two half spheres as caps
 - [ ] Do I implement NEE correctly? (Reflections/refractions). I feel like this keeping track of the previous interaction type is not right.
 - [ ] Reflections inside the glass sphere? Should I ony reflect from the outside? 
-- [ ] New shapes:
-  - [x] Cone (for pen)
-  - [ ] Torus
-  - [ ] Half Torus
-  - [ ] Half Ring (for globe): Half torus with two half spheres as caps
-  - [x] Thick tube (requires a 2D ring)
+- [ ] Optimization: Precompute the pixel range for each object in a pre-processing scan. Needs to be re-done for each image, but not sample. Add a safety margin for antialiasing
 - [ ] Figure out how to make composite objects work.
 - [ ] Add a new interaction: Transparency where teh light passes through unaffected (I need this for windows in walls + transparency textures)
 - [ ] Make a clean simple scene to visualize the contributions of N=1,2,3,4,5 scatterings
