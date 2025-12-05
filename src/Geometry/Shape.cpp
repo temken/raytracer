@@ -67,6 +67,8 @@ std::string Shape::TypeToString(Type type) {
             return "Disk";
         case Type::HALF_SPHERE:
             return "Half Sphere";
+        case Type::HALF_TORUS:
+            return "Half Torus";
         case Type::PLANE:
             return "Plane";
         case Type::RECTANGLE:

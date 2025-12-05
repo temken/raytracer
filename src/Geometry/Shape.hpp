@@ -23,6 +23,7 @@ public:
         CYLINDRICAL_SHELL,
         DISK,
         HALF_SPHERE,
+        HALF_TORUS,
         OCTAHEDRON,
         PLANE,
         RECTANGLE,

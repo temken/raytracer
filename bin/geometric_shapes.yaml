@@ -36,7 +36,7 @@ camera:
   framesPerSecond: 15
   antialiasing: false
   blur_image: false
-  samples_per_pixel: 10
+  samples_per_pixel: 1
   
 scene:  
   background_color: black
@@ -262,4 +262,14 @@ scene:
       minor_radius: 0.2
       material:
         baseColor: white
-    
+
+    - type: HalfTorus
+      id: half-torus
+      visible: true
+      position: [8.0, -2.0, -4.0]
+      normal: [0.0, 0.0, 1.0]
+      reference_direction: [0.0, -1.0, 0.0]
+      major_radius: 1.0
+      minor_radius: 0.2
+      material:
+        baseColor: white

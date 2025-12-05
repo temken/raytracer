@@ -3,18 +3,14 @@
 #include "Geometry/Intersection.hpp"
 #include "Geometry/Line.hpp"
 #include "Geometry/Shape.hpp"
+#include "Geometry/Shapes/Torus.hpp"
 #include "Geometry/Vector.hpp"
-
-#include <array>
-#include <optional>
-#include <random>
-#include <vector>
 
 namespace Raytracer::Geometry {
 
-class Torus : public Shape {
+class HalfTorus : public Torus {
 public:
-    Torus(const Vector3D& position, const Vector3D& orientation, double majorRadius, double minorRadius);
+    HalfTorus(const Vector3D& position, const Vector3D& orientation, const Vector3D& referenceDirection, double majorRadius, double minorRadius);
 
     virtual std::optional<Intersection> Intersect(const Line& line) const override;
 
@@ -26,12 +22,7 @@ public:
 
     virtual void PrintInfo() const override;
 
-protected:
-    double mMajorRadius;
-    double mMinorRadius;
-
-    std::array<double, 5> ComputeQuarticCoefficients(const Vector3D& localOrigin, const Vector3D& localDirection) const;
-    Vector3D ComputeNormalAtPoint(const Vector3D& localPoint) const;
+private:
 };
 
 }  // namespace Raytracer::Geometry

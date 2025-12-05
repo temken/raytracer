@@ -7,6 +7,7 @@
 #include "Geometry/Shapes/CylindricalShell.hpp"
 #include "Geometry/Shapes/Disk.hpp"
 #include "Geometry/Shapes/HalfSphere.hpp"
+#include "Geometry/Shapes/HalfTorus.hpp"
 #include "Geometry/Shapes/Octahedron.hpp"
 #include "Geometry/Shapes/Rectangle.hpp"
 #include "Geometry/Shapes/Sphere.hpp"
@@ -203,6 +204,8 @@ Scene Configuration::ConstructScene() const {
                 scene.AddObject(std::make_unique<Object>(ParseTube(obj)));
             } else if (type == "HalfSphere") {
                 scene.AddObject(std::make_unique<Object>(ParseHalfSphere(obj)));
+            } else if (type == "HalfTorus") {
+                scene.AddObject(std::make_unique<Object>(ParseHalfTorus(obj)));
             } else if (type == "BoxAxisAligned") {
                 scene.AddObject(std::make_unique<Object>(ParseBoxAxisAligned(obj)));
             } else {
@@ -618,6 +621,23 @@ Object Configuration::ParseHalfSphere(const YAML::Node& obj) const {
     halfSphere.SetVisible(props.visible);
 
     return halfSphere;
+}
+
+Object Configuration::ParseHalfTorus(const YAML::Node& obj) const {
+    ObjectProperties props = ParseObjectProperties(obj);
+    double majorRadius = obj["major_radius"].as<double>();
+    double minorRadius = obj["minor_radius"].as<double>();
+
+    // Construct the half-torus
+    Object halfTorus = MakeObject<Geometry::HalfTorus>(props.id, props.material, props.position, props.normal, props.referenceDirection, majorRadius, minorRadius);
+
+    halfTorus.SetVelocity(props.velocity);
+    halfTorus.SetAcceleration(props.acceleration);
+    halfTorus.SetAngularVelocity(props.angularVelocity);
+    halfTorus.SetSpin(props.spin);
+
+    halfTorus.SetVisible(props.visible);
+    return halfTorus;
 }
 
 Object Configuration::ParseBoxAxisAligned(const YAML::Node& obj) const {
