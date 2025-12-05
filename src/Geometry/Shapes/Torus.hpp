@@ -30,7 +30,9 @@ private:
     double mMajorRadius;
     double mMinorRadius;
 
+protected:
     std::array<double, 5> ComputeQuarticCoefficients(const Vector3D& localOrigin, const Vector3D& localDirection) const;
+    Vector3D ComputeNormalAtPoint(const Vector3D& localPoint) const;
 };
 
 }  // namespace Raytracer::Geometry

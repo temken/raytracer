@@ -43,22 +43,10 @@ std::optional<Intersection> Torus::Intersect(const Line& line) const {
     Vector3D localPoint = O + D * tMin;
     Vector3D globalPoint = mOrthonormalBasis.ToGlobal(localPoint) + mPosition;
 
-    // Compute gradient of F(X) = (|X|^2 + R^2 - r^2)^2 - 4 R^2 (x^2 + y^2)
-    // ∇F = (4 x Qp - 8 R^2 x, 4 y Qp - 8 R^2 y, 4 z Qp) where Qp = |X|^2 + R^2 - r^2
-    double R = mMajorRadius;
-    double r = mMinorRadius;
-    double Qp = localPoint.Dot(localPoint) + R * R - r * r;
-    Vector3D localNormal{
-        4.0 * localPoint[0] * Qp - 8.0 * R * R * localPoint[0],
-        4.0 * localPoint[1] * Qp - 8.0 * R * R * localPoint[1],
-        4.0 * localPoint[2] * Qp};
-    localNormal.Normalize();
-
     // Transform normal to global space (assumes ToGlobal preserves directions, not positions)
-    Vector3D globalNormal = mOrthonormalBasis.ToGlobal(localNormal);
-    globalNormal.Normalize();
+    Vector3D normal = ComputeNormalAtPoint(localPoint);
 
-    return Intersection{tMin, globalPoint, globalNormal};
+    return Intersection{tMin, globalPoint, normal};
 }
 
 double Torus::SurfaceArea() const {
@@ -142,6 +130,24 @@ std::array<double, 5> Torus::ComputeQuarticCoefficients(const Vector3D& localOri
     double e = G0 * G0 - 4.0 * R * R * H0;                  // t⁰: G0² - 4R²*H0
 
     return {a, b, c, d, e};
+}
+
+Vector3D Torus::ComputeNormalAtPoint(const Vector3D& localPoint) const {
+    // Compute gradient of F(X) = (|X|^2 + R^2 - r^2)^2 - 4 R^2 (x^2 + y^2)
+    // ∇F = (4 x Qp - 8 R^2 x, 4 y Qp - 8 R^2 y, 4 z Qp) where Qp = |X|^2 + R^2 - r^2
+    double R = mMajorRadius;
+    double r = mMinorRadius;
+    double Qp = localPoint.Dot(localPoint) + R * R - r * r;
+    Vector3D localNormal{
+        4.0 * localPoint[0] * Qp - 8.0 * R * R * localPoint[0],
+        4.0 * localPoint[1] * Qp - 8.0 * R * R * localPoint[1],
+        4.0 * localPoint[2] * Qp};
+    localNormal.Normalize();
+
+    // Transform normal to global space (assumes ToGlobal preserves directions, not positions)
+    Vector3D globalNormal = mOrthonormalBasis.ToGlobal(localNormal);
+    globalNormal.Normalize();
+    return globalNormal;
 }
 
 }  // namespace Raytracer::Geometry
