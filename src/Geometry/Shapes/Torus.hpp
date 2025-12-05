@@ -5,6 +5,7 @@
 #include "Geometry/Shape.hpp"
 #include "Geometry/Vector.hpp"
 
+#include <array>
 #include <optional>
 #include <random>
 #include <vector>
@@ -28,6 +29,8 @@ public:
 private:
     double mMajorRadius;
     double mMinorRadius;
+
+    std::array<double, 5> ComputeQuarticCoefficients(const Vector3D& localOrigin, const Vector3D& localDirection) const;
 };
 
 }  // namespace Raytracer::Geometry
