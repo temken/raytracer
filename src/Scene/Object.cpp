@@ -97,7 +97,7 @@ std::optional<HitRecord> Object::Intersect(const Ray& ray) {
         hitRecord.t = intersection->t;
         hitRecord.point = intersection->point;
         hitRecord.normal = intersection->normal;
-        hitRecord.object = this;
+        hitRecord.object = shared_from_this();
         return hitRecord;
     }
     return std::nullopt;

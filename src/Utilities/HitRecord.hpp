@@ -4,13 +4,14 @@
 #include "Geometry/Vector.hpp"
 
 #include <limits>
+#include <memory>
 
 namespace Raytracer {
 
 class Object;
 
 struct HitRecord : public Geometry::Intersection {
-    Object* object;  // pointer to the object at the hit point
+    std::shared_ptr<Object> object;  // shared pointer to the object at the hit point
 };
 
 }  // namespace Raytracer

@@ -16,7 +16,7 @@
 
 namespace Raytracer {
 
-class Object {
+class Object : public std::enable_shared_from_this<Object> {
 public:
     explicit Object(const std::string& name, const Material& material, std::shared_ptr<Geometry::Shape> shape);
     ~Object() = default;

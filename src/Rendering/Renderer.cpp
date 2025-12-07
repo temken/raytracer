@@ -73,7 +73,7 @@ void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const HitReco
 
             Ray shadowRay(x + toLight * kEpsilon, toLight);
             auto shadowHit = Intersect(shadowRay, scene);
-            if (!shadowHit.has_value() || shadowHit->object != lightSource.get()) {
+            if (!shadowHit.has_value() || shadowHit->object != lightSource) {
                 continue;  // occluded or no intersection
             }
             anyLightHit = true;
