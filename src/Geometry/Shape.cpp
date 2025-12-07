@@ -69,6 +69,10 @@ std::string Shape::TypeToString(Type type) {
             return "Half Sphere";
         case Type::HALF_TORUS:
             return "Half Torus";
+        case Type::HALF_TORUS_WITH_SPHERICAL_CAPS:
+            return "Half Torus with Spherical Caps";
+        case Type::OCTAHEDRON:
+            return "Octahedron";
         case Type::PLANE:
             return "Plane";
         case Type::RECTANGLE:

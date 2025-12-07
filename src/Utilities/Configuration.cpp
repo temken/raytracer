@@ -8,6 +8,7 @@
 #include "Geometry/Shapes/Disk.hpp"
 #include "Geometry/Shapes/HalfSphere.hpp"
 #include "Geometry/Shapes/HalfTorus.hpp"
+#include "Geometry/Shapes/HalfTorusWithSphericalCaps.hpp"
 #include "Geometry/Shapes/Octahedron.hpp"
 #include "Geometry/Shapes/Rectangle.hpp"
 #include "Geometry/Shapes/Sphere.hpp"
@@ -206,6 +207,8 @@ Scene Configuration::ConstructScene() const {
                 scene.AddObject(std::make_unique<Object>(ParseHalfSphere(obj)));
             } else if (type == "HalfTorus") {
                 scene.AddObject(std::make_unique<Object>(ParseHalfTorus(obj)));
+            } else if (type == "HalfTorusWithSphericalCaps") {
+                scene.AddObject(std::make_unique<Object>(ParseHalfTorusWithSphericalCaps(obj)));
             } else if (type == "BoxAxisAligned") {
                 scene.AddObject(std::make_unique<Object>(ParseBoxAxisAligned(obj)));
             } else {
@@ -638,6 +641,23 @@ Object Configuration::ParseHalfTorus(const YAML::Node& obj) const {
 
     halfTorus.SetVisible(props.visible);
     return halfTorus;
+}
+
+Object Configuration::ParseHalfTorusWithSphericalCaps(const YAML::Node& obj) const {
+    ObjectProperties props = ParseObjectProperties(obj);
+    double majorRadius = obj["major_radius"].as<double>();
+    double minorRadius = obj["minor_radius"].as<double>();
+
+    // Construct the half-torus with spherical caps
+    Object halfTorusWithCaps = MakeObject<Geometry::HalfTorusWithSphericalCaps>(props.id, props.material, props.position, props.normal, props.referenceDirection, majorRadius, minorRadius);
+
+    halfTorusWithCaps.SetVelocity(props.velocity);
+    halfTorusWithCaps.SetAcceleration(props.acceleration);
+    halfTorusWithCaps.SetAngularVelocity(props.angularVelocity);
+    halfTorusWithCaps.SetSpin(props.spin);
+
+    halfTorusWithCaps.SetVisible(props.visible);
+    return halfTorusWithCaps;
 }
 
 Object Configuration::ParseBoxAxisAligned(const YAML::Node& obj) const {

@@ -12,11 +12,11 @@
   - [x] Thick tube (requires a 2D ring)
 - [x] Print preview of image downscaled in terminal
 - [x] Implement torus class
+- [x] New class: Half Torus and Half Ring (for globe): Half torus with two half spheres as caps
 - [ ] Implement quartic equation solver:
   - [ ] Exact solution
   - [x] Approximative: Durand–Kerner method
 - [ ] Compare performance of quartic solvers on the Torus.
-- [ ] New class: Half Torus and Half Ring (for globe): Half torus with two half spheres as caps
 - [ ] Do I implement NEE correctly? (Reflections/refractions). I feel like this keeping track of the previous interaction type is not right.
 - [ ] Reflections inside the glass sphere? Should I ony reflect from the outside? 
 - [ ] Optimization: Precompute the pixel range for each object in a pre-processing scan. Needs to be re-done for each image, but not sample. Add a safety margin for antialiasing

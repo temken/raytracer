@@ -24,6 +24,7 @@ public:
         DISK,
         HALF_SPHERE,
         HALF_TORUS,
+        HALF_TORUS_WITH_SPHERICAL_CAPS,
         OCTAHEDRON,
         PLANE,
         RECTANGLE,

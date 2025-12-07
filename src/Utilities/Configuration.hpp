@@ -102,6 +102,7 @@ private:
     Object ParseTube(const YAML::Node& obj) const;
     Object ParseHalfSphere(const YAML::Node& obj) const;
     Object ParseHalfTorus(const YAML::Node& obj) const;
+    Object ParseHalfTorusWithSphericalCaps(const YAML::Node& obj) const;
     Object ParseBoxAxisAligned(const YAML::Node& obj) const;
 
     std::string CreateRunID() const;
