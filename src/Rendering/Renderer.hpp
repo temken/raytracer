@@ -3,7 +3,6 @@
 #include "Rendering/Ray.hpp"
 #include "Scene/Scene.hpp"
 #include "Utilities/Color.hpp"
-#include "Utilities/HitRecord.hpp"
 
 #include <optional>
 #include <random>
@@ -40,9 +39,9 @@ protected:
     static constexpr double kEpsilon = 1e-6;
     std::mt19937 mGenerator{std::random_device{}()};
 
-    virtual std::optional<HitRecord> Intersect(const Ray& ray, const Scene& scene);
+    virtual std::optional<Object::Intersection> Intersect(const Ray& ray, const Scene& scene);
 
-    void CollectDirectLighting(Ray& ray, const Scene& scene, const HitRecord& hitRecord, std::size_t numLightSamples = 0);
+    void CollectDirectLighting(Ray& ray, const Scene& scene, const Object::Intersection& intersection, std::size_t numLightSamples = 0);
 };
 
 }  // namespace Raytracer

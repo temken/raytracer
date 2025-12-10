@@ -1,10 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Utilities/HitRecord.hpp"
+#include "Scene/ObjectPrimitive.hpp"
 
 using namespace Raytracer;
 
-TEST(TestHitRecord, Test1) {
+TEST(TestObjectPrimitive, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

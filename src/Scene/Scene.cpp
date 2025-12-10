@@ -12,8 +12,8 @@ Scene::Scene(const Color& backgroundColor) :
 
 void Scene::AddObject(std::shared_ptr<Object> object) {
     mObjects.push_back(object);
-    if (object->EmitsLight()) {
-        mLightSources.push_back(object);
+    for (auto& lightSource : object->GetLightSources()) {
+        mLightSources.push_back(lightSource);
     }
     if (object->IsDynamic()) {
         mDynamicObjects.push_back(object);
@@ -24,7 +24,7 @@ const std::vector<std::shared_ptr<Object>>& Scene::GetObjects() const {
     return mObjects;
 }
 
-const std::vector<std::shared_ptr<Object>>& Scene::GetLightSources() const {
+const std::vector<std::shared_ptr<ObjectPrimitive>>& Scene::GetLightSources() const {
     return mLightSources;
 }
 

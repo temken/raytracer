@@ -2,7 +2,8 @@
 
 #include "Rendering/Ray.hpp"
 #include "Scene/Object.hpp"
-#include "Utilities/HitRecord.hpp"
+#include "Scene/ObjectPrimitive.hpp"
+#include "Utilities/Texture.hpp"
 
 #include <memory>
 #include <vector>
@@ -16,7 +17,7 @@ public:
     void AddObject(std::shared_ptr<Object> object);
 
     const std::vector<std::shared_ptr<Object>>& GetObjects() const;
-    const std::vector<std::shared_ptr<Object>>& GetLightSources() const;
+    const std::vector<std::shared_ptr<ObjectPrimitive>>& GetLightSources() const;
 
     Color GetBackgroundColor(const Ray& ray) const;
     void SetColorTexture(std::string filename);
@@ -34,7 +35,7 @@ public:
 
 private:
     std::vector<std::shared_ptr<Object>> mObjects;
-    std::vector<std::shared_ptr<Object>> mLightSources;
+    std::vector<std::shared_ptr<ObjectPrimitive>> mLightSources;
     std::vector<std::shared_ptr<Object>> mDynamicObjects;
 
     // Background

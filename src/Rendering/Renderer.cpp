@@ -1,6 +1,6 @@
 #include "Rendering/Renderer.hpp"
 
-#include "Utilities/HitRecord.hpp"
+#include "Scene/ObjectPrimitive.hpp"
 
 namespace Raytracer {
 
@@ -31,8 +31,8 @@ std::string Renderer::GetTypeString() const {
     }
 }
 
-std::optional<HitRecord> Renderer::Intersect(const Ray& ray, const Scene& scene) {
-    std::optional<HitRecord> closestHit;
+std::optional<Object::Intersection> Renderer::Intersect(const Ray& ray, const Scene& scene) {
+    std::optional<Object::Intersection> closestHit;
     for (const auto& object : scene.GetObjects()) {
         if (!object || !object->IsVisible()) {
             continue;
@@ -47,10 +47,10 @@ std::optional<HitRecord> Renderer::Intersect(const Ray& ray, const Scene& scene)
     return closestHit;
 }
 
-void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const HitRecord& hitRecord, std::size_t numLightSamples) {
-    const auto& material = hitRecord.object->GetMaterial();
-    const Vector3D& x = hitRecord.point;
-    Vector3D n = hitRecord.normal.Normalized();
+void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const Object::Intersection& intersection, std::size_t numLightSamples) {
+    const auto& material = intersection.object->GetMaterial();
+    const Vector3D& x = intersection.point;
+    Vector3D n = intersection.normal.Normalized();
 
     if (ray.IsEntering(n)) {
         n = -1.0 * n;
@@ -89,7 +89,7 @@ void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const HitReco
             const Color Le = lightSource->GetMaterial().GetEmission() * lightSource->GetColor(*shadowHit);  // emitted radiance (RGB)
 
             // Lambertian BRDF
-            const Color f_r = material.GetColor(hitRecord) * (1.0 / M_PI);
+            const Color f_r = material.GetColor(intersection) * (1.0 / M_PI);
 
             // Geometry factor (two-sided light source)
             const double G = cosSurface * cosLight * lightArea / dist2;

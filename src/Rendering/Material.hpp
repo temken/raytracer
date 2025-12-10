@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Rendering/Ray.hpp"
+#include "Scene/Object.hpp"
 #include "Utilities/Color.hpp"
-#include "Utilities/HitRecord.hpp"
 #include "Utilities/Texture.hpp"
 
 #include <map>
@@ -22,14 +22,14 @@ public:
     Material();
     Material(const Color& baseColor, double roughness = 1.0, double refractiveIndex = 1.0, double meanFreePath = 0.0, double radiance = 0.0);
 
-    InteractionType Interact(Ray& ray, const HitRecord& hitRecord, bool applyRoughness = true);
+    InteractionType Interact(Ray& ray, const Object::Intersection& intersection, bool applyRoughness = true);
 
-    void Diffuse(Ray& incomingRay, const HitRecord& hitRecord, double probability = 1.0);
-    void Reflect(Ray& incomingRay, const HitRecord& hitRecord, bool applyRoughness, double probability = 1.0);
-    void Refract(Ray& incomingRay, const HitRecord& hitRecord, bool applyRoughness, double probability = 1.0);
+    void Diffuse(Ray& incomingRay, const Object::Intersection& intersection, double probability = 1.0);
+    void Reflect(Ray& incomingRay, const Object::Intersection& intersection, bool applyRoughness, double probability = 1.0);
+    void Refract(Ray& incomingRay, const Object::Intersection& intersection, bool applyRoughness, double probability = 1.0);
 
     // Get color at intersection point (with texture if available)
-    Color GetColor(const HitRecord& hitRecord) const;
+    Color GetColor(const Object::Intersection& intersection) const;
 
     Color GetBaseColor() const;
     void SetBaseColor(const Color& color);

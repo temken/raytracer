@@ -1,6 +1,6 @@
 #include "Rendering/Material.hpp"
 
-#include "Scene/Object.hpp"
+#include "Scene/ObjectPrimitive.hpp"
 #include "Version.hpp"
 
 namespace Raytracer {
@@ -27,7 +27,7 @@ Material::Material(const Color& baseColor, double roughness, double refractiveIn
     NormalizeProbabilities();
 }
 
-Material::InteractionType Material::Interact(Ray& ray, const HitRecord& hitRecord, bool applyRoughness) {
+Material::InteractionType Material::Interact(Ray& ray, const Object::Intersection& intersection, bool applyRoughness) {
     // Draw a random number in [0,1)
     const double r = mDistribution(mGenerator);
 
@@ -35,7 +35,7 @@ Material::InteractionType Material::Interact(Ray& ray, const HitRecord& hitRecor
 
     auto probabilities = mInteractionProbabilities;
     if (mUseFresnel) {
-        double cosThetaI = ray.IncidentAngleCosine(hitRecord.normal);
+        double cosThetaI = ray.IncidentAngleCosine(intersection.normal);
         if (cosThetaI < 0.0) {
             cosThetaI = -cosThetaI;
         }
@@ -50,15 +50,15 @@ Material::InteractionType Material::Interact(Ray& ray, const HitRecord& hitRecor
         if (r <= cumulative) {
             switch (type) {
                 case InteractionType::DIFFUSE:
-                    Diffuse(ray, hitRecord, prob);
+                    Diffuse(ray, intersection, prob);
                     return InteractionType::DIFFUSE;
 
                 case InteractionType::REFLECTIVE:
-                    Reflect(ray, hitRecord, applyRoughness, prob);
+                    Reflect(ray, intersection, applyRoughness, prob);
                     return InteractionType::REFLECTIVE;
 
                 case InteractionType::REFRACTIVE:
-                    Refract(ray, hitRecord, applyRoughness, prob);
+                    Refract(ray, intersection, applyRoughness, prob);
                     return InteractionType::REFRACTIVE;
             }
         }
@@ -67,10 +67,10 @@ Material::InteractionType Material::Interact(Ray& ray, const HitRecord& hitRecor
     throw std::runtime_error("Material::Interact: No interaction type selected; check probabilities.");
 }
 
-void Material::Diffuse(Ray& ray, const HitRecord& hitRecord, double probability) {
+void Material::Diffuse(Ray& ray, const Object::Intersection& intersection, double probability) {
     // Diffuse surface: random new direction in hemisphere
     // Build ONB around normal
-    Vector3D eZ = ray.IsEntering(hitRecord.normal) ? hitRecord.normal : -1.0 * hitRecord.normal;
+    Vector3D eZ = ray.IsEntering(intersection.normal) ? intersection.normal : -1.0 * intersection.normal;
     Vector3D a = (std::fabs(eZ[0]) > 0.707) ? Vector3D({0.0, 1.0, 0.0}) : Vector3D({1.0, 0.0, 0.0});
     Vector3D eX = a.Cross(eZ).Normalized();
     Vector3D eY = eZ.Cross(eX);
@@ -87,18 +87,18 @@ void Material::Diffuse(Ray& ray, const HitRecord& hitRecord, double probability)
     // Transform to world and normalize
     Vector3D newDir = (x * eX + y * eY + cosTheta * eZ).Normalized();
 
-    ray.SetOrigin(hitRecord.point + kEpsilon * newDir);
+    ray.SetOrigin(intersection.point + kEpsilon * newDir);
     ray.SetDirection(newDir);
     ray.IncrementDepth();
 
     // ---- Physically based energy update ----
     // f_r = albedo / π, PDF = cosθ / π  ->  throughput *= albedo
-    ray.UpdateThroughput(GetColor(hitRecord) / probability);
+    ray.UpdateThroughput(GetColor(intersection) / probability);
 }
 
-void Material::Reflect(Ray& ray, const HitRecord& hitRecord, bool applyRoughness, double probability) {
+void Material::Reflect(Ray& ray, const Object::Intersection& intersection, bool applyRoughness, double probability) {
     Vector3D incomingDir = ray.GetDirection();
-    Vector3D newDir = incomingDir - 2 * incomingDir.Dot(hitRecord.normal) * hitRecord.normal;
+    Vector3D newDir = incomingDir - 2 * incomingDir.Dot(intersection.normal) * intersection.normal;
     if (applyRoughness && mRoughness > 0.0) {
         double cosThetaMax = std::cos(mRoughness * (M_PI / 2.0));  // roughness=1 => 90° cone
         newDir = SampleCone(newDir, cosThetaMax);
@@ -108,14 +108,14 @@ void Material::Reflect(Ray& ray, const HitRecord& hitRecord, bool applyRoughness
         // Perfect mirror - no probability compensation for delta function
         ray.UpdateThroughput(mSpecularColor);
     }
-    ray.SetOrigin(hitRecord.point + kEpsilon * newDir);
+    ray.SetOrigin(intersection.point + kEpsilon * newDir);
     ray.SetDirection(newDir);
     ray.IncrementDepth();
 }
 
-void Material::Refract(Ray& ray, const HitRecord& hitRecord, bool applyRoughness, double probability) {
+void Material::Refract(Ray& ray, const Object::Intersection& intersection, bool applyRoughness, double probability) {
     Vector3D d = ray.GetDirection().Normalized();
-    Vector3D n = hitRecord.normal.Normalized();
+    Vector3D n = intersection.normal.Normalized();
 
     // Determine if the ray is entering or exiting
     double cosThetaI = ray.IncidentAngleCosine(n);
@@ -134,9 +134,9 @@ void Material::Refract(Ray& ray, const HitRecord& hitRecord, bool applyRoughness
 
     // Handle total internal reflection
     if (sin2ThetaT > 1.0) {
-        HitRecord tmpHitRecord = hitRecord;
-        tmpHitRecord.normal = n;  // Use the correct normal for reflection
-        Reflect(ray, tmpHitRecord, applyRoughness, probability);
+        Object::Intersection tmpIntersection = intersection;
+        tmpIntersection.normal = n;  // Use the correct normal for reflection
+        Reflect(ray, tmpIntersection, applyRoughness, probability);
         return;
     }
 
@@ -151,19 +151,19 @@ void Material::Refract(Ray& ray, const HitRecord& hitRecord, bool applyRoughness
         double cosThetaMax = std::cos(mRoughness * (M_PI / 4.0));  // half the reflection roughness
         refractDir = SampleCone(refractDir, cosThetaMax);
         // For rough refraction, divide by probability since it's continuous sampling
-        ray.UpdateThroughput(GetColor(hitRecord) / probability);
+        ray.UpdateThroughput(GetColor(intersection) / probability);
     } else {
         // Perfect refraction - no probability compensation for delta function
-        ray.UpdateThroughput(GetColor(hitRecord));
+        ray.UpdateThroughput(GetColor(intersection));
     }
-    ray.SetOrigin(hitRecord.point + kEpsilon * refractDir);
+    ray.SetOrigin(intersection.point + kEpsilon * refractDir);
     ray.SetDirection(refractDir);
     ray.IncrementDepth();
 }
 
-Color Material::GetColor(const HitRecord& hitRecord) const {
+Color Material::GetColor(const Object::Intersection& intersection) const {
     if (mColorTexture) {
-        auto uv = hitRecord.object->GetShape()->GetSurfaceParameters(hitRecord.point);
+        auto uv = intersection.object->GetShape()->GetSurfaceParameters(intersection.point);
         // TODO: Do not mix the ranges. Either [-0.5,0.5] everywhere or [0,1] everywhere
         return mColorTexture->GetColorAt(uv.first + 0.5, uv.second + 0.5) * mBaseColor;
     }

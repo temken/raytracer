@@ -16,7 +16,7 @@
 #include "Geometry/Shapes/Torus.hpp"
 #include "Geometry/Shapes/Triangle.hpp"
 #include "Geometry/Shapes/Tube.hpp"
-#include "Scene/Object.hpp"
+#include "Scene/ObjectPrimitive.hpp"
 #include "Version.hpp"
 
 #include <chrono>
@@ -24,6 +24,7 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <memory>
 
 namespace Raytracer {
 
@@ -178,39 +179,39 @@ Scene Configuration::ConstructScene() const {
             std::string type = obj["type"].as<std::string>();
 
             if (type == "Disk") {
-                scene.AddObject(std::make_unique<Object>(ParseDisk(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseDisk(obj)));
             } else if (type == "Sphere") {
-                scene.AddObject(std::make_unique<Object>(ParseSphere(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseSphere(obj)));
             } else if (type == "Rectangle") {
-                scene.AddObject(std::make_unique<Object>(ParseRectangle(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseRectangle(obj)));
             } else if (type == "Box") {
-                scene.AddObject(std::make_unique<Object>(ParseBox(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseBox(obj)));
             } else if (type == "Cone") {
-                scene.AddObject(std::make_unique<Object>(ParseCone(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseCone(obj)));
             } else if (type == "Cylinder") {
-                scene.AddObject(std::make_unique<Object>(ParseCylinder(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseCylinder(obj)));
             } else if (type == "CylindricalShell") {
-                scene.AddObject(std::make_unique<Object>(ParseCylindricalShell(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseCylindricalShell(obj)));
             } else if (type == "Tetrahedron") {
-                scene.AddObject(std::make_unique<Object>(ParseTetrahedron(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseTetrahedron(obj)));
             } else if (type == "Octahedron") {
-                scene.AddObject(std::make_unique<Object>(ParseOctahedron(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseOctahedron(obj)));
             } else if (type == "Ring") {
-                scene.AddObject(std::make_unique<Object>(ParseRing(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseRing(obj)));
             } else if (type == "Torus") {
-                scene.AddObject(std::make_unique<Object>(ParseTorus(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseTorus(obj)));
             } else if (type == "Triangle") {
-                scene.AddObject(std::make_unique<Object>(ParseTriangle(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseTriangle(obj)));
             } else if (type == "Tube") {
-                scene.AddObject(std::make_unique<Object>(ParseTube(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseTube(obj)));
             } else if (type == "HalfSphere") {
-                scene.AddObject(std::make_unique<Object>(ParseHalfSphere(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseHalfSphere(obj)));
             } else if (type == "HalfTorus") {
-                scene.AddObject(std::make_unique<Object>(ParseHalfTorus(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseHalfTorus(obj)));
             } else if (type == "HalfTorusWithSphericalCaps") {
-                scene.AddObject(std::make_unique<Object>(ParseHalfTorusWithSphericalCaps(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseHalfTorusWithSphericalCaps(obj)));
             } else if (type == "BoxAxisAligned") {
-                scene.AddObject(std::make_unique<Object>(ParseBoxAxisAligned(obj)));
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseBoxAxisAligned(obj)));
             } else {
                 throw std::runtime_error("Unknown object type: " + type);
             }
@@ -385,12 +386,12 @@ Configuration::ObjectProperties Configuration::ParseObjectProperties(const YAML:
     return props;
 }
 
-Object Configuration::ParseSphere(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseSphere(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double radius = obj["radius"].as<double>();
 
     // Construct the sphere
-    Object sphere = MakeObject<Geometry::Sphere>(props.id, props.material, props.position, radius, props.normal, props.referenceDirection);
+    ObjectPrimitive sphere = MakePrimitiveObject<Geometry::Sphere>(props.id, props.material, props.position, radius, props.normal, props.referenceDirection);
 
     sphere.SetVelocity(props.velocity);
     sphere.SetAcceleration(props.acceleration);
@@ -402,12 +403,12 @@ Object Configuration::ParseSphere(const YAML::Node& obj) const {
     return sphere;
 }
 
-Object Configuration::ParseDisk(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseDisk(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double radius = obj["radius"].as<double>();
 
     // Construct the disk
-    Object disk = MakeObject<Geometry::Disk>(props.id, props.material, props.position, props.normal, radius);
+    ObjectPrimitive disk = MakePrimitiveObject<Geometry::Disk>(props.id, props.material, props.position, props.normal, radius);
 
     disk.SetVelocity(props.velocity);
     disk.SetAcceleration(props.acceleration);
@@ -418,13 +419,13 @@ Object Configuration::ParseDisk(const YAML::Node& obj) const {
     return disk;
 }
 
-Object Configuration::ParseRectangle(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseRectangle(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double width = obj["dimensions"]["width"].as<double>();
     double height = obj["dimensions"]["height"].as<double>();
 
     // Construct the rectangle
-    Object rectangle = MakeObject<Geometry::Rectangle>(props.id, props.material, props.position, props.normal, props.referenceDirection, width, height);
+    ObjectPrimitive rectangle = MakePrimitiveObject<Geometry::Rectangle>(props.id, props.material, props.position, props.normal, props.referenceDirection, width, height);
 
     rectangle.SetVelocity(props.velocity);
     rectangle.SetAcceleration(props.acceleration);
@@ -434,7 +435,7 @@ Object Configuration::ParseRectangle(const YAML::Node& obj) const {
     return rectangle;
 }
 
-Object Configuration::ParseBox(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseBox(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
 
     auto dim = obj["dimensions"];
@@ -443,7 +444,7 @@ Object Configuration::ParseBox(const YAML::Node& obj) const {
     double height = dim["height"].as<double>();
 
     // Construct the box
-    Object box = MakeObject<Geometry::Box>(props.id, props.material, props.position, props.normal, props.referenceDirection, length, width, height);
+    ObjectPrimitive box = MakePrimitiveObject<Geometry::Box>(props.id, props.material, props.position, props.normal, props.referenceDirection, length, width, height);
 
     box.SetVisible(props.visible);
 
@@ -455,13 +456,13 @@ Object Configuration::ParseBox(const YAML::Node& obj) const {
     return box;
 }
 
-Object Configuration::ParseCylinder(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseCylinder(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double radius = obj["radius"].as<double>();
     double height = obj["height"].as<double>();
 
     // Construct the cylinder
-    Object cylinder = MakeObject<Geometry::Cylinder>(props.id, props.material, props.position, props.normal, radius, height);
+    ObjectPrimitive cylinder = MakePrimitiveObject<Geometry::Cylinder>(props.id, props.material, props.position, props.normal, radius, height);
 
     cylinder.SetVelocity(props.velocity);
     cylinder.SetAcceleration(props.acceleration);
@@ -472,14 +473,14 @@ Object Configuration::ParseCylinder(const YAML::Node& obj) const {
     return cylinder;
 }
 
-Object Configuration::ParseCylindricalShell(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseCylindricalShell(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double innerRadius = obj["inner_radius"].as<double>();
     double outerRadius = obj["outer_radius"].as<double>();
     double height = obj["height"].as<double>();
 
     // Construct the cylindrical shell
-    Object shell = MakeObject<Geometry::CylindricalShell>(props.id, props.material, props.position, props.normal, innerRadius, outerRadius, height);
+    ObjectPrimitive shell = MakePrimitiveObject<Geometry::CylindricalShell>(props.id, props.material, props.position, props.normal, innerRadius, outerRadius, height);
 
     shell.SetVelocity(props.velocity);
     shell.SetAcceleration(props.acceleration);
@@ -490,13 +491,13 @@ Object Configuration::ParseCylindricalShell(const YAML::Node& obj) const {
     return shell;
 }
 
-Object Configuration::ParseCone(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseCone(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double baseRadius = obj["base_radius"].as<double>();
     double height = obj["height"].as<double>();
 
     // Construct the cone
-    Object cone = MakeObject<Geometry::Cone>(props.id, props.material, props.position, props.normal, baseRadius, height);
+    ObjectPrimitive cone = MakePrimitiveObject<Geometry::Cone>(props.id, props.material, props.position, props.normal, baseRadius, height);
 
     cone.SetVelocity(props.velocity);
     cone.SetAcceleration(props.acceleration);
@@ -507,12 +508,12 @@ Object Configuration::ParseCone(const YAML::Node& obj) const {
     return cone;
 }
 
-Object Configuration::ParseTetrahedron(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseTetrahedron(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double edgeLength = obj["edge_length"].as<double>();
 
     // Construct the tetrahedron
-    Object tetrahedron = MakeObject<Geometry::Tetrahedron>(props.id, props.material, props.position, props.normal, props.referenceDirection, edgeLength);
+    ObjectPrimitive tetrahedron = MakePrimitiveObject<Geometry::Tetrahedron>(props.id, props.material, props.position, props.normal, props.referenceDirection, edgeLength);
 
     tetrahedron.SetVelocity(props.velocity);
     tetrahedron.SetAcceleration(props.acceleration);
@@ -523,13 +524,13 @@ Object Configuration::ParseTetrahedron(const YAML::Node& obj) const {
     return tetrahedron;
 }
 
-Object Configuration::ParseRing(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseRing(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double innerRadius = obj["inner_radius"].as<double>();
     double outerRadius = obj["outer_radius"].as<double>();
 
     // Construct the ring
-    Object ring = MakeObject<Geometry::Ring>(props.id, props.material, props.position, props.normal, innerRadius, outerRadius);
+    ObjectPrimitive ring = MakePrimitiveObject<Geometry::Ring>(props.id, props.material, props.position, props.normal, innerRadius, outerRadius);
 
     ring.SetVelocity(props.velocity);
     ring.SetAcceleration(props.acceleration);
@@ -540,13 +541,13 @@ Object Configuration::ParseRing(const YAML::Node& obj) const {
     return ring;
 }
 
-Object Configuration::ParseTorus(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseTorus(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double majorRadius = obj["major_radius"].as<double>();
     double minorRadius = obj["minor_radius"].as<double>();
 
     // Construct the torus
-    Object torus = MakeObject<Geometry::Torus>(props.id, props.material, props.position, props.normal, majorRadius, minorRadius);
+    ObjectPrimitive torus = MakePrimitiveObject<Geometry::Torus>(props.id, props.material, props.position, props.normal, majorRadius, minorRadius);
 
     torus.SetVelocity(props.velocity);
     torus.SetAcceleration(props.acceleration);
@@ -557,12 +558,12 @@ Object Configuration::ParseTorus(const YAML::Node& obj) const {
     return torus;
 }
 
-Object Configuration::ParseOctahedron(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseOctahedron(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double edgeLength = obj["edge_length"].as<double>();
 
     // Construct the octahedron
-    Object octahedron = MakeObject<Geometry::Octahedron>(props.id, props.material, props.position, props.normal, props.referenceDirection, edgeLength);
+    ObjectPrimitive octahedron = MakePrimitiveObject<Geometry::Octahedron>(props.id, props.material, props.position, props.normal, props.referenceDirection, edgeLength);
 
     octahedron.SetVelocity(props.velocity);
     octahedron.SetAcceleration(props.acceleration);
@@ -573,7 +574,7 @@ Object Configuration::ParseOctahedron(const YAML::Node& obj) const {
     return octahedron;
 }
 
-Object Configuration::ParseTriangle(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseTriangle(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     auto vertices = obj["vertices"];
     Vector3D v1 = ParseVector3D(vertices[0]);
@@ -581,7 +582,7 @@ Object Configuration::ParseTriangle(const YAML::Node& obj) const {
     Vector3D v3 = ParseVector3D(vertices[2]);
 
     // Construct the triangle
-    Object triangle = MakeObject<Geometry::Triangle>(props.id, props.material, v1, v2, v3);
+    ObjectPrimitive triangle = MakePrimitiveObject<Geometry::Triangle>(props.id, props.material, v1, v2, v3);
 
     triangle.SetVelocity(props.velocity);
     triangle.SetAcceleration(props.acceleration);
@@ -592,13 +593,13 @@ Object Configuration::ParseTriangle(const YAML::Node& obj) const {
     return triangle;
 }
 
-Object Configuration::ParseTube(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseTube(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double radius = obj["radius"].as<double>();
     double height = obj["height"].as<double>();
 
     // Construct the tube
-    Object tube = MakeObject<Geometry::Tube>(props.id, props.material, props.position, props.normal, radius, height);
+    ObjectPrimitive tube = MakePrimitiveObject<Geometry::Tube>(props.id, props.material, props.position, props.normal, radius, height);
 
     tube.SetVelocity(props.velocity);
     tube.SetAcceleration(props.acceleration);
@@ -609,12 +610,12 @@ Object Configuration::ParseTube(const YAML::Node& obj) const {
     return tube;
 }
 
-Object Configuration::ParseHalfSphere(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseHalfSphere(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double radius = obj["radius"].as<double>();
 
     // Construct the half-sphere
-    Object halfSphere = MakeObject<Geometry::HalfSphere>(props.id, props.material, props.position, radius, props.normal);
+    ObjectPrimitive halfSphere = MakePrimitiveObject<Geometry::HalfSphere>(props.id, props.material, props.position, radius, props.normal);
 
     // Dynamics
     halfSphere.SetVelocity(props.velocity);
@@ -626,13 +627,13 @@ Object Configuration::ParseHalfSphere(const YAML::Node& obj) const {
     return halfSphere;
 }
 
-Object Configuration::ParseHalfTorus(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseHalfTorus(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double majorRadius = obj["major_radius"].as<double>();
     double minorRadius = obj["minor_radius"].as<double>();
 
     // Construct the half-torus
-    Object halfTorus = MakeObject<Geometry::HalfTorus>(props.id, props.material, props.position, props.normal, props.referenceDirection, majorRadius, minorRadius);
+    ObjectPrimitive halfTorus = MakePrimitiveObject<Geometry::HalfTorus>(props.id, props.material, props.position, props.normal, props.referenceDirection, majorRadius, minorRadius);
 
     halfTorus.SetVelocity(props.velocity);
     halfTorus.SetAcceleration(props.acceleration);
@@ -643,13 +644,13 @@ Object Configuration::ParseHalfTorus(const YAML::Node& obj) const {
     return halfTorus;
 }
 
-Object Configuration::ParseHalfTorusWithSphericalCaps(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseHalfTorusWithSphericalCaps(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double majorRadius = obj["major_radius"].as<double>();
     double minorRadius = obj["minor_radius"].as<double>();
 
     // Construct the half-torus with spherical caps
-    Object halfTorusWithCaps = MakeObject<Geometry::HalfTorusWithSphericalCaps>(props.id, props.material, props.position, props.normal, props.referenceDirection, majorRadius, minorRadius);
+    ObjectPrimitive halfTorusWithCaps = MakePrimitiveObject<Geometry::HalfTorusWithSphericalCaps>(props.id, props.material, props.position, props.normal, props.referenceDirection, majorRadius, minorRadius);
 
     halfTorusWithCaps.SetVelocity(props.velocity);
     halfTorusWithCaps.SetAcceleration(props.acceleration);
@@ -660,14 +661,14 @@ Object Configuration::ParseHalfTorusWithSphericalCaps(const YAML::Node& obj) con
     return halfTorusWithCaps;
 }
 
-Object Configuration::ParseBoxAxisAligned(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseBoxAxisAligned(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double length = obj["dimensions"]["length"].as<double>();
     double width = obj["dimensions"]["width"].as<double>();
     double height = obj["dimensions"]["height"].as<double>();
 
     // Construct the axis-aligned box
-    Object boxAA = MakeObject<Geometry::BoxAxisAligned>(props.id, props.material, props.position, length, width, height);
+    ObjectPrimitive boxAA = MakePrimitiveObject<Geometry::BoxAxisAligned>(props.id, props.material, props.position, length, width, height);
 
     boxAA.SetVelocity(props.velocity);
     boxAA.SetAcceleration(props.acceleration);

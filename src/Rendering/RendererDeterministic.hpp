@@ -4,7 +4,6 @@
 #include "Rendering/Renderer.hpp"
 #include "Scene/Scene.hpp"
 #include "Utilities/Color.hpp"
-#include "Utilities/HitRecord.hpp"
 
 namespace Raytracer {
 

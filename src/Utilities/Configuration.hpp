@@ -2,7 +2,7 @@
 
 #include "Rendering/Camera.hpp"
 #include "Rendering/Material.hpp"
-#include "Scene/Object.hpp"
+#include "Scene/ObjectPrimitive.hpp"
 #include "Scene/Scene.hpp"
 
 #include <yaml-cpp/yaml.h>
@@ -87,23 +87,23 @@ private:
 
     ObjectProperties ParseObjectProperties(const YAML::Node& obj) const;
 
-    Object ParseSphere(const YAML::Node& obj) const;
-    Object ParseCone(const YAML::Node& obj) const;
-    Object ParseDisk(const YAML::Node& obj) const;
-    Object ParseRectangle(const YAML::Node& obj) const;
-    Object ParseBox(const YAML::Node& obj) const;
-    Object ParseCylinder(const YAML::Node& obj) const;
-    Object ParseCylindricalShell(const YAML::Node& obj) const;
-    Object ParseTetrahedron(const YAML::Node& obj) const;
-    Object ParseOctahedron(const YAML::Node& obj) const;
-    Object ParseRing(const YAML::Node& obj) const;
-    Object ParseTorus(const YAML::Node& obj) const;
-    Object ParseTriangle(const YAML::Node& obj) const;
-    Object ParseTube(const YAML::Node& obj) const;
-    Object ParseHalfSphere(const YAML::Node& obj) const;
-    Object ParseHalfTorus(const YAML::Node& obj) const;
-    Object ParseHalfTorusWithSphericalCaps(const YAML::Node& obj) const;
-    Object ParseBoxAxisAligned(const YAML::Node& obj) const;
+    ObjectPrimitive ParseSphere(const YAML::Node& obj) const;
+    ObjectPrimitive ParseCone(const YAML::Node& obj) const;
+    ObjectPrimitive ParseDisk(const YAML::Node& obj) const;
+    ObjectPrimitive ParseRectangle(const YAML::Node& obj) const;
+    ObjectPrimitive ParseBox(const YAML::Node& obj) const;
+    ObjectPrimitive ParseCylinder(const YAML::Node& obj) const;
+    ObjectPrimitive ParseCylindricalShell(const YAML::Node& obj) const;
+    ObjectPrimitive ParseTetrahedron(const YAML::Node& obj) const;
+    ObjectPrimitive ParseOctahedron(const YAML::Node& obj) const;
+    ObjectPrimitive ParseRing(const YAML::Node& obj) const;
+    ObjectPrimitive ParseTorus(const YAML::Node& obj) const;
+    ObjectPrimitive ParseTriangle(const YAML::Node& obj) const;
+    ObjectPrimitive ParseTube(const YAML::Node& obj) const;
+    ObjectPrimitive ParseHalfSphere(const YAML::Node& obj) const;
+    ObjectPrimitive ParseHalfTorus(const YAML::Node& obj) const;
+    ObjectPrimitive ParseHalfTorusWithSphericalCaps(const YAML::Node& obj) const;
+    ObjectPrimitive ParseBoxAxisAligned(const YAML::Node& obj) const;
 
     std::string CreateRunID() const;
     void CreateOutputDirectory() const;
