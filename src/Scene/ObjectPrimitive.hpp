@@ -32,6 +32,7 @@ public:
     virtual void PrintInfo() const override;
 
 protected:
+    friend class ObjectComposite;
     bool mVisible = true;
 
     Material mMaterial;
