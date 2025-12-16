@@ -1,13 +1,14 @@
-#include "Geometry/Shapes/HalfSphere.hpp"
+#include "Geometry/Shapes/SphericalCap.hpp"
 
 namespace Raytracer::Geometry {
 
-HalfSphere::HalfSphere(const Vector3D& position, double radius, const Vector3D& orientation) :
-    Shape(Type::HALF_SPHERE, position, orientation),
-    mRadius(radius) {
+SphericalCap::SphericalCap(const Vector3D& position, double radius, const Vector3D& orientation, double maxAngle) :
+    Shape(Type::SPHERICAL_CAP, position, orientation),
+    mRadius(radius),
+    mCosMaxAngle(std::cos(maxAngle)) {
 }
 
-std::optional<Intersection> HalfSphere::Intersect(const Line& line) const {
+std::optional<Intersection> SphericalCap::Intersect(const Line& line) const {
     Vector3D oc = line.GetOrigin() - mPosition;
 
     double a = line.GetDirection().NormSquared();
@@ -31,7 +32,7 @@ std::optional<Intersection> HalfSphere::Intersect(const Line& line) const {
         }
         Vector3D intersectionPoint = line(r);
         Vector3D fromCenter = intersectionPoint - mPosition;
-        if (fromCenter.Dot(GetBasisVector(OrthonormalBasis::BasisVector::eZ)) < 0.0) {  // Keep the hemisphere in the +orientation direction
+        if (fromCenter.Dot(GetBasisVector(OrthonormalBasis::BasisVector::eZ)) / mRadius < mCosMaxAngle) {  // Keep the hemisphere in the +orientation direction
             continue;
         }
         if (r < t) {
@@ -49,11 +50,11 @@ std::optional<Intersection> HalfSphere::Intersect(const Line& line) const {
     return Intersection{t, intersectionPoint, normal};
 }
 
-double HalfSphere::SurfaceArea() const {
+double SphericalCap::SurfaceArea() const {
     return 2.0 * M_PI * mRadius * mRadius;
 }
 
-std::vector<Vector3D> HalfSphere::SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const {
+std::vector<Vector3D> SphericalCap::SampleSurfacePoints(std::size_t numPoints, std::mt19937& prng) const {
     std::vector<Vector3D> points;
 
     std::uniform_real_distribution<double> uniformDistribution(0.0, 1.0);
@@ -81,16 +82,16 @@ std::vector<Vector3D> HalfSphere::SampleSurfacePoints(std::size_t numPoints, std
     return points;
 }
 
-std::vector<Vector3D> HalfSphere::GetKeyPoints() const {
+std::vector<Vector3D> SphericalCap::GetKeyPoints() const {
     return {mPosition + mRadius * GetBasisVector(OrthonormalBasis::BasisVector::eZ)};
 }
 
-std::pair<double, double> HalfSphere::GetSurfaceParameters(const Vector3D& point) const {
+std::pair<double, double> SphericalCap::GetSurfaceParameters(const Vector3D& point) const {
     // TODO: Implement preojection
     return {0.0, 0.0};
 }
 
-void HalfSphere::PrintInfo() const {
+void SphericalCap::PrintInfo() const {
     PrintInfoBase();
     std::cout << "\tRadius:\t" << mRadius << std::endl
               << std::endl;

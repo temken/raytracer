@@ -1,10 +1,10 @@
 #include "gtest/gtest.h"
 
-#include "Geometry/Shapes/HalfSphere.hpp"
+#include "Geometry/Shapes/SphericalCap.hpp"
 
 using namespace Raytracer;
 
-TEST(TestHalfSphere, Test1) {
+TEST(TestSphericalCap, Test1) {
     // ARRANGE
     // ACT
     // ASSERT

@@ -65,8 +65,8 @@ std::string Shape::TypeToString(Type type) {
             return "Cylindrical Shell";
         case Type::DISK:
             return "Disk";
-        case Type::HALF_SPHERE:
-            return "Half Sphere";
+        case Type::SPHERICAL_CAP:
+            return "Spherical Cap";
         case Type::HALF_TORUS:
             return "Half Torus";
         case Type::HALF_TORUS_WITH_SPHERICAL_CAPS:

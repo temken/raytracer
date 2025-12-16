@@ -170,8 +170,8 @@ scene:
       material:
         baseColor: white
 
-    - type: HalfSphere
-      id: half-sphere
+    - type: SphericalCap
+      id: spherical-cap
       visible: true
       position: [0.0, -2.0, -4.0]
       normal: [0.0, 0.0, -1.0]

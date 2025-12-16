@@ -1,7 +1,7 @@
 #include "Geometry/Shapes/HalfTorusWithSphericalCaps.hpp"
 
-#include "Geometry/Shapes/HalfSphere.hpp"
 #include "Geometry/Shapes/HalfTorus.hpp"
+#include "Geometry/Shapes/SphericalCap.hpp"
 
 #include <iostream>
 #include <memory>
@@ -35,12 +35,12 @@ void HalfTorusWithSphericalCaps::ComposeShape() {
 
     // Create and add right spherical cap
     Vector3D rigthCenter = mPosition + eX * mMajorRadius;
-    auto topSphere = std::make_shared<HalfSphere>(rigthCenter, mMinorRadius, -1.0 * eY);
+    auto topSphere = std::make_shared<SphericalCap>(rigthCenter, mMinorRadius, -1.0 * eY);
     AddComponent(topSphere);
 
     // Create and add left spherical cap
     Vector3D leftCenter = mPosition - eX * mMajorRadius;
-    auto bottomSphere = std::make_shared<HalfSphere>(leftCenter, mMinorRadius, -1.0 * eY);
+    auto bottomSphere = std::make_shared<SphericalCap>(leftCenter, mMinorRadius, -1.0 * eY);
     AddComponent(bottomSphere);
 }
 

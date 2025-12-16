@@ -6,12 +6,12 @@
 #include "Geometry/Shapes/Cylinder.hpp"
 #include "Geometry/Shapes/CylindricalShell.hpp"
 #include "Geometry/Shapes/Disk.hpp"
-#include "Geometry/Shapes/HalfSphere.hpp"
 #include "Geometry/Shapes/HalfTorus.hpp"
 #include "Geometry/Shapes/HalfTorusWithSphericalCaps.hpp"
 #include "Geometry/Shapes/Octahedron.hpp"
 #include "Geometry/Shapes/Rectangle.hpp"
 #include "Geometry/Shapes/Sphere.hpp"
+#include "Geometry/Shapes/SphericalCap.hpp"
 #include "Geometry/Shapes/Tetrahedron.hpp"
 #include "Geometry/Shapes/Torus.hpp"
 #include "Geometry/Shapes/Triangle.hpp"
@@ -204,8 +204,8 @@ Scene Configuration::ConstructScene() const {
                 scene.AddObject(std::make_shared<ObjectPrimitive>(ParseTriangle(obj)));
             } else if (type == "Tube") {
                 scene.AddObject(std::make_shared<ObjectPrimitive>(ParseTube(obj)));
-            } else if (type == "HalfSphere") {
-                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseHalfSphere(obj)));
+            } else if (type == "SphericalCap") {
+                scene.AddObject(std::make_shared<ObjectPrimitive>(ParseSphericalCap(obj)));
             } else if (type == "HalfTorus") {
                 scene.AddObject(std::make_shared<ObjectPrimitive>(ParseHalfTorus(obj)));
             } else if (type == "HalfTorusWithSphericalCaps") {
@@ -610,21 +610,21 @@ ObjectPrimitive Configuration::ParseTube(const YAML::Node& obj) const {
     return tube;
 }
 
-ObjectPrimitive Configuration::ParseHalfSphere(const YAML::Node& obj) const {
+ObjectPrimitive Configuration::ParseSphericalCap(const YAML::Node& obj) const {
     ObjectProperties props = ParseObjectProperties(obj);
     double radius = obj["radius"].as<double>();
 
     // Construct the half-sphere
-    ObjectPrimitive halfSphere = MakePrimitiveObject<Geometry::HalfSphere>(props.id, props.material, props.position, radius, props.normal);
+    ObjectPrimitive sphericalCap = MakePrimitiveObject<Geometry::SphericalCap>(props.id, props.material, props.position, radius, props.normal);
 
     // Dynamics
-    halfSphere.SetVelocity(props.velocity);
-    halfSphere.SetAcceleration(props.acceleration);
-    halfSphere.SetAngularVelocity(props.angularVelocity);
-    halfSphere.SetSpin(props.spin);
-    halfSphere.SetVisible(props.visible);
+    sphericalCap.SetVelocity(props.velocity);
+    sphericalCap.SetAcceleration(props.acceleration);
+    sphericalCap.SetAngularVelocity(props.angularVelocity);
+    sphericalCap.SetSpin(props.spin);
+    sphericalCap.SetVisible(props.visible);
 
-    return halfSphere;
+    return sphericalCap;
 }
 
 ObjectPrimitive Configuration::ParseHalfTorus(const YAML::Node& obj) const {

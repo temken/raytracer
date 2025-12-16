@@ -100,7 +100,7 @@ private:
     ObjectPrimitive ParseTorus(const YAML::Node& obj) const;
     ObjectPrimitive ParseTriangle(const YAML::Node& obj) const;
     ObjectPrimitive ParseTube(const YAML::Node& obj) const;
-    ObjectPrimitive ParseHalfSphere(const YAML::Node& obj) const;
+    ObjectPrimitive ParseSphericalCap(const YAML::Node& obj) const;
     ObjectPrimitive ParseHalfTorus(const YAML::Node& obj) const;
     ObjectPrimitive ParseHalfTorusWithSphericalCaps(const YAML::Node& obj) const;
     ObjectPrimitive ParseBoxAxisAligned(const YAML::Node& obj) const;
