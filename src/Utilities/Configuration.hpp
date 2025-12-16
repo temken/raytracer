@@ -9,6 +9,8 @@
 
 namespace Raytracer {
 
+class ObjectComposite;
+
 struct RenderConfig {
     bool renderImage = false;
     bool renderVideo = false;
@@ -104,6 +106,8 @@ private:
     ObjectPrimitive ParseHalfTorus(const YAML::Node& obj) const;
     ObjectPrimitive ParseHalfTorusWithSphericalCaps(const YAML::Node& obj) const;
     ObjectPrimitive ParseBoxAxisAligned(const YAML::Node& obj) const;
+
+    ObjectComposite ParseCompositeObject(const YAML::Node& obj, const std::string& type) const;
 
     std::string CreateRunID() const;
     void CreateOutputDirectory() const;

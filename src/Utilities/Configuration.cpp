@@ -3,6 +3,7 @@
 #include "Geometry/Shapes.hpp"
 #include "Scene/ObjectComposite.hpp"
 #include "Scene/ObjectPrimitive.hpp"
+#include "Scene/Objects.hpp"
 #include "Version.hpp"
 
 #include <chrono>
@@ -199,7 +200,14 @@ Scene Configuration::ConstructScene() const {
             } else if (type == "BoxAxisAligned") {
                 scene.AddObject(std::make_shared<ObjectPrimitive>(ParseBoxAxisAligned(obj)));
             } else {
-                throw std::runtime_error("Unknown object type: " + type);
+                // Check if it's a composite object type
+                static const std::vector<std::string> compositeTypes = {"Globus"};
+                auto it = std::find(compositeTypes.begin(), compositeTypes.end(), type);
+                if (it != compositeTypes.end()) {
+                    scene.AddObject(std::make_shared<ObjectComposite>(ParseCompositeObject(obj, type)));
+                } else {
+                    throw std::runtime_error("Unknown object type: " + type);
+                }
             }
         }
     }
@@ -663,6 +671,18 @@ ObjectPrimitive Configuration::ParseBoxAxisAligned(const YAML::Node& obj) const 
     boxAA.SetVisible(props.visible);
 
     return boxAA;
+}
+
+ObjectComposite Configuration::ParseCompositeObject(const YAML::Node& obj, const std::string& type) const {
+    ObjectProperties props = ParseObjectProperties(obj);
+    double referenceLength = obj["reference_length"].as<double>();
+
+    // Call the appropriate factory method based on type
+    if (type == "Globus") {
+        return Items::CreateGlobus(referenceLength, props.position, props.normal, props.referenceDirection);
+    } else {
+        throw std::runtime_error("Unknown composite object type: " + type);
+    }
 }
 
 std::string Configuration::CreateRunID() const {
