@@ -5,7 +5,7 @@
 
 namespace Raytracer {
 
-Material::Material() {
+Material::Material() : mBaseColor(1.0, 1.0, 1.0), mSpecularColor(1.0, 1.0, 1.0), mEmission(0.0, 0.0, 0.0), mRoughness(0.0) {
     // Default probabilities
     mInteractionProbabilities[InteractionType::DIFFUSE] = 1.0;
     mInteractionProbabilities[InteractionType::REFLECTIVE] = 0.0;
@@ -246,7 +246,7 @@ Material::InteractionType Material::MostLikelyInteraction() const {
 }
 
 void Material::SetColorTexture(std::string filename) {
-    std::string filepath = TOP_LEVEL_DIR "/textures/" + filename;
+    std::string filepath = TOP_LEVEL_DIR "textures/" + filename;
     mColorTexture = Texture(filepath);
 }
 
