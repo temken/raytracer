@@ -7,6 +7,7 @@ namespace Raytracer::Items {
 
 ObjectComposite CreateGlobus(double referenceLength, const Vector3D& position, const Vector3D& orientation, const Vector3D& referenceDirection) {
     ObjectComposite globus("Globus", referenceLength, position, orientation, referenceDirection);
+    auto onb = Geometry::OrthonormalBasis(orientation, referenceDirection);
 
     Material material;
     Material brass = MaterialFactory::CreateBrass();
@@ -40,9 +41,9 @@ ObjectComposite CreateGlobus(double referenceLength, const Vector3D& position, c
     double torusMinorRadius = 0.02 * referenceLength;
     double distanceToGlobe = 0.1 * referenceLength;
     double torusMajorRadius = referenceLength + distanceToGlobe + torusMinorRadius;
-    Vector3D center = position + Vector3D({0, 0, bottomDiskHeight + standCylinderHeight + 2.0 * torusMinorRadius + distanceToGlobe + referenceLength});
-    Vector3D halfTorusOrientation({1.0, 0.0, 0.0});
-    Vector3D halfTorusReferenceDirection({0.0, -std::sin(globeTilt), std::cos(globeTilt)});
+    Vector3D center = position + onb.ToGlobal(Vector3D({0, 0, bottomDiskHeight + standCylinderHeight + 2.0 * torusMinorRadius + distanceToGlobe + referenceLength}));
+    Vector3D halfTorusOrientation = onb.ToGlobal({1.0, 0.0, 0.0});
+    Vector3D halfTorusReferenceDirection = onb.ToGlobal({0.0, -std::sin(globeTilt), std::cos(globeTilt)});
     auto halfTorusWithCaps = MakePrimitiveObject<Geometry::HalfTorusWithSphericalCaps>("globeHalfTorusWithCaps", copper, center, halfTorusOrientation, halfTorusReferenceDirection, torusMajorRadius, torusMinorRadius);
     globus.AddComponent(std::make_shared<ObjectPrimitive>(halfTorusWithCaps));
 
@@ -50,16 +51,17 @@ ObjectComposite CreateGlobus(double referenceLength, const Vector3D& position, c
     double tubeRadius = 0.01 * referenceLength;
     double tubeLength = 2.05 * torusMajorRadius;
     Vector3D tubePosition = center;
-    Vector3D tubeOrientation({0.0, -std::sin(globeTilt), std::cos(globeTilt)});
+    Vector3D tubeOrientation = onb.ToGlobal({0.0, -std::sin(globeTilt), std::cos(globeTilt)});
     auto tube = MakePrimitiveObject<Geometry::Tube>("globeTube", silver, tubePosition, tubeOrientation, tubeRadius, tubeLength);
     globus.AddComponent(std::make_shared<ObjectPrimitive>(tube));
 
     // Globe
     double globeRadius = referenceLength;
     Vector3D globePosition = center;
+    Vector3D globeReferenceDirection = onb.ToGlobal({1.0, 0.0, 0.0});
     Material globeMaterial;
     globeMaterial.SetColorTexture("earth_vintage.png");
-    auto globe = MakePrimitiveObject<Geometry::Sphere>("globe", globeMaterial, globePosition, globeRadius, tubeOrientation);
+    auto globe = MakePrimitiveObject<Geometry::Sphere>("globe", globeMaterial, globePosition, globeRadius, tubeOrientation, globeReferenceDirection);
     globus.AddComponent(std::make_shared<ObjectPrimitive>(globe));
 
     // Equatorial ring
