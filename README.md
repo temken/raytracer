@@ -18,6 +18,10 @@
   - [x] Approximative: Durand–Kerner method
 - [ ] Compare performance of quartic solvers on the Torus.
 - [ ] Do I implement NEE correctly? (Reflections/refractions). I feel like this keeping track of the previous interaction type is not right.
+  - [ ] How to handle light source behind transmissive/glass surfaces
+- [ ] Optimizatoins
+  - [ ] Bounding Boxes for composite objects
+  - [ ] More postprocessing of image: Remove bright pixels and then bilateral filtering.
 - [ ] Reflections inside the glass sphere? Should I ony reflect from the outside? 
 - [ ] Optimization: Precompute the pixel range for each object in a pre-processing scan. Needs to be re-done for each image, but not sample. Add a safety margin for antialiasing
 - [ ] Figure out how to make composite objects work.
