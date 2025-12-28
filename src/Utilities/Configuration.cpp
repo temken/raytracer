@@ -679,7 +679,13 @@ ObjectComposite Configuration::ParseCompositeObject(const YAML::Node& obj, const
 
     // Call the appropriate factory method based on type
     if (type == "Globus") {
-        return Items::CreateGlobus(referenceLength, props.position, props.normal, props.referenceDirection);
+        ObjectComposite globus = Items::CreateGlobus(referenceLength, props.position, props.normal, props.referenceDirection);
+        globus.SetVelocity(props.velocity);
+        globus.SetAcceleration(props.acceleration);
+        globus.SetAngularVelocity(props.angularVelocity);
+        globus.SetSpin(props.spin);
+        globus.SetVisible(props.visible);
+        return globus;
     } else {
         throw std::runtime_error("Unknown composite object type: " + type);
     }
