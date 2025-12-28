@@ -28,8 +28,8 @@ public:
     virtual void PrintInfo() const override;
 
 protected:
-    Vector3D mPosition;
     double mReferenceLength;
+    Vector3D mPosition;
     Geometry::OrthonormalBasis mOrthonormalBasis;
 
     std::vector<std::shared_ptr<ObjectPrimitive>> mComponents;

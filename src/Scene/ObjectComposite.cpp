@@ -112,6 +112,7 @@ void ObjectComposite::Rotate(double angle, const Geometry::Line& axis) {
 
     for (auto& component : mComponents) {
         component->Rotate(angle, axis);
+        component->Spin(angle, axis.GetDirection());
     }
 }
 
