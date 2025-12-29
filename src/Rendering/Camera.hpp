@@ -75,7 +75,7 @@ private:
 
     Ray CreateRay(size_t x, size_t y) const;
 
-    Image CreateImage(const std::vector<std::vector<Color>>& accumulatedColors, size_t samples, bool applyPostProcessing) const;
+    Image CreateImage(const std::vector<std::vector<Color>>& accumulatedColors, size_t samples, bool applyPostProcessing = true) const;
 
     static void ApplyPostProcessing(Color& color);
     static void ApplyGammaCorrection(Color& color);

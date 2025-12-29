@@ -47,7 +47,8 @@ std::optional<Object::Intersection> Renderer::Intersect(const Ray& ray, const Sc
     return closestHit;
 }
 
-void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const Object::Intersection& intersection, std::size_t numLightSamples) {
+// Taking throughput before the material interaction to avoid double-multiplying the surface albedo when direct light sampling is used after Material::Diffuse()
+void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const Object::Intersection& intersection, const Color& throughputBefore, std::size_t numLightSamples) {
     const auto& material = intersection.object->GetMaterial();
     const Vector3D& x = intersection.point;
     Vector3D n = intersection.normal.Normalized();
@@ -88,7 +89,7 @@ void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const Object:
 
             const Color Le = lightSource->GetMaterial().GetEmission() * lightSource->GetColor(*shadowHit);  // emitted radiance (RGB)
 
-            // Lambertian BRDF
+            // Lambertian BRDF: include surface albedo (texture/base color)
             const Color f_r = material.GetColor(intersection) * (1.0 / M_PI);
 
             // Geometry factor (two-sided light source)
@@ -105,11 +106,9 @@ void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const Object:
     }
 
     if (!anyLightHit) {
-        ray.AddRadiance(kAmbientFactor * ray.GetThroughput());
+        ray.AddRadiance(kAmbientFactor * throughputBefore);
     } else {
-        // ray.AddRadiance(directRadiance);
-        // It could be that this is actually physically more correct, but it looks less nice.
-        ray.AddRadiance(ray.GetThroughput() * directRadiance);
+        ray.AddRadiance(throughputBefore * directRadiance);
     }
 }
 

@@ -21,10 +21,11 @@ Color RendererRayTracer::TraceRay(Ray ray, const Scene& scene) {
             break;
         }
 
+        Color throughputBefore = ray.GetThroughput();
         auto interactionType = material.Interact(ray, intersection.value());
 
         if (interactionType == Material::InteractionType::DIFFUSE) {
-            CollectDirectLighting(ray, scene, intersection.value(), kNumLightSamples);
+            CollectDirectLighting(ray, scene, intersection.value(), throughputBefore, kNumLightSamples);
             break;
         }
     }

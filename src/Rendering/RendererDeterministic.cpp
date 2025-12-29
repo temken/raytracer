@@ -23,16 +23,20 @@ Color RendererDeterministic::TraceRay(Ray ray, const Scene& scene) {
         Material::InteractionType mostLikelyInteraction = material.MostLikelyInteraction();
         const bool applyRoughness = !mIsDeterministic;
         switch (mostLikelyInteraction) {
-            case Material::InteractionType::DIFFUSE:
+            case Material::InteractionType::DIFFUSE: {
+                Color throughputBefore = ray.GetThroughput();
                 material.Diffuse(ray, intersection.value());
-                CollectDirectLighting(ray, scene, intersection.value());
+                CollectDirectLighting(ray, scene, intersection.value(), throughputBefore);
                 return ray.GetRadiance();
-            case Material::InteractionType::REFLECTIVE:
+            }
+            case Material::InteractionType::REFLECTIVE: {
                 material.Reflect(ray, intersection.value(), applyRoughness);
                 break;
-            case Material::InteractionType::REFRACTIVE:
+            }
+            case Material::InteractionType::REFRACTIVE: {
                 material.Refract(ray, intersection.value(), applyRoughness);
                 break;
+            }
         }
     }
     return ray.GetRadiance();

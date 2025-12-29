@@ -147,7 +147,7 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
             }
         }
         if (video) {
-            Image tempImage = CreateImage(accumulatedColors, s + 1, true);
+            Image tempImage = CreateImage(accumulatedColors, s + 1);
             video->AddFrame(tempImage);
         }
     }
@@ -156,9 +156,8 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
         std::cout << "Saving converging video to: " << filepath << std::endl;
         video->Save(true, false, false, filepath);
     }
-    // Apply post-processing for all renderers to handle HDR values properly except SIMPLE
-    bool applyPostProcessing = mRenderer->GetType() != Renderer::Type::SIMPLE;
-    Image image = CreateImage(accumulatedColors, samples, applyPostProcessing);
+    // Apply post-processing for all renderers to handle HDR values
+    Image image = CreateImage(accumulatedColors, samples);
     double totalDuration = std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - startTime).count();
     if (printProgressBar) {
         libphysica::Print_Progress_Bar(1.0, 0, 60, totalDuration, "Blue");

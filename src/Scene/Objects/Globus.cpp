@@ -9,7 +9,6 @@ ObjectComposite CreateGlobus(double referenceLength, const Vector3D& position, c
     ObjectComposite globus("Globus", referenceLength, position, orientation, referenceDirection);
     auto onb = Geometry::OrthonormalBasis(orientation, referenceDirection);
 
-    Material material;
     Material brass = MaterialFactory::CreateBrass();
     Material copper = MaterialFactory::CreateCopper();
     Material silver = MaterialFactory::CreateSilver();

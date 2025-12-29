@@ -41,7 +41,8 @@ protected:
 
     virtual std::optional<Object::Intersection> Intersect(const Ray& ray, const Scene& scene);
 
-    void CollectDirectLighting(Ray& ray, const Scene& scene, const Object::Intersection& intersection, std::size_t numLightSamples = 0);
+    // Overload that takes the throughput before the material interaction
+    void CollectDirectLighting(Ray& ray, const Scene& scene, const Object::Intersection& intersection, const Color& throughputBefore, std::size_t numLightSamples = 0);
 };
 
 }  // namespace Raytracer

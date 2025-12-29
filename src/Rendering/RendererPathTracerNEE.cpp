@@ -15,6 +15,8 @@ Color RendererPathTracerNEE::TraceRay(Ray ray, const Scene& scene) {
             return ray.GetRadiance() + ray.GetThroughput() * scene.GetBackgroundColor(ray);
         }
         auto& material = intersection->object->GetMaterial();
+        // Capture throughput before material interaction for correct direct lighting
+        Color throughputBefore = ray.GetThroughput();
 
         // Add light emission - avoid double-counting only for paths that come from diffuse surfaces
         if (material.EmitsLight()) {
@@ -26,9 +28,8 @@ Color RendererPathTracerNEE::TraceRay(Ray ray, const Scene& scene) {
         }
 
         auto interactionType = material.Interact(ray, intersection.value());
-
         if (interactionType == Material::InteractionType::DIFFUSE) {
-            CollectDirectLighting(ray, scene, intersection.value(), kNumLightSamples);
+            CollectDirectLighting(ray, scene, intersection.value(), throughputBefore, kNumLightSamples);
         }
         previousInteraction = interactionType;
 
