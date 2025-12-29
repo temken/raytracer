@@ -120,7 +120,6 @@ Camera Configuration::ConstructCamera() const {
     size_t width = res["width"].as<int>();
     size_t height = res["height"].as<int>();
     bool useAntiAliasing = node["antialiasing"].as<bool>();
-    bool blurImage = node["blur_image"] ? node["blur_image"].as<bool>() : false;
     size_t samplesPerPixel = node["samples_per_pixel"].as<int>();
     double framesPerSecond = node["framesPerSecond"] ? node["framesPerSecond"].as<double>() : 30.0;
 
@@ -135,7 +134,6 @@ Camera Configuration::ConstructCamera() const {
     camera.SetResolution(width, height);
     camera.SetSamplesPerPixel(samplesPerPixel);
     camera.SetUseAntiAliasing(useAntiAliasing);
-    camera.SetBlurImage(blurImage);
     camera.SetFramesPerSecond(framesPerSecond);
 
     return camera;

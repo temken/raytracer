@@ -37,7 +37,6 @@ public:
     void SetFramesPerSecond(double fps);
     void SetSamplesPerPixel(size_t samples);
     void SetUseAntiAliasing(bool useAA);
-    void SetBlurImage(bool blur);
 
     Image RenderImage(const Scene& scene, bool printProgressBar = false, bool createConvergingVideo = false) const;
     Video RenderVideo(Scene& scene, double durationSeconds, bool printProgressBar = true);
@@ -64,7 +63,6 @@ private:
     std::unique_ptr<Renderer> mRenderer;
     size_t mSamplesPerPixel = 1;
     bool mUseAntiAliasing = false;
-    bool mBlurImage = false;
 
     const double kEpsilon = 1e-6;
 

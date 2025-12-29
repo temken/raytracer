@@ -76,28 +76,6 @@ Color Image::GetPixel(std::size_t x, std::size_t y) const {
     return mPixels[y * mWidth + x];
 }
 
-void Image::Blur() {
-    if (mWidth < 3 || mHeight < 3) {
-        return;  // Image too small to blur
-    }
-
-    std::vector<Color> newPixels = mPixels;
-
-    for (std::size_t y = 1; y < mHeight - 1; ++y) {
-        for (std::size_t x = 1; x < mWidth - 1; ++x) {
-            Color sum(0.0, 0.0, 0.0);
-            for (int dy = -1; dy <= 1; ++dy) {
-                for (int dx = -1; dx <= 1; ++dx) {
-                    sum += GetPixel(x + dx, y + dy);
-                }
-            }
-            newPixels[y * mWidth + x] = sum * (1.0 / 9.0);
-        }
-    }
-
-    mPixels = std::move(newPixels);
-}
-
 void Image::Clear(const Color& color) {
     std::fill(mPixels.begin(), mPixels.end(), color);
 }

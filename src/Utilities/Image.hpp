@@ -20,8 +20,6 @@ public:
     void SetPixel(std::size_t x, std::size_t y, const Color& color);
     Color GetPixel(std::size_t x, std::size_t y) const;
 
-    void Blur();
-
     bool Save(bool openFile = false, std::string filepath = "") const;
 
     void PrintToTerminal(std::size_t width, double terminalCharAspectRatio = 18.0 / 7.0) const;

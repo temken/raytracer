@@ -35,7 +35,6 @@ camera:
     height: 1200
   framesPerSecond: 15
   antialiasing: false
-  blur_image: false
   samples_per_pixel: 1
   
 scene:  

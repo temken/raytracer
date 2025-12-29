@@ -105,10 +105,6 @@ void Camera::SetUseAntiAliasing(bool useAA) {
     mUseAntiAliasing = useAA;
 }
 
-void Camera::SetBlurImage(bool blur) {
-    mBlurImage = blur;
-}
-
 Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool createConvergingVideo) const {
     // Set the starting time
     auto startTime = std::chrono::high_resolution_clock::now();
@@ -204,10 +200,6 @@ Image Camera::CreateImage(const std::vector<std::vector<Color>>& accumulatedColo
             image.SetPixel(x, y, colorAverage);
         }
     }
-
-    if (mBlurImage) {
-        image.Blur();
-    }
     return image;
 }
 
@@ -252,7 +244,6 @@ void Camera::PrintInfo() const {
               << "FPS:\t\t" << mFramesPerSecond << std::endl
               << "Samples/Pixel:\t" << mSamplesPerPixel << std::endl
               << "Anti-Aliasing:\t" << (mUseAntiAliasing ? "[x]" : "[ ]") << std::endl
-              << "Blur Image:\t" << (mBlurImage ? "[x]" : "[ ]") << std::endl
               << "Dynamic:\t" << (IsDynamic() ? "[x]" : "[ ]") << std::endl;
     if (IsDynamic()) {
         std::cout << "Velocity:\t" << mVelocity << std::endl
