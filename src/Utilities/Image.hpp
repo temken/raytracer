@@ -19,6 +19,7 @@ public:
 
     void SetPixel(std::size_t x, std::size_t y, const Color& color);
     Color GetPixel(std::size_t x, std::size_t y) const;
+    std::vector<Color> GetNeighbors(std::size_t x, std::size_t y) const;
 
     bool Save(bool openFile = false, std::string filepath = "") const;
 

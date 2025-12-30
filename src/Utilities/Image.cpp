@@ -76,6 +76,26 @@ Color Image::GetPixel(std::size_t x, std::size_t y) const {
     return mPixels[y * mWidth + x];
 }
 
+std::vector<Color> Image::GetNeighbors(std::size_t x, std::size_t y) const {
+    CheckBounds(x, y);
+    std::vector<Color> neighbors;
+    for (int dy = -1; dy <= 1; ++dy) {
+        if (y + dy < 0 || y + dy >= mHeight) {
+            continue;
+        }
+        for (int dx = -1; dx <= 1; ++dx) {
+            if (x + dx < 0 || x + dx >= mWidth) {
+                continue;
+            }
+            if (dx == 0 && dy == 0) {
+                continue;  // Skip the center pixel
+            }
+            neighbors.push_back(GetPixel(x + dx, y + dy));
+        }
+    }
+    return neighbors;
+}
+
 void Image::Clear(const Color& color) {
     std::fill(mPixels.begin(), mPixels.end(), color);
 }
