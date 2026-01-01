@@ -36,7 +36,7 @@ Color RendererPathTracerNEE::TraceRay(Ray ray, const Scene& scene) {
         // Russian roulette after a few bounces
         if (ray.GetDepth() >= 3) {
             Color throughput = ray.GetThroughput();
-            double luminance = 0.299 * throughput.R() + 0.587 * throughput.G() + 0.114 * throughput.B();
+            double luminance = throughput.Luminance();
             double p = std::clamp(luminance, 0.1, 0.95);
             if (mDistribution(mGenerator) > p) {
                 break;

@@ -15,6 +15,8 @@ public:
     double G() const;
     double B() const;
 
+    double Luminance() const;
+
     std::array<double, 3> GetRGB() const;
     std::array<int, 3> GetRGB255() const;
 
