@@ -11,6 +11,8 @@ Image Denoiser::Denoise(const Image& inputImage, Denoiser::Method method) {
             return Blur(inputImage, 1);
         case Method::GAUSSIAN_BLUR:
             return GaussianBlur(inputImage, 1.0);
+        case Method::BILATERAL_FILTER:
+            return BilateralFilter(inputImage, 2.0, 0.1);
         default:
             throw std::invalid_argument("Unsupported denoising method.");
     }
@@ -86,6 +88,44 @@ Image Denoiser::GaussianBlur(const Image& inputImage, double sigma) {
                     }
                     Color pixel = inputImage.GetPixel(x + kx, y + ky);
                     double weight = kernel[ky + kernelRadius][kx + kernelRadius];
+                    sum += pixel * weight;
+                    weightSum += weight;
+                }
+            }
+            if (weightSum > 0.0) {
+                outputImage.SetPixel(x, y, sum / weightSum);
+            }
+        }
+    }
+
+    return outputImage;
+}
+
+Image Denoiser::BilateralFilter(const Image& inputImage, double sigmaSpatial, double sigmaColor) {
+    int spatialKernelRadius = static_cast<int>(std::ceil(3 * sigmaSpatial));
+    if (spatialKernelRadius < 1) {
+        return inputImage;
+    }
+    auto spatialKernel = CreateGaussianKernel(sigmaSpatial);
+
+    Image outputImage = inputImage;
+    for (std::size_t y = 0; y < inputImage.GetHeight(); ++y) {
+        for (std::size_t x = 0; x < inputImage.GetWidth(); ++x) {
+            Color sum(0.0, 0.0, 0.0);
+            double weightSum = 0.0;
+            Color centerPixel = inputImage.GetPixel(x, y);
+
+            for (int ky = -spatialKernelRadius; ky <= spatialKernelRadius; ++ky) {
+                for (int kx = -spatialKernelRadius; kx <= spatialKernelRadius; ++kx) {
+                    if (x + kx < 0 || x + kx >= inputImage.GetWidth() ||
+                        y + ky < 0 || y + ky >= inputImage.GetHeight()) {
+                        continue;
+                    }
+                    Color pixel = inputImage.GetPixel(x + kx, y + ky);
+                    double spatialWeight = spatialKernel[ky + static_cast<int>(spatialKernel.size() / 2)][kx + static_cast<int>(spatialKernel.size() / 2)];
+                    double colorDistance = (pixel - centerPixel).Length();
+                    double colorWeight = Gaussian(colorDistance, sigmaColor);
+                    double weight = spatialWeight * colorWeight;
                     sum += pixel * weight;
                     weightSum += weight;
                 }

@@ -9,6 +9,7 @@ public:
     enum class Method {
         BLUR,
         GAUSSIAN_BLUR,
+        BILATERAL_FILTER,
     };
 
     static Image Denoise(const Image& inputImage, Method method);
@@ -16,6 +17,8 @@ public:
     static Image Blur(const Image& inputImage, std::size_t blurCount = 1);
 
     static Image GaussianBlur(const Image& inputImage, double sigma);
+
+    static Image BilateralFilter(const Image& inputImage, double sigmaSpatial, double sigmaColor);
 
     static Image RemoveHotPixels(const Image& inputImage);
 

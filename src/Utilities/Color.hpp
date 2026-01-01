@@ -16,6 +16,7 @@ public:
     double B() const;
 
     double Luminance() const;
+    double Length() const;
 
     std::array<double, 3> GetRGB() const;
     std::array<int, 3> GetRGB255() const;
@@ -43,6 +44,10 @@ public:
 
     Color operator+(const Color& other) const {
         return Color((r + other.r), (g + other.g), (b + other.b));
+    }
+
+    Color operator-(const Color& other) const {
+        return Color((r - other.r), (g - other.g), (b - other.b));
     }
 
     Color& operator+=(const Color& other) {

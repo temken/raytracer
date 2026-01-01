@@ -28,6 +28,10 @@ double Color::Luminance() const {
     return 0.299 * r + 0.587 * g + 0.114 * b;
 }
 
+double Color::Length() const {
+    return std::sqrt(r * r + g * g + b * b);
+}
+
 std::array<double, 3> Color::GetRGB() const {
     return {r, g, b};
 }
