@@ -27,12 +27,12 @@ Image Denoiser::Blur(const Image& inputImage, std::size_t blurCount) {
     Image outputImage = inputImage;
     // Simple box blur implementation
     for (std::size_t i = 0; i < blurCount; i++) {
-        for (std::size_t y = 1; y < outputImage.GetHeight() - 1; y++) {
-            for (std::size_t x = 1; x < outputImage.GetWidth() - 1; x++) {
+        for (std::size_t y = 1; y < inputImage.GetHeight() - 1; y++) {
+            for (std::size_t x = 1; x < inputImage.GetWidth() - 1; x++) {
                 Color sum(0.0, 0.0, 0.0);
                 for (int dy = -1; dy <= 1; ++dy) {
                     for (int dx = -1; dx <= 1; ++dx) {
-                        sum += outputImage.GetPixel(x + dx, y + dy);
+                        sum += inputImage.GetPixel(x + dx, y + dy);
                     }
                 }
                 outputImage.SetPixel(x, y, sum * (1.0 / 9.0));
