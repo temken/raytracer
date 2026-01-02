@@ -15,8 +15,9 @@
 - [x] New class: Half Torus and Half Ring (for globe): Half torus with two half spheres as caps
 - [x] Figure out how to make composite objects work.
 - [ ] Denoising:
-  - [ ] Gaussian Blur as reference
-  - [ ] Bilateral filtering
+  - [x] Gaussian Blur as reference
+  - [x] Bilateral filtering
+  - [ ] Modify image by reference?
   - [ ] Remove fireflies
   - [ ] Explore another more advanced technique. (Joint bilateral filtering?)
   - [ ] Integrate denoising functionality in rendering pipeline.

@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 namespace Raytracer {
 
@@ -139,31 +140,70 @@ Image Denoiser::BilateralFilter(const Image& inputImage, double sigmaSpatial, do
     return outputImage;
 }
 
-Image Denoiser::RemoveHotPixels(const Image& inputImage) {
-    Image outputImage = inputImage;
+Image Denoiser::RemoveHotPixels(const Image& input) {
+    if (input.GetWidth() < 3 || input.GetHeight() < 3) {
+        return input;  // Image too small to process
+    }
+    Image output = input;
 
-    for (std::size_t y = 1; y < inputImage.GetHeight() - 1; ++y) {
-        for (std::size_t x = 1; x < inputImage.GetWidth() - 1; ++x) {
-            Color currentPixel = inputImage.GetPixel(x, y);
-            std::vector<Color> neighbors = inputImage.GetNeighbors(x, y);
+    const int radius = 2;
+    const double outlierFactor = 3.0;
+    const double minimumLuminance = 1e-4;
 
-            // Simple average of neighbors
-            Color averageColor(0.0, 0.0, 0.0);
-            for (const auto& neighbor : neighbors) {
-                averageColor += neighbor;
+    std::size_t hotPixelCount = 0;
+
+    for (int y = 0; y < input.GetHeight(); y++) {
+        for (int x = 0; x < input.GetWidth(); x++) {
+            const Color& center = input.GetPixel(x, y);
+            const double centerLuminance = center.Luminance();
+
+            if (centerLuminance < minimumLuminance) {
+                continue;
             }
-            averageColor = averageColor / static_cast<double>(neighbors.size());
 
-            // If current pixel deviates significantly from average, replace it
-            const double threshold = 0.5;
-            if (std::abs(currentPixel.R() - averageColor.R()) > threshold ||
-                std::abs(currentPixel.G() - averageColor.G()) > threshold ||
-                std::abs(currentPixel.B() - averageColor.B()) > threshold) {
-                outputImage.SetPixel(x, y, averageColor);
+            // Collect neighborhood luminance
+            std::vector<double> neighborLuminances;
+            for (int dy = -radius; dy <= radius; ++dy) {
+                if (y + dy < 0 || y + dy >= input.GetHeight()) {
+                    continue;
+                }
+                for (int dx = -radius; dx <= radius; ++dx) {
+                    if ((dx == 0 && dy == 0) || (x + dx < 0) || (x + dx >= input.GetWidth())) {
+                        continue;
+                    }
+                    neighborLuminances.push_back(input.GetPixel(x + dx, y + dy).Luminance());
+                }
+            }
+
+            // Find median luminance
+            std::sort(neighborLuminances.begin(), neighborLuminances.end());
+            const double medianLuminance = neighborLuminances[neighborLuminances.size() / 2];
+
+            // Compute MAD
+            std::vector<double> absDeviations;
+            for (const double lum : neighborLuminances) {
+                absDeviations.push_back(std::abs(lum - medianLuminance));
+            }
+            std::sort(absDeviations.begin(), absDeviations.end());
+            const double mad = absDeviations[absDeviations.size() / 2];
+
+            // Outlier test using MAD (robust sigma estimate)
+            // sigma_est = 1.4826 * MAD for normal-like distributions
+            const double kMad = 6.0;  // sensitivity multiplier (tune: 3-6)
+            const double madToSigma = 1.4826;
+            const double sigmaEst = madToSigma * mad;
+            const double threshold = medianLuminance + kMad * sigmaEst;
+
+            if (centerLuminance > threshold) {
+                const double newLuminance = threshold;
+                const double scale = newLuminance / centerLuminance;
+                hotPixelCount++;
+                output.SetPixel(x, y, center * scale);
             }
         }
     }
-    return outputImage;
+    std::cout << "Removed " << hotPixelCount << " hot pixels." << std::endl;
+    return output;
 }
 
 }  // namespace Raytracer
