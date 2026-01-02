@@ -52,7 +52,8 @@ Image::Image(std::string filepath, bool assume_srgb) {
                 g = srgb_to_linear(g);
                 b = srgb_to_linear(b);
             }
-            mPixels[y * mWidth + x] = Color(r, g, b);
+            Color color(r, g, b);
+            mPixels[y * mWidth + x] = Pixel(color);
         }
     }
 
@@ -71,14 +72,14 @@ void Image::SetPixel(std::size_t x, std::size_t y, const Color& color) {
     mPixels[y * mWidth + x] = color;
 }
 
-Color Image::GetPixel(std::size_t x, std::size_t y) const {
+Pixel Image::GetPixel(std::size_t x, std::size_t y) const {
     CheckBounds(x, y);
     return mPixels[y * mWidth + x];
 }
 
-std::vector<Color> Image::GetNeighbors(std::size_t x, std::size_t y) const {
+std::vector<Pixel> Image::GetNeighbors(std::size_t x, std::size_t y) const {
     CheckBounds(x, y);
-    std::vector<Color> neighbors;
+    std::vector<Pixel> neighbors;
     for (int dy = -1; dy <= 1; ++dy) {
         if (y + dy < 0 || y + dy >= mHeight) {
             continue;
@@ -94,6 +95,10 @@ std::vector<Color> Image::GetNeighbors(std::size_t x, std::size_t y) const {
         }
     }
     return neighbors;
+}
+
+Color Image::GetColor(std::size_t x, std::size_t y) const {
+    return GetPixel(x, y).GetColor();
 }
 
 void Image::Clear(const Color& color) {
@@ -117,8 +122,8 @@ double Image::CalculateBlackPixelRatio() const {
 }
 
 size_t Image::CountBlackPixels() const {
-    return std::count_if(mPixels.begin(), mPixels.end(), [](const Color& c) {
-        return c == BLACK;
+    return std::count_if(mPixels.begin(), mPixels.end(), [](const Pixel& p) {
+        return p.GetColor() == BLACK;
     });
 }
 
@@ -138,7 +143,8 @@ bool Image::Save(bool openFile, std::string filepath) const {
     rgba.resize(mWidth * mHeight * 4);
 
     std::size_t idx = 0;
-    for (const auto& c : mPixels) {
+    for (const auto& pixel : mPixels) {
+        auto c = pixel.GetColor();
         auto rgb255 = c.GetRGB255();
         rgba[idx + 0] = static_cast<std::uint8_t>(rgb255[0]);
         rgba[idx + 1] = static_cast<std::uint8_t>(rgb255[1]);
@@ -197,7 +203,7 @@ void Image::PrintToTerminal(std::size_t width, double terminalCharAspectRatio) c
                     std::size_t imgX = tx * terminalPixelsWidth + j;
                     std::size_t imgY = ty * terminalPixelsHeight + i;
                     if (imgX < mWidth && imgY < mHeight) {
-                        terminalPixelColor += GetPixel(imgX, imgY);
+                        terminalPixelColor += GetColor(imgX, imgY);
                         pixelCount++;
                     }
                 }

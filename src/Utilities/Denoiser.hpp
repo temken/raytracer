@@ -10,6 +10,7 @@ public:
         BLUR,
         GAUSSIAN_BLUR,
         BILATERAL_FILTER,
+        JOINT_BILATERAL_FILTER,
     };
 
     static Image Denoise(const Image& inputImage, Method method);
@@ -19,6 +20,8 @@ public:
     static Image GaussianBlur(const Image& inputImage, double sigma);
 
     static Image BilateralFilter(const Image& inputImage, double sigmaSpatial, double sigmaColor);
+
+    static Image JointBilateralFilter(const Image& inputImage, double sigmaSpatial, double sigmaNormal, double sigmaDepth, double sigmaAlbedo);
 
     static Image RemoveHotPixels(const Image& inputImage);
 

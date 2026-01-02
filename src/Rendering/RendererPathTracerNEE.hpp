@@ -10,7 +10,7 @@ class RendererPathTracerNEE : public Renderer {
 public:
     RendererPathTracerNEE();
 
-    virtual Color TraceRay(Ray ray, const Scene& scene) override;
+    virtual Pixel TraceRay(Ray ray, const Scene& scene) override;
 
 private:
     std::uniform_real_distribution<double> mDistribution{0.0, 1.0};

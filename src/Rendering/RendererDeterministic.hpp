@@ -11,7 +11,7 @@ class RendererDeterministic : public Renderer {
 public:
     RendererDeterministic();
 
-    virtual Color TraceRay(Ray ray, const Scene& scene) override;
+    virtual Pixel TraceRay(Ray ray, const Scene& scene) override;
 
 private:
 };

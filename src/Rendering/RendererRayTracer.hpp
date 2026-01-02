@@ -8,7 +8,7 @@ class RendererRayTracer : public Renderer {
 public:
     RendererRayTracer();
 
-    virtual Color TraceRay(Ray ray, const Scene& scene) override;
+    virtual Pixel TraceRay(Ray ray, const Scene& scene) override;
 
 private:
     static constexpr size_t kNumLightSamples = 5;

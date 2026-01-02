@@ -64,6 +64,9 @@ private:
     size_t mSamplesPerPixel = 1;
     bool mUseAntiAliasing = false;
 
+    // Post-processing flags and constants
+    // ...
+
     const double kEpsilon = 1e-6;
 
     // Camera dynamics

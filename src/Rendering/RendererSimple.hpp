@@ -11,7 +11,8 @@ class RendererSimple : public Renderer {
 public:
     RendererSimple() :
         Renderer(Type::SIMPLE, true) {};
-    virtual Color TraceRay(Ray ray, const Scene& scene) override;
+
+    virtual Pixel TraceRay(Ray ray, const Scene& scene) override;
 
 private:
 };

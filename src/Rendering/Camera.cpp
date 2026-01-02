@@ -128,8 +128,8 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
             for (size_t x = 0; x < mResolution.width; x++) {
                 // Sample the pixel
                 Ray ray = CreateRay(x, y);
-                Color color = mRenderer->TraceRay(ray, scene);
-                accumulatedColors[y][x] += color;
+                Pixel pixel = mRenderer->TraceRay(ray, scene);
+                accumulatedColors[y][x] += pixel.GetColor();
             }
             if (printProgressBar) {
                 size_t done;
