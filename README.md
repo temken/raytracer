@@ -17,9 +17,15 @@
 - [ ] Denoising:
   - [x] Gaussian Blur as reference
   - [x] Bilateral filtering
-  - [ ] Modify image by reference?
-  - [ ] Remove fireflies
-  - [ ] Explore another more advanced technique. (Joint bilateral filtering?)
+  - [x] Modify image by reference? -> No
+  - [x] Remove fireflies
+  - [ ] Joint bilateral filtering
+    - [ ] The camera post processing steps cannot be applied after filtering since they work on a single color. 
+    - [ ] The 1st hit information is not yet passed to the rendered image. Have to handle the AccumulatedColor property. Inherit from Color?
+    - [ ] Clarify and unify the post processing pipeline. What parameters should be set in the config file? What order should the steps be called.
+    - [ ] Use normal, depth, and albedo in the filter.
+    - [ ] Fall back to bilateral filter without 1st hit information?
+    - [ ] Compare to bilateral filter.
   - [ ] Integrate denoising functionality in rendering pipeline.
 - [ ] Composite object: Glass
   - [ ] Implement simple glass shape (round edge on the top?)
