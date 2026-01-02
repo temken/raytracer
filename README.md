@@ -13,26 +13,32 @@
 - [x] Print preview of image downscaled in terminal
 - [x] Implement torus class
 - [x] New class: Half Torus and Half Ring (for globe): Half torus with two half spheres as caps
-- [ ] Implement quartic equation solver:
-  - [ ] Exact solution
-  - [x] Approximative: Durand–Kerner method
-- [ ] Compare performance of quartic solvers on the Torus.
-- [ ] Do I implement NEE correctly? (Reflections/refractions). I feel like this keeping track of the previous interaction type is not right.
-  - [ ] How to handle light source behind transmissive/glass surfaces
-- [ ] Optimizatoins
-  - [ ] Bounding Boxes for composite objects
-  - [ ] More postprocessing of image: Remove bright pixels and then bilateral filtering.
-- [ ] Reflections inside the glass sphere? Should I ony reflect from the outside? 
+- [x] Figure out how to make composite objects work.
+- [ ] Denoising:
+  - [ ] Gaussian Blur as reference
+  - [ ] Bilateral filtering
+  - [ ] Remove fireflies
+  - [ ] Explore another more advanced technique. (Joint bilateral filtering?)
+  - [ ] Integrate denoising functionality in rendering pipeline.
+- [ ] Composite object: Glass
+  - [ ] Implement simple glass shape (round edge on the top?)
+  - [ ] Option to fill it with a colored "liquid"
+  - [ ] Implement normal textures to give the glass some structure. (Normal textures especially for glass surfaces, but not just (who owns the normal texture? -> The shape))
+- [ ] Composite objects:
+  - [ ] Desk lamp
+  - [ ] Pencil
+  - [ ] Desk
+  - [ ] Chair
+- [ ] Optimization: Bounding boxes for composite objects
+  - [ ] Create AABB from two points
+  - [ ] Shape should return vertices and min/max values to easily create bounding boxes
+  - [ ] Split AABB into two boxes along the longest side
 - [ ] Optimization: Precompute the pixel range for each object in a pre-processing scan. Needs to be re-done for each image, but not sample. Add a safety margin for antialiasing
-- [ ] Figure out how to make composite objects work.
 - [ ] Add a new interaction: Transparency where teh light passes through unaffected (I need this for windows in walls + transparency textures)
-- [ ] Make a clean simple scene to visualize the contributions of N=1,2,3,4,5 scatterings
 - [ ] Do I implement NEE correctly? (Reflections/refractions). I feel like this keeping track of the previous interaction type is not right.
-- [ ] Reflections inside the glass sphere? Should I ony reflect from the outside? 
 - [ ] Maybe textures should not get stretched. How to have unstretched textures on cylinders, boxes, etc.
   - [ ] Textures for cubes/other composite objects. (Use only some of the texture? Special textures (t shaped) for cubes for example) Or each object uses its own texture.
-- [ ] Create composite objects (street lamps, desk lamps, pencil, spots, table, Chair, glass, filled glass)
-- [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
+- [ ] Find a better title and make an ascii art header
 - [ ] Scene: Table see below
 - [ ] If black pixels or noise still an issue? Improve the block blur algorithm to not smudge edges. -> Bilateral filter Or look at other Denoising algorithms.
 - [ ] Image textures for other objects
@@ -40,28 +46,31 @@
   - [ ] Boxes
   - [ ] Cylinder/Tube
 - [ ] Add more pre-defined colors
-- [ ] Find a better title and make an ascii art header
 - [ ] Improve the deterministic renderer by modeling mixtures of refraction and reflection. Split the ray in two, weigh each by their probability and propagate them recurseively. This should even reproduce the Fresnel effect.
 - [ ] Mean free path inside the object with scattering color (could just be albedo color). Also useable for fog.
-- [ ] Create camera based on aspect ratio and one pixel dimension
-- [ ] Implement depth of field capability
-- [ ] Normal textures especially for glass surfaces, but not just (who owns the normal texture? -> The shape)
-- [ ] Check out texture resources.
-- [ ] Allow to run ALL renderes and store the renderer type in the file name. (?)
-- [ ] Look into ogb mesh files.
-- [ ] Create AABB from two points
-- [ ] Shape should return vertices and min/max values to easily create bounding boxes
-- [ ] Split AABB into two boxes along the longest side
-- [ ] Camera effects:
-  - [ ] Motion blur
-  - [ ] Depth/aperture
 - [ ] Camera/object have dynamics property in common (velocity, Evolve(t), etc). Common Interface?
   - [ ] Camera should have an ONB that handles location and orientation or a 3d motion base class
+- [ ] Create camera based on aspect ratio and one pixel dimension
+- [ ] Implement depth of field capability
+- [ ] Check out texture resources.
 - [ ] Profile to check for bottlenecks.
+- [ ] Allow to run ALL renderes and store the renderer type in the file name. (?)
+- [ ] Look into ogb mesh files.
 - [ ] Organize textures
   - [ ] Normal, basecolor, specular, normal, Transparancy
+- [ ] Implement quartic equation solver:
+  - [ ] Exact solution
+  - [x] Approximative: Durand–Kerner method
+  - [ ] Compare performance of quartic solvers on the Torus.
+
+### Open questions
+- [ ] Reflections inside the glass sphere? Should I ony reflect from the outside? 
+- [ ] Do I implement NEE correctly? (Reflections/refractions). I feel like this keeping track of the previous interaction type is not right.
+  - [ ] How to handle light source behind transmissive/glass surfaces
 
 ### Image ideas:
+- [ ] Render some nice example of the Fresnel effect. Cylinder on a table. Wet road with lights from an oncoming car. Stuff like that.
+- [ ] Make a clean simple scene to visualize the contributions of N=1,2,3,4,5 scatterings
 - [ ] Light lanterns along a road in the night with nice ambient. Wet road, oncoming car.
 - [x] Create a series of material comparisons, e.g. roughness, metallicity, glas, ...
 - [ ] Recreate that photo I took in the pub.
@@ -69,7 +78,7 @@
 
 ### Known bugs and issues:
 - [x] Increasing the resolution sometimes seems to widen the field of view and vice versa
-- [ ] Test and debug the image class, import/export a file. Ensure that the image has the same orientation.
+- [x] Test and debug the image class, import/export a file. Ensure that the image has the same orientation.
 - [x] Debug the rectangle/ box classes. There is something off with the dimensions. This is related to the previous point potentially.
   - [x] Check the brick scene. The texture orientation is different for each wall. It might have to do with the fact that the normals are aligned with an axis -> Swap x,y of the rectangle.
 
