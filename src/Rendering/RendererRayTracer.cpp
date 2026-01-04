@@ -6,7 +6,7 @@ RendererRayTracer::RendererRayTracer() :
     Renderer(Type::RAY_TRACER, false) {
 }
 
-Pixel RendererRayTracer::TraceRay(Ray ray, const Scene& scene) {
+Color RendererRayTracer::TraceRay(Ray ray, const Scene& scene) {
     while (ray.GetDepth() < kMaximumDepth) {
         auto intersection = Intersect(ray, scene);
         if (!intersection.has_value()) {

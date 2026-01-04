@@ -12,7 +12,7 @@ public:
     RendererSimple() :
         Renderer(Type::SIMPLE, true) {};
 
-    virtual Pixel TraceRay(Ray ray, const Scene& scene) override;
+    virtual Color TraceRay(Ray ray, const Scene& scene) override;
 
 private:
 };

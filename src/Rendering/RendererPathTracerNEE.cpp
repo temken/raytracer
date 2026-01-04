@@ -6,7 +6,7 @@ RendererPathTracerNEE::RendererPathTracerNEE() :
     Renderer(Type::PATH_TRACER_NEE, false) {
 }
 
-Pixel RendererPathTracerNEE::TraceRay(Ray ray, const Scene& scene) {
+Color RendererPathTracerNEE::TraceRay(Ray ray, const Scene& scene) {
     Material::InteractionType previousInteraction = Material::InteractionType::DIFFUSE;
 
     while (ray.GetDepth() < kMaximumDepth) {

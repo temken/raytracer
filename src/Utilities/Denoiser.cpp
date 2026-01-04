@@ -46,7 +46,7 @@ Image Denoiser::Blur(const Image& inputImage, std::size_t blurCount) {
                 Color sum(0.0, 0.0, 0.0);
                 for (int dy = -1; dy <= 1; ++dy) {
                     for (int dx = -1; dx <= 1; ++dx) {
-                        sum += inputImage.GetColor(x + dx, y + dy);
+                        sum += inputImage.GetPixel(x + dx, y + dy);
                     }
                 }
                 outputImage.SetPixel(x, y, sum * (1.0 / 9.0));
@@ -101,7 +101,7 @@ Image Denoiser::GaussianBlur(const Image& inputImage, double sigma) {
                         y + ky < 0 || y + ky >= inputImage.GetHeight()) {
                         continue;
                     }
-                    Color pixel = inputImage.GetColor(x + kx, y + ky);
+                    Color pixel = inputImage.GetPixel(x + kx, y + ky);
                     double weight = kernel[ky + kernelRadius][kx + kernelRadius];
                     sum += pixel * weight;
                     weightSum += weight;
@@ -128,7 +128,7 @@ Image Denoiser::BilateralFilter(const Image& inputImage, double sigmaSpatial, do
         for (std::size_t x = 0; x < inputImage.GetWidth(); ++x) {
             Color sum(0.0, 0.0, 0.0);
             double weightSum = 0.0;
-            Color centerPixel = inputImage.GetColor(x, y);
+            Color centerPixel = inputImage.GetPixel(x, y);
 
             for (int ky = -spatialKernelRadius; ky <= spatialKernelRadius; ++ky) {
                 for (int kx = -spatialKernelRadius; kx <= spatialKernelRadius; ++kx) {
@@ -136,7 +136,7 @@ Image Denoiser::BilateralFilter(const Image& inputImage, double sigmaSpatial, do
                         y + ky < 0 || y + ky >= inputImage.GetHeight()) {
                         continue;
                     }
-                    Color pixel = inputImage.GetColor(x + kx, y + ky);
+                    Color pixel = inputImage.GetPixel(x + kx, y + ky);
                     double spatialWeight = spatialKernel[ky + static_cast<int>(spatialKernel.size() / 2)][kx + static_cast<int>(spatialKernel.size() / 2)];
                     double colorDistance = (pixel - centerPixel).Length();
                     double colorWeight = Gaussian(colorDistance, sigmaColor);
@@ -167,7 +167,7 @@ Image Denoiser::RemoveHotPixels(const Image& input) {
 
     for (int y = 0; y < input.GetHeight(); y++) {
         for (int x = 0; x < input.GetWidth(); x++) {
-            const Color& center = input.GetColor(x, y);
+            const Color& center = input.GetPixel(x, y);
             const double centerLuminance = center.Luminance();
 
             if (centerLuminance < minimumLuminance) {
@@ -184,7 +184,7 @@ Image Denoiser::RemoveHotPixels(const Image& input) {
                     if ((dx == 0 && dy == 0) || (x + dx < 0) || (x + dx >= input.GetWidth())) {
                         continue;
                     }
-                    neighborLuminances.push_back(input.GetColor(x + dx, y + dy).Luminance());
+                    neighborLuminances.push_back(input.GetPixel(x + dx, y + dy).Luminance());
                 }
             }
 

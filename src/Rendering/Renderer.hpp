@@ -3,7 +3,6 @@
 #include "Rendering/Ray.hpp"
 #include "Scene/Scene.hpp"
 #include "Utilities/Color.hpp"
-#include "Utilities/Pixel.hpp"
 
 #include <optional>
 #include <random>
@@ -24,7 +23,7 @@ public:
 
     explicit Renderer(Type type, bool deterministic);
 
-    virtual Pixel TraceRay(Ray ray, const Scene& scene) = 0;
+    virtual Color TraceRay(Ray ray, const Scene& scene) = 0;
 
     bool IsDeterministic() const;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utilities/Pixel.hpp"
+#include "Utilities/Color.hpp"
 
 #include <cstddef>
 #include <string>
@@ -18,10 +18,8 @@ public:
     std::size_t GetHeight() const;
 
     void SetPixel(std::size_t x, std::size_t y, const Color& color);
-    Pixel GetPixel(std::size_t x, std::size_t y) const;
-    std::vector<Pixel> GetNeighbors(std::size_t x, std::size_t y) const;
-
-    Color GetColor(std::size_t x, std::size_t y) const;
+    Color GetPixel(std::size_t x, std::size_t y) const;
+    std::vector<Color> GetNeighbors(std::size_t x, std::size_t y) const;
 
     bool Save(bool openFile = false, std::string filepath = "") const;
 
@@ -34,7 +32,7 @@ public:
 private:
     std::size_t mWidth = 100;
     std::size_t mHeight = 100;
-    std::vector<Pixel> mPixels;
+    std::vector<Color> mPixels;
 
     void CheckBounds(std::size_t x, std::size_t y) const;
     size_t CountBlackPixels() const;

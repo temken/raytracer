@@ -7,7 +7,7 @@ RendererDeterministic::RendererDeterministic() :
     kAmbientFactor = 3e-3;
 }
 
-Pixel RendererDeterministic::TraceRay(Ray ray, const Scene& scene) {
+Color RendererDeterministic::TraceRay(Ray ray, const Scene& scene) {
     while (ray.GetDepth() < kMaximumDepth) {
         auto intersection = Intersect(ray, scene);
         if (!intersection.has_value()) {
