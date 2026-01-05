@@ -12,6 +12,9 @@ Image Denoiser::Denoise(const Image& inputImage, Denoiser::Method method, GBuffe
     }
 
     switch (method) {
+        case Method::NONE: {
+            return inputImage;
+        }
         case Method::BLUR: {
             return Blur(inputImage);
         }
