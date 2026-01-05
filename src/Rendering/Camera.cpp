@@ -84,7 +84,7 @@ void Camera::SetFieldOfView(double fov) {
     ConfigureCamera();
 }
 
-void Camera::SetResolution(size_t width, size_t height) {
+void Camera::SetResolution(std::size_t width, std::size_t height) {
     // Throw error for odd values
     if (width % 2 != 0 || height % 2 != 0) {
         throw std::invalid_argument("Resolution must be even numbers.");
@@ -97,7 +97,7 @@ void Camera::SetFramesPerSecond(double fps) {
     mFramesPerSecond = fps;
 }
 
-void Camera::SetSamplesPerPixel(size_t samples) {
+void Camera::SetSamplesPerPixel(std::size_t samples) {
     mSamplesPerPixel = samples;
 }
 
@@ -108,13 +108,13 @@ void Camera::SetUseAntiAliasing(bool useAA) {
 Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool createConvergingVideo) const {
     // Set the starting time
     auto startTime = std::chrono::high_resolution_clock::now();
-    size_t samples = mSamplesPerPixel;
+    std::size_t samples = mSamplesPerPixel;
     if (mRenderer->IsDeterministic() && !mUseAntiAliasing && mSamplesPerPixel > 1) {
         std::cerr << "Warning: Renderer is deterministic, and anti-aliasing is disabled. Setting samples to 1." << std::endl;
         samples = 1;
     }
 
-    size_t renderedPixels = 0;
+    std::size_t renderedPixels = 0;
     auto totalPixels = mResolution.width * mResolution.height * samples;
     std::vector<std::vector<Color>> accumulatedColors(mResolution.height, std::vector<Color>(mResolution.width, Color(0.0, 0.0, 0.0)));
 
@@ -122,17 +122,17 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
     if (createConvergingVideo && samples > 1) {
         video = std::make_unique<Video>(mFramesPerSecond);
     }
-    for (size_t s = 0; s < samples; s++) {
+    for (std::size_t s = 0; s < samples; s++) {
 #pragma omp parallel for collapse(2) schedule(static)
-        for (size_t y = 0; y < mResolution.height; y++) {
-            for (size_t x = 0; x < mResolution.width; x++) {
+        for (std::size_t y = 0; y < mResolution.height; y++) {
+            for (std::size_t x = 0; x < mResolution.width; x++) {
                 // Sample the pixel
                 Ray ray = CreateRay(x, y);
                 Color pixel = mRenderer->TraceRay(ray, scene);
                 accumulatedColors[y][x] += pixel;
             }
             if (printProgressBar) {
-                size_t done;
+                std::size_t done;
 #pragma omp atomic capture
                 done = ++renderedPixels;
 
@@ -166,10 +166,10 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
 Video Camera::RenderVideo(Scene& scene, double durationSeconds, bool printProgressBar) {
     auto startTime = std::chrono::high_resolution_clock::now();
 
-    size_t totalFrames = mFramesPerSecond * durationSeconds;
+    std::size_t totalFrames = mFramesPerSecond * durationSeconds;
     double timeStep = 1.0 / mFramesPerSecond;
     Video video(mFramesPerSecond);
-    for (size_t i = 0; i < totalFrames; i++) {
+    for (std::size_t i = 0; i < totalFrames; i++) {
         Image frame = RenderImage(scene);
         video.AddFrame(frame);
         if (printProgressBar) {
@@ -186,10 +186,10 @@ Video Camera::RenderVideo(Scene& scene, double durationSeconds, bool printProgre
     return video;
 }
 
-Image Camera::CreateImage(const std::vector<std::vector<Color>>& accumulatedColors, size_t samples, bool applyPostProcessing) const {
+Image Camera::CreateImage(const std::vector<std::vector<Color>>& accumulatedColors, std::size_t samples, bool applyPostProcessing) const {
     Image image(mResolution.width, mResolution.height);
-    for (size_t y = 0; y < mResolution.height; y++) {
-        for (size_t x = 0; x < mResolution.width; x++) {
+    for (std::size_t y = 0; y < mResolution.height; y++) {
+        for (std::size_t x = 0; x < mResolution.width; x++) {
             Color accumulatedColor = accumulatedColors[y][x];
             Color colorAverage((accumulatedColor.R() / samples), (accumulatedColor.G() / samples), (accumulatedColor.B() / samples));
 
@@ -284,7 +284,7 @@ void Camera::Spin(double angle, const Vector3D& axis) {
     ConfigureCamera();
 }
 
-Ray Camera::CreateRay(size_t x, size_t y) const {
+Ray Camera::CreateRay(std::size_t x, std::size_t y) const {
     const double width = double(mResolution.width);
     const double height = double(mResolution.height);
 

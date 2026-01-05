@@ -15,8 +15,8 @@ public:
     Camera(const Vector3D& position, const Vector3D& direction, Renderer::Type rendererType);
 
     struct Resolution {
-        size_t width{800};
-        size_t height{600};
+        std::size_t width{800};
+        std::size_t height{600};
     };
 
     void SetPosition(const Vector3D& position);
@@ -33,9 +33,9 @@ public:
 
     // Settings
     void SetFieldOfView(double fov);
-    void SetResolution(size_t width, size_t height);
+    void SetResolution(std::size_t width, std::size_t height);
     void SetFramesPerSecond(double fps);
-    void SetSamplesPerPixel(size_t samples);
+    void SetSamplesPerPixel(std::size_t samples);
     void SetUseAntiAliasing(bool useAA);
 
     Image RenderImage(const Scene& scene, bool printProgressBar = false, bool createConvergingVideo = false) const;
@@ -61,7 +61,7 @@ private:
     double mFramesPerSecond = 30.0;
 
     std::unique_ptr<Renderer> mRenderer;
-    size_t mSamplesPerPixel = 1;
+    std::size_t mSamplesPerPixel = 1;
     bool mUseAntiAliasing = false;
 
     // Post-processing flags and constants
@@ -74,9 +74,9 @@ private:
     void Rotate(double angle, const Vector3D& axis = Vector3D({0, 0, 1}));
     void Spin(double angle, const Vector3D& axis = Vector3D({0, 0, 1}));
 
-    Ray CreateRay(size_t x, size_t y) const;
+    Ray CreateRay(std::size_t x, std::size_t y) const;
 
-    Image CreateImage(const std::vector<std::vector<Color>>& accumulatedColors, size_t samples, bool applyPostProcessing = true) const;
+    Image CreateImage(const std::vector<std::vector<Color>>& accumulatedColors, std::size_t samples, bool applyPostProcessing = true) const;
 
     static void ApplyPostProcessing(Color& color);
     static void ApplyGammaCorrection(Color& color);
