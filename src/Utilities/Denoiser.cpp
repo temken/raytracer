@@ -50,6 +50,10 @@ Image Denoiser::Denoise(const Image& inputImage, Method method, std::size_t iter
     return outputImage;
 }
 
+void Denoiser::ApplyDenoising(Image& image, Method method, std::size_t iterations, GBuffer* gbuffer) {
+    image = Denoise(image, method, iterations, gbuffer);
+}
+
 Image Denoiser::Blur(const Image& inputImage, std::size_t radius) {
     Image outputImage = inputImage;
 

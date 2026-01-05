@@ -18,6 +18,8 @@ public:
     static Image Denoise(const Image& inputImage, Method method, GBuffer* gbuffer = nullptr);
     static Image Denoise(const Image& inputImage, Method method, std::size_t iterations = 1, GBuffer* gbuffer = nullptr);
 
+    static void ApplyDenoising(Image& image, Method method, std::size_t iterations = 1, GBuffer* gbuffer = nullptr);
+
     static Image Blur(const Image& inputImage, std::size_t radius = 1);
 
     static Image GaussianBlur(const Image& inputImage, double sigma);
