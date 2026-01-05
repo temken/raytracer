@@ -192,46 +192,15 @@ Image Camera::CreateImage(const std::vector<std::vector<Color>>& accumulatedColo
         for (std::size_t x = 0; x < mResolution.width; x++) {
             Color accumulatedColor = accumulatedColors[y][x];
             Color colorAverage((accumulatedColor.R() / samples), (accumulatedColor.G() / samples), (accumulatedColor.B() / samples));
-
-            if (applyPostProcessing) {
-                ApplyPostProcessing(colorAverage);
-            }
-
             image.SetPixel(x, y, colorAverage);
         }
     }
+    if (applyPostProcessing) {
+        image.ApplyGammaCorrection();
+        image.ApplyReinhardToneMapping();
+        image.ConvertLinearToSRGB();
+    }
     return image;
-}
-
-void Camera::ApplyPostProcessing(Color& color) {
-    // First: apply exposure/gain in linear space
-    ApplyGammaCorrection(color);
-    // Second: compress HDR values with Reinhard tone mapping
-    ReinhardToneMapping(color);
-    // Third: convert from linear to sRGB (includes gamma correction)
-    LinearToSRGB(color);
-}
-
-void Camera::ApplyGammaCorrection(Color& color) {
-    // Apply exposure (EV = 1.5) and gain (2^(EV)) in linear space
-    double exposureEV = 1.5;
-    double gain = std::pow(2.0, exposureEV);
-    color = color * gain;
-}
-
-void Camera::ReinhardToneMapping(Color& color) {
-    double R = color.R() / (1.0 + color.R());
-    double G = color.G() / (1.0 + color.G());
-    double B = color.B() / (1.0 + color.B());
-    color = Color(R, G, B);
-}
-
-void Camera::LinearToSRGB(Color& color) {
-    auto to_srgb = [](double x) {
-        x = std::min(1.0, std::max(0.0, x));
-        return (x <= 0.0031308) ? 12.92 * x : 1.055 * std::pow(x, 1.0 / 2.4) - 0.055;
-    };
-    color = Color(to_srgb(color.R()), to_srgb(color.G()), to_srgb(color.B()));
 }
 
 void Camera::PrintInfo() const {

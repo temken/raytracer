@@ -27,6 +27,11 @@ public:
 
     void Clear(const Color& color = Color(0, 0, 0));
 
+    // Color processing
+    void ApplyGammaCorrection(double exposureValue = 1.5);
+    void ApplyReinhardToneMapping();
+    void ConvertLinearToSRGB();
+
     void PrintInfo() const;
 
 private:

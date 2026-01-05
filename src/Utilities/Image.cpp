@@ -209,6 +209,32 @@ void Image::PrintToTerminal(std::size_t width, double terminalCharAspectRatio) c
     }
 }
 
+void Image::ApplyGammaCorrection(double exposureValue) {
+    double gain = std::pow(2.0, exposureValue);
+    for (auto& pixel : mPixels) {
+        pixel = pixel * gain;
+    }
+}
+
+void Image::ApplyReinhardToneMapping() {
+    for (auto& pixel : mPixels) {
+        double R = pixel.R() / (1.0 + pixel.R());
+        double G = pixel.G() / (1.0 + pixel.G());
+        double B = pixel.B() / (1.0 + pixel.B());
+        pixel = Color(R, G, B);
+    }
+}
+
+void Image::ConvertLinearToSRGB() {
+    auto to_srgb = [](double x) {
+        x = std::min(1.0, std::max(0.0, x));
+        return (x <= 0.0031308) ? 12.92 * x : 1.055 * std::pow(x, 1.0 / 2.4) - 0.055;
+    };
+    for (auto& pixel : mPixels) {
+        pixel = Color(to_srgb(pixel.R()), to_srgb(pixel.G()), to_srgb(pixel.B()));
+    }
+}
+
 void Image::CheckBounds(std::size_t x, std::size_t y) const {
     if (x >= mWidth || y >= mHeight) {
         throw std::out_of_range("Pixel coordinate out of bounds");

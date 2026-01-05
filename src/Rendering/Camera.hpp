@@ -78,11 +78,6 @@ private:
 
     Image CreateImage(const std::vector<std::vector<Color>>& accumulatedColors, std::size_t samples, bool applyPostProcessing = true) const;
 
-    static void ApplyPostProcessing(Color& color);
-    static void ApplyGammaCorrection(Color& color);
-    static void ReinhardToneMapping(Color& color);
-    static void LinearToSRGB(Color& color);
-
     void ConfigureCamera();
     static std::unique_ptr<Renderer> CreateRenderer(Renderer::Type type);
 };
