@@ -6,7 +6,7 @@
 
 namespace Raytracer {
 
-Image Denoiser::Denoise(const Image& inputImage, Denoiser::Method method, GBuffer* gbuffer) {
+Image Denoiser::Denoise(const Image& inputImage, Denoiser::Method method, std::optional<GBuffer>& gbuffer) {
     if (inputImage.GetWidth() < 3 || inputImage.GetHeight() < 3) {
         return inputImage;  // Image too small to denoise
     }
@@ -32,17 +32,18 @@ Image Denoiser::Denoise(const Image& inputImage, Denoiser::Method method, GBuffe
             const double sigmaNormal = 0.25;
             const double sigmaDepth = 0.1;
             const double sigmaAlbedo = 0.05;
-            if (gbuffer == nullptr) {
+            double sigmaColor = 0.2;
+            if (!gbuffer.has_value()) {
                 throw std::invalid_argument("GBuffer must be provided for joint bilateral filter.");
             }
-            return JointBilateralFilter(inputImage, *gbuffer, sigmaSpatial, sigmaNormal, sigmaDepth, sigmaAlbedo);
+            return JointBilateralFilter(inputImage, *gbuffer, sigmaSpatial, sigmaNormal, sigmaDepth, sigmaAlbedo, sigmaColor);
         }
         default:
             throw std::invalid_argument("Unsupported denoising method.");
     }
 }
 
-Image Denoiser::Denoise(const Image& inputImage, Method method, std::size_t iterations, GBuffer* gbuffer) {
+Image Denoiser::Denoise(const Image& inputImage, Method method, std::optional<GBuffer>& gbuffer, std::size_t iterations) {
     Image outputImage = inputImage;
     for (std::size_t i = 0; i < iterations; ++i) {
         outputImage = Denoise(outputImage, method, gbuffer);
@@ -50,8 +51,8 @@ Image Denoiser::Denoise(const Image& inputImage, Method method, std::size_t iter
     return outputImage;
 }
 
-void Denoiser::ApplyDenoising(Image& image, Method method, std::size_t iterations, GBuffer* gbuffer) {
-    image = Denoise(image, method, iterations, gbuffer);
+void Denoiser::ApplyDenoising(Image& image, Method method, std::optional<GBuffer>& gbuffer, std::size_t iterations) {
+    image = Denoise(image, method, gbuffer, iterations);
 }
 
 Image Denoiser::Blur(const Image& inputImage, std::size_t radius) {
@@ -191,7 +192,7 @@ Image Denoiser::JointBilateralFilter(const Image& inputImage, GBuffer& gbuffer, 
                 outputImage.SetPixel(x, y, inputImage.GetPixel(x, y));
                 continue;
             }
-
+            Color centerColor = inputImage.GetPixel(x, y);
             for (int ky = -spatialKernelRadius; ky <= spatialKernelRadius; ky++) {
                 for (int kx = -spatialKernelRadius; kx <= spatialKernelRadius; kx++) {
                     int nx = static_cast<int>(x) + kx;
@@ -297,6 +298,21 @@ Image Denoiser::RemoveHotPixels(const Image& input) {
         }
     }
     return output;
+}
+
+std::string Denoiser::MethodToString(Denoiser::Method method) {
+    switch (method) {
+        case Method::NONE:
+            return "None";
+        case Method::BLUR:
+            return "Blur";
+        case Method::GAUSSIAN_BLUR:
+            return "Gaussian Blur";
+        case Method::BILATERAL_FILTER:
+            return "Bilateral Filter";
+        case Method::JOINT_BILATERAL_FILTER:
+            return "Joint Bilateral Filter";
+    }
 }
 
 }  // namespace Raytracer

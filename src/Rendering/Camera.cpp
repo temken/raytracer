@@ -6,6 +6,7 @@
 #include "Rendering/RendererRayTracer.hpp"
 #include "Rendering/RendererSimple.hpp"
 #include "Utilities/Configuration.hpp"
+#include "Utilities/Denoiser.hpp"
 
 #include "libphysica/Utilities.hpp"
 
@@ -105,6 +106,15 @@ void Camera::SetUseAntiAliasing(bool useAA) {
     mUseAntiAliasing = useAA;
 }
 
+void Camera::SetDenoisingMethod(Denoiser::Method method, std::size_t iterations) {
+    mDenoisingMethod = method;
+    mDenoisingIterations = iterations;
+}
+
+void Camera::SetRemoveHotPixels(bool remove) {
+    mRemoveHotPixels = remove;
+}
+
 Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool createConvergingVideo) const {
     // Set the starting time
     auto startTime = std::chrono::high_resolution_clock::now();
@@ -114,12 +124,16 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
         samples = 1;
     }
 
-    const bool needGbuffer = !mRenderer->IsDeterministic();
+    // Some denoising methods need the G-Buffer
+    const bool needGbuffer = !mRenderer->IsDeterministic() && mDenoisingMethod == Denoiser::Method::JOINT_BILATERAL_FILTER;
+    std::optional<GBuffer> gBuffer;
+    if (needGbuffer) {
+        gBuffer.emplace(mResolution.width, mResolution.height);
+    }
 
     std::size_t renderedPixels = 0;
     auto totalPixels = mResolution.width * mResolution.height * samples;
     std::vector<std::vector<Color>> accumulatedColors(mResolution.height, std::vector<Color>(mResolution.width, Color(0.0, 0.0, 0.0)));
-    GBuffer gBuffer(mResolution.width, mResolution.height);
     std::unique_ptr<Video> video = nullptr;
     if (createConvergingVideo && samples > 1) {
         video = std::make_unique<Video>(mFramesPerSecond);
@@ -128,12 +142,12 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
 #pragma omp parallel for collapse(2) schedule(static)
         for (std::size_t y = 0; y < mResolution.height; y++) {
             for (std::size_t x = 0; x < mResolution.width; x++) {
-                if (s == 0 && needGbuffer) {
+                if (s == 0 && gBuffer.has_value()) {
                     // Fill G-Buffer
                     const bool useAntiAliasingForGBuffer = false;
                     Ray gBufferRay = CreateRay(x, y, useAntiAliasingForGBuffer);
                     GBufferData gBufferData = mRenderer->ComputeGBuffer(gBufferRay, scene);
-                    gBuffer.SetData(x, y, gBufferData);
+                    gBuffer->SetData(x, y, gBufferData);
                 }
 
                 // Sample the pixel
@@ -160,7 +174,7 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
     }
 
     Image image = CreateRawImage(accumulatedColors, samples);
-    ProcessImage(image);
+    ProcessImage(image, gBuffer);
 
     if (video) {
         video->AddFrame(image);
@@ -214,9 +228,21 @@ Image Camera::CreateRawImage(const std::vector<std::vector<Color>>& accumulatedC
     return image;
 }
 
-void Camera::ProcessImage(Image& image) const {
+void Camera::ProcessImage(Image& image, std::optional<GBuffer>& gBuffer) const {
+    // 1. Remove outliers in linear space
+    if (mRemoveHotPixels) {
+        image = Denoiser::RemoveHotPixels(image);
+    }
+    // 2. Denoise in linear space for Monte Carlo renderers
+    Renderer::Type rendererType = mRenderer->GetType();
+    if (rendererType != Renderer::Type::SIMPLE && rendererType != Renderer::Type::DETERMINISTIC) {
+        Denoiser::ApplyDenoising(image, mDenoisingMethod, gBuffer, mDenoisingIterations);
+    }
+    // 3. Exposure adjustment
     image.ApplyGammaCorrection();
+    // 4. Tone mapping
     image.ApplyReinhardToneMapping();
+    // 5. Display transform
     image.ConvertLinearToSRGB();
 }
 
@@ -227,6 +253,9 @@ void Camera::PrintInfo() const {
               << "Direction:\t" << mEz << std::endl
               << "Field of View:\t" << mFieldOfView << std::endl
               << "Resolution:\t" << mResolution.width << "x" << mResolution.height << std::endl
+              << "Post-Processing:" << std::endl
+              << "\tRemove Hot Pixels:\t" << (mRemoveHotPixels ? "[x]" : "[ ]") << std::endl
+              << "\tDenoising Method:\t" << Denoiser::MethodToString(mDenoisingMethod) << " (Iterations: " << mDenoisingIterations << ")" << std::endl
               << "FPS:\t\t" << mFramesPerSecond << std::endl
               << "Samples/Pixel:\t" << mSamplesPerPixel << std::endl
               << "Anti-Aliasing:\t" << (mUseAntiAliasing ? "[x]" : "[ ]") << std::endl

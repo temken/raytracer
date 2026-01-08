@@ -33,6 +33,11 @@ camera:
   resolution:
     width: 800
     height: 600
+  post_processing:
+    remove_hot_pixels: false
+    denoising:
+      method: NONE # Options: NONE, BLUR, GAUSSIAN_BLUR, BILATERAL_FILTER, JOINT_BILATERAL_FILTER
+      iterations: 1
   framesPerSecond: 15
   antialiasing: false
   samples_per_pixel: 1

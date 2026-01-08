@@ -3,6 +3,8 @@
 #include "Rendering/GBuffer.hpp"
 #include "Utilities/Image.hpp"
 
+#include <optional>
+
 namespace Raytracer {
 
 class Denoiser {
@@ -15,10 +17,10 @@ public:
         JOINT_BILATERAL_FILTER,
     };
 
-    static Image Denoise(const Image& inputImage, Method method, GBuffer* gbuffer = nullptr);
-    static Image Denoise(const Image& inputImage, Method method, std::size_t iterations = 1, GBuffer* gbuffer = nullptr);
+    static Image Denoise(const Image& inputImage, Method method, std::optional<GBuffer>& gbuffer);
+    static Image Denoise(const Image& inputImage, Method method, std::optional<GBuffer>& gbuffer, std::size_t iterations);
 
-    static void ApplyDenoising(Image& image, Method method, std::size_t iterations = 1, GBuffer* gbuffer = nullptr);
+    static void ApplyDenoising(Image& image, Method method, std::optional<GBuffer>& gbuffer, std::size_t iterations = 1);
 
     static Image Blur(const Image& inputImage, std::size_t radius = 1);
 
@@ -29,6 +31,8 @@ public:
     static Image JointBilateralFilter(const Image& inputImage, GBuffer& gbuffer, double sigmaSpatial, double sigmaNormal, double sigmaDepth, double sigmaAlbedo);
 
     static Image RemoveHotPixels(const Image& inputImage);
+
+    static std::string MethodToString(Method method);
 
 private:
     // Helper functions

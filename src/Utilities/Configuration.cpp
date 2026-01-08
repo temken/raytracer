@@ -116,9 +116,32 @@ Camera Configuration::ConstructCamera() const {
     Vector3D angularVelocity = node["angular_velocity"] ? ParseVector3D(node["angular_velocity"]) : Vector3D({0.0, 0.0, 0.0});
     Vector3D spin = node["spin"] ? ParseVector3D(node["spin"]) : Vector3D({0.0, 0.0, 0.0});
 
+    // Resolution
     auto res = node["resolution"];
     size_t width = res["width"].as<int>();
     size_t height = res["height"].as<int>();
+
+    // Post processing
+    auto postProcessing = node["post_processing"];
+    auto denoising = postProcessing["denoising"];
+    std::string denoisingMethodStr = denoising["method"] ? denoising["method"].as<std::string>() : "NONE";
+    Denoiser::Method denoisingMethod;
+    if (denoisingMethodStr == "NONE") {
+        denoisingMethod = Denoiser::Method::NONE;
+    } else if (denoisingMethodStr == "BLUR") {
+        denoisingMethod = Denoiser::Method::BLUR;
+    } else if (denoisingMethodStr == "GAUSSIAN_BLUR") {
+        denoisingMethod = Denoiser::Method::GAUSSIAN_BLUR;
+    } else if (denoisingMethodStr == "BILATERAL_FILTER") {
+        denoisingMethod = Denoiser::Method::BILATERAL_FILTER;
+    } else if (denoisingMethodStr == "JOINT_BILATERAL_FILTER") {
+        denoisingMethod = Denoiser::Method::JOINT_BILATERAL_FILTER;
+    } else {
+        throw std::invalid_argument("Unknown denoising method: " + denoisingMethodStr);
+    }
+    std::size_t denoisingIterations = denoising["iterations"] ? denoising["iterations"].as<int>() : 1;
+    bool removeHotPixels = postProcessing["remove_hot_pixels"] ? postProcessing["remove_hot_pixels"].as<bool>() : false;
+
     bool useAntiAliasing = node["antialiasing"].as<bool>();
     size_t samplesPerPixel = node["samples_per_pixel"].as<int>();
     double framesPerSecond = node["framesPerSecond"] ? node["framesPerSecond"].as<double>() : 30.0;
@@ -132,6 +155,8 @@ Camera Configuration::ConstructCamera() const {
 
     camera.SetFieldOfView(fieldOfView);
     camera.SetResolution(width, height);
+    camera.SetDenoisingMethod(denoisingMethod, denoisingIterations);
+    camera.SetRemoveHotPixels(removeHotPixels);
     camera.SetSamplesPerPixel(samplesPerPixel);
     camera.SetUseAntiAliasing(useAntiAliasing);
     camera.SetFramesPerSecond(framesPerSecond);

@@ -4,6 +4,7 @@
 #include "Rendering/Ray.hpp"
 #include "Rendering/Renderer.hpp"
 #include "Scene/Scene.hpp"
+#include "Utilities/Denoiser.hpp"
 #include "Utilities/Image.hpp"
 #include "Utilities/Video.hpp"
 
@@ -38,6 +39,9 @@ public:
     void SetSamplesPerPixel(std::size_t samples);
     void SetUseAntiAliasing(bool useAA);
 
+    void SetDenoisingMethod(Denoiser::Method method, std::size_t iterations = 1);
+    void SetRemoveHotPixels(bool remove);
+
     Image RenderImage(const Scene& scene, bool printProgressBar = false, bool createConvergingVideo = false) const;
     Video RenderVideo(Scene& scene, double durationSeconds, bool printProgressBar = true);
 
@@ -65,7 +69,9 @@ private:
     bool mUseAntiAliasing = false;
 
     // Post-processing flags and constants
-    // ...
+    Denoiser::Method mDenoisingMethod = Denoiser::Method::NONE;
+    std::size_t mDenoisingIterations = 1;
+    bool mRemoveHotPixels = false;
 
     const double kEpsilon = 1e-6;
 
@@ -77,7 +83,7 @@ private:
     Ray CreateRay(std::size_t x, std::size_t y, bool useAntiAliasing = true) const;
 
     Image CreateRawImage(const std::vector<std::vector<Color>>& accumulatedColors, std::size_t samples) const;
-    void ProcessImage(Image& image) const;
+    void ProcessImage(Image& image, std::optional<GBuffer>& gBuffer) const;
 
     void ConfigureCamera();
     static std::unique_ptr<Renderer> CreateRenderer(Renderer::Type type);
