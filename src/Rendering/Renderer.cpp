@@ -119,7 +119,8 @@ void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const Object:
     }
 
     if (!anyLightHit) {
-        ray.AddRadiance(kAmbientFactor * throughputBefore);
+        Color ambientColor = material.GetColor(intersection) * kAmbientFactor;
+        ray.AddRadiance(throughputBefore * ambientColor);
     } else {
         ray.AddRadiance(throughputBefore * directRadiance);
     }

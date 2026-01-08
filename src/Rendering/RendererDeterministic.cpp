@@ -4,7 +4,7 @@ namespace Raytracer {
 
 RendererDeterministic::RendererDeterministic() :
     Renderer(Type::DETERMINISTIC, true) {
-    kAmbientFactor = 3e-3;
+    kAmbientFactor = 3e-2;
 }
 
 Color RendererDeterministic::TraceRay(Ray ray, const Scene& scene) {
