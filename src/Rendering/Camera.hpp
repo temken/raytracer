@@ -76,7 +76,8 @@ private:
 
     Ray CreateRay(std::size_t x, std::size_t y) const;
 
-    Image CreateImage(const std::vector<std::vector<Color>>& accumulatedColors, std::size_t samples, bool applyPostProcessing = true) const;
+    Image CreateImage(const std::vector<std::vector<Color>>& accumulatedColors, std::size_t samples) const;
+    void ProcessImage(Image& image) const;
 
     void ConfigureCamera();
     static std::unique_ptr<Renderer> CreateRenderer(Renderer::Type type);

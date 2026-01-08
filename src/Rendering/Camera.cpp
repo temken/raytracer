@@ -147,13 +147,17 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
             video->AddFrame(tempImage);
         }
     }
+
+    Image image = CreateImage(accumulatedColors, samples);
+    ProcessImage(image);
+
     if (video) {
+        video->AddFrame(image);
         std::string filepath = Configuration::GetInstance().GetOutputDirectory() + "/videos/converging_video_" + Configuration::GetInstance().GetRunID() + ".mp4";
         std::cout << "Saving converging video to: " << filepath << std::endl;
         video->Save(true, false, false, filepath);
     }
-    // Apply post-processing for all renderers to handle HDR values
-    Image image = CreateImage(accumulatedColors, samples);
+
     double totalDuration = std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - startTime).count();
     if (printProgressBar) {
         libphysica::Print_Progress_Bar(1.0, 0, 60, totalDuration, "Blue");
@@ -186,7 +190,7 @@ Video Camera::RenderVideo(Scene& scene, double durationSeconds, bool printProgre
     return video;
 }
 
-Image Camera::CreateImage(const std::vector<std::vector<Color>>& accumulatedColors, std::size_t samples, bool applyPostProcessing) const {
+Image Camera::CreateImage(const std::vector<std::vector<Color>>& accumulatedColors, std::size_t samples) const {
     Image image(mResolution.width, mResolution.height);
     for (std::size_t y = 0; y < mResolution.height; y++) {
         for (std::size_t x = 0; x < mResolution.width; x++) {
@@ -195,12 +199,13 @@ Image Camera::CreateImage(const std::vector<std::vector<Color>>& accumulatedColo
             image.SetPixel(x, y, colorAverage);
         }
     }
-    if (applyPostProcessing) {
-        image.ApplyGammaCorrection();
-        image.ApplyReinhardToneMapping();
-        image.ConvertLinearToSRGB();
-    }
     return image;
+}
+
+void Camera::ProcessImage(Image& image) const {
+    image.ApplyGammaCorrection();
+    image.ApplyReinhardToneMapping();
+    image.ConvertLinearToSRGB();
 }
 
 void Camera::PrintInfo() const {
