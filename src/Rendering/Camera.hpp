@@ -74,7 +74,7 @@ private:
     void Rotate(double angle, const Vector3D& axis = Vector3D({0, 0, 1}));
     void Spin(double angle, const Vector3D& axis = Vector3D({0, 0, 1}));
 
-    Ray CreateRay(std::size_t x, std::size_t y) const;
+    Ray CreateRay(std::size_t x, std::size_t y, bool useAntiAliasing = true) const;
 
     Image CreateRawImage(const std::vector<std::vector<Color>>& accumulatedColors, std::size_t samples) const;
     void ProcessImage(Image& image) const;

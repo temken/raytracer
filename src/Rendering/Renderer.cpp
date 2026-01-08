@@ -8,6 +8,19 @@ Renderer::Renderer(Type type, bool deterministic) :
     mType(type),
     mIsDeterministic(deterministic) {}
 
+GBufferData Renderer::ComputeGBuffer(Ray& ray, const Scene& scene) {
+    GBufferData gBuffer;
+    auto intersection = Intersect(ray, scene);
+    if (intersection.has_value()) {
+        // Fill G-Buffer data
+        gBuffer.hit = true;
+        gBuffer.depth = static_cast<float>(intersection->t);
+        gBuffer.normal = intersection->normal;
+        gBuffer.albedo = intersection->object->GetMaterial().GetColor(intersection.value());
+    }
+    return gBuffer;
+}
+
 bool Renderer::IsDeterministic() const {
     return mIsDeterministic;
 }

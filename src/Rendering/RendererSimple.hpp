@@ -9,8 +9,7 @@ namespace Raytracer {
 
 class RendererSimple : public Renderer {
 public:
-    RendererSimple() :
-        Renderer(Type::SIMPLE, true) {};
+    RendererSimple();
 
     virtual Color TraceRay(Ray ray, const Scene& scene) override;
 

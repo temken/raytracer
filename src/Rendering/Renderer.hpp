@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Rendering/GBuffer.hpp"
 #include "Rendering/Ray.hpp"
 #include "Scene/Scene.hpp"
 #include "Utilities/Color.hpp"
@@ -23,6 +24,7 @@ public:
 
     explicit Renderer(Type type, bool deterministic);
 
+    GBufferData ComputeGBuffer(Ray& ray, const Scene& scene);
     virtual Color TraceRay(Ray ray, const Scene& scene) = 0;
 
     bool IsDeterministic() const;

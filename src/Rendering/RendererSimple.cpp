@@ -2,6 +2,9 @@
 
 namespace Raytracer {
 
+RendererSimple::RendererSimple() :
+    Renderer(Type::SIMPLE, true) {};
+
 Color RendererSimple::TraceRay(Ray ray, const Scene& scene) {
     auto intersection = Intersect(ray, scene);
     if (intersection) {

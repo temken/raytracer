@@ -114,10 +114,12 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
         samples = 1;
     }
 
+    const bool needGbuffer = !mRenderer->IsDeterministic();
+
     std::size_t renderedPixels = 0;
     auto totalPixels = mResolution.width * mResolution.height * samples;
     std::vector<std::vector<Color>> accumulatedColors(mResolution.height, std::vector<Color>(mResolution.width, Color(0.0, 0.0, 0.0)));
-
+    GBuffer gBuffer(mResolution.width, mResolution.height);
     std::unique_ptr<Video> video = nullptr;
     if (createConvergingVideo && samples > 1) {
         video = std::make_unique<Video>(mFramesPerSecond);
@@ -126,9 +128,18 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
 #pragma omp parallel for collapse(2) schedule(static)
         for (std::size_t y = 0; y < mResolution.height; y++) {
             for (std::size_t x = 0; x < mResolution.width; x++) {
+                if (s == 0 && needGbuffer) {
+                    // Fill G-Buffer
+                    const bool useAntiAliasingForGBuffer = false;
+                    Ray gBufferRay = CreateRay(x, y, useAntiAliasingForGBuffer);
+                    GBufferData gBufferData = mRenderer->ComputeGBuffer(gBufferRay, scene);
+                    gBuffer.SetData(x, y, gBufferData);
+                }
+
                 // Sample the pixel
                 Ray ray = CreateRay(x, y);
                 Color pixel = mRenderer->TraceRay(ray, scene);
+
                 accumulatedColors[y][x] += pixel;
             }
             if (printProgressBar) {
@@ -259,14 +270,14 @@ void Camera::Spin(double angle, const Vector3D& axis) {
     ConfigureCamera();
 }
 
-Ray Camera::CreateRay(std::size_t x, std::size_t y) const {
+Ray Camera::CreateRay(std::size_t x, std::size_t y, bool useAntiAliasing) const {
     const double width = double(mResolution.width);
     const double height = double(mResolution.height);
 
     // Left-positive, up-positive pixel-center offsets on the image plane
     double dx = 0.0;
     double dy = 0.0;
-    if (mUseAntiAliasing) {
+    if (mUseAntiAliasing && useAntiAliasing) {
         static thread_local std::mt19937 generator(std::random_device{}());
         static thread_local std::uniform_real_distribution<double> distribution(-0.5, 0.5);
         dx = distribution(generator);

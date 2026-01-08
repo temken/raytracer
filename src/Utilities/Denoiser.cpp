@@ -29,9 +29,9 @@ Image Denoiser::Denoise(const Image& inputImage, Denoiser::Method method, GBuffe
         }
         case Method::JOINT_BILATERAL_FILTER: {
             const double sigmaSpatial = 2.0;
-            const double sigmaNormal = 0.5;
+            const double sigmaNormal = 0.25;
             const double sigmaDepth = 0.1;
-            const double sigmaAlbedo = 0.1;
+            const double sigmaAlbedo = 0.05;
             if (gbuffer == nullptr) {
                 throw std::invalid_argument("GBuffer must be provided for joint bilateral filter.");
             }
