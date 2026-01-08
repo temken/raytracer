@@ -143,12 +143,12 @@ Image Camera::RenderImage(const Scene& scene, bool printProgressBar, bool create
             }
         }
         if (video) {
-            Image tempImage = CreateImage(accumulatedColors, s + 1);
+            Image tempImage = CreateRawImage(accumulatedColors, s + 1);
             video->AddFrame(tempImage);
         }
     }
 
-    Image image = CreateImage(accumulatedColors, samples);
+    Image image = CreateRawImage(accumulatedColors, samples);
     ProcessImage(image);
 
     if (video) {
@@ -190,7 +190,8 @@ Video Camera::RenderVideo(Scene& scene, double durationSeconds, bool printProgre
     return video;
 }
 
-Image Camera::CreateImage(const std::vector<std::vector<Color>>& accumulatedColors, std::size_t samples) const {
+// Better function name? Create Rendered Image? ConstructImage?
+Image Camera::CreateRawImage(const std::vector<std::vector<Color>>& accumulatedColors, std::size_t samples) const {
     Image image(mResolution.width, mResolution.height);
     for (std::size_t y = 0; y < mResolution.height; y++) {
         for (std::size_t x = 0; x < mResolution.width; x++) {
