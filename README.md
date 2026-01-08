@@ -7,26 +7,13 @@
 
 ## To do
 
-- [x] New shapes:
-  - [x] Cone (for pen)
-  - [x] Thick tube (requires a 2D ring)
-- [x] Print preview of image downscaled in terminal
-- [x] Implement torus class
-- [x] New class: Half Torus and Half Ring (for globe): Half torus with two half spheres as caps
-- [x] Figure out how to make composite objects work.
-- [ ] Denoising:
-  - [x] Gaussian Blur as reference
-  - [x] Bilateral filtering
-  - [x] Modify image by reference? -> No
-  - [x] Remove fireflies
-  - [ ] Joint bilateral filtering
-    - [ ] The camera post processing steps cannot be applied after filtering since they work on a single color. 
-    - [ ] The 1st hit information is not yet passed to the rendered image. Have to handle the AccumulatedColor property. Inherit from Color?
-    - [ ] Clarify and unify the post processing pipeline. What parameters should be set in the config file? What order should the steps be called.
-    - [ ] Use normal, depth, and albedo in the filter.
-    - [ ] Fall back to bilateral filter without 1st hit information?
-    - [ ] Compare to bilateral filter.
-  - [ ] Integrate denoising functionality in rendering pipeline.
+- [ ] Test and compare filters
+  - [ ] Remove hot pixels only from non reflective/refractive surfaces?
+  - [ ] Depth scaling linear maybe not optimal? The image looks very white at least.
+- [ ] Joint Bilateral filters do not work for reflective/refractive surfaces (constant albedo).
+  - [ ] Find a way to mitigate. Do not apply to those surfaces? Find a way to guide? Test this with Globe scene + mirror
+      - Adjust the albedo guide by including reflections/refractions?
+- [ ] Blog post or bluesky post on denoising
 - [ ] Composite object: Glass
   - [ ] Implement simple glass shape (round edge on the top?)
   - [ ] Option to fill it with a colored "liquid"
@@ -207,6 +194,25 @@
  -> we double counted direct light even for depth > 0. The fireflies were just the rays that hit the light surface directly.
 - [x] Print preview of image downscaled in terminal
 - [x] Print preview of video downscaled in terminal (without scrolling...)
+- [x] New shapes:
+  - [x] Cone (for pen)
+  - [x] Thick tube (requires a 2D ring)
+- [x] Print preview of image downscaled in terminal
+- [x] Implement torus class
+- [x] New class: Half Torus and Half Ring (for globe): Half torus with two half spheres as caps
+- [x] Figure out how to make composite objects work.
+- [x] Denoising:
+  - [x] Gaussian Blur as reference
+  - [x] Bilateral filtering
+  - [x] Modify image by reference? -> No
+  - [x] Remove fireflies
+  - [x] Joint bilateral filtering
+    - [x] The camera post processing steps cannot be applied after filtering since they work on a single color. 
+    - [x] The 1st hit information is not yet passed to the rendered image. Have to handle the AccumulatedColor property. Inherit from Color? 
+    - [x] Clarify and unify the post processing pipeline. What parameters should be set in the config file? What order should the steps be called.
+    - [x] Use normal, depth, and albedo in the filter.
+    - [x] Compare to bilateral filter.
+  - [x] Integrate denoising functionality in rendering pipeline.
 
 
 ## General notes
