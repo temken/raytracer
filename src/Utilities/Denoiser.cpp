@@ -24,7 +24,7 @@ Image Denoiser::Denoise(const Image& inputImage, Denoiser::Method method, std::o
         }
         case Method::BILATERAL_FILTER: {
             const double sigmaSpatial = 2.0;
-            const double sigmaColor = 0.1;
+            const double sigmaColor = 0.02;
             return BilateralFilter(inputImage, sigmaSpatial, sigmaColor);
         }
         case Method::JOINT_BILATERAL_FILTER: {
@@ -32,11 +32,10 @@ Image Denoiser::Denoise(const Image& inputImage, Denoiser::Method method, std::o
             const double sigmaNormal = 0.25;
             const double sigmaDepth = 0.1;
             const double sigmaAlbedo = 0.05;
-            double sigmaColor = 0.2;
             if (!gbuffer.has_value()) {
                 throw std::invalid_argument("GBuffer must be provided for joint bilateral filter.");
             }
-            return JointBilateralFilter(inputImage, *gbuffer, sigmaSpatial, sigmaNormal, sigmaDepth, sigmaAlbedo, sigmaColor);
+            return JointBilateralFilter(inputImage, *gbuffer, sigmaSpatial, sigmaNormal, sigmaDepth, sigmaAlbedo);
         }
         default:
             throw std::invalid_argument("Unsupported denoising method.");
@@ -192,7 +191,6 @@ Image Denoiser::JointBilateralFilter(const Image& inputImage, GBuffer& gbuffer, 
                 outputImage.SetPixel(x, y, inputImage.GetPixel(x, y));
                 continue;
             }
-            Color centerColor = inputImage.GetPixel(x, y);
             for (int ky = -spatialKernelRadius; ky <= spatialKernelRadius; ky++) {
                 for (int kx = -spatialKernelRadius; kx <= spatialKernelRadius; kx++) {
                     int nx = static_cast<int>(x) + kx;
@@ -203,7 +201,7 @@ Image Denoiser::JointBilateralFilter(const Image& inputImage, GBuffer& gbuffer, 
                     }
 
                     GBufferData neighborPixel = gbuffer.GetData(nx, ny);
-                    if (neighborPixel.hit == false) {
+                    if (!neighborPixel.hit) {
                         continue;
                     }
 
