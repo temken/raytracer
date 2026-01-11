@@ -30,7 +30,7 @@ Image Denoiser::Denoise(const Image& inputImage, Denoiser::Method method, std::o
         case Method::JOINT_BILATERAL_FILTER: {
             const double sigmaSpatial = 2.0;
             const double sigmaNormal = 0.25;
-            const double sigmaDepth = 0.1;
+            const double sigmaDepth = 0.05;
             const double sigmaAlbedo = 0.05;
             if (!gbuffer.has_value()) {
                 throw std::invalid_argument("GBuffer must be provided for joint bilateral filter.");
@@ -207,8 +207,8 @@ Image Denoiser::JointBilateralFilter(const Image& inputImage, GBuffer& gbuffer, 
 
                     // 1. Spatial weight
                     double spatialWeight = spatialKernel[ky + spatialKernelRadius][kx + spatialKernelRadius];
-                    // 2. Depth weight
-                    double depthDifference = std::abs(neighborPixel.depth - centerPixel.depth);
+                    // 2. Depth weight (relative difference)
+                    double depthDifference = std::abs(neighborPixel.depth - centerPixel.depth) / (centerPixel.depth + 1e-6);
                     double depthWeight = Gaussian(depthDifference, sigmaDepth);
                     // 3. Normal weight
                     double normalDot = std::clamp(neighborPixel.normal.Dot(centerPixel.normal), -1.0, 1.0);
