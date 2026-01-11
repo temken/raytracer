@@ -79,7 +79,6 @@ void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const Object:
 
         Color colorSum(0.0, 0.0, 0.0);
 
-        std::size_t lightHits = 0;
         for (const Vector3D& y : lightPoints) {
             Vector3D toLight = y - x;
             const double dist2 = toLight.NormSquared();
@@ -110,12 +109,8 @@ void Renderer::CollectDirectLighting(Ray& ray, const Scene& scene, const Object:
 
             // Direct contribution
             colorSum += f_r * Le * G;
-            lightHits++;
         }
-
-        if (lightHits > 0) {
-            directRadiance += colorSum / static_cast<double>(lightHits);
-        }
+        directRadiance += colorSum / static_cast<double>(lightPoints.size());
     }
 
     if (!anyLightHit) {
