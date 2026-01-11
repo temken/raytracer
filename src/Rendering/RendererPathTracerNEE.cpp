@@ -7,7 +7,7 @@ RendererPathTracerNEE::RendererPathTracerNEE() :
 }
 
 Color RendererPathTracerNEE::TraceRay(Ray ray, const Scene& scene) {
-    Material::InteractionType previousInteraction = Material::InteractionType::DIFFUSE;
+    bool hadDiffuseInteraction = false;
 
     while (ray.GetDepth() < kMaximumDepth) {
         auto intersection = Intersect(ray, scene);
@@ -18,10 +18,10 @@ Color RendererPathTracerNEE::TraceRay(Ray ray, const Scene& scene) {
         // Capture throughput before material interaction for correct direct lighting
         Color throughputBefore = ray.GetThroughput();
 
-        // Add light emission - avoid double-counting only for paths that come from diffuse surfaces
+        // Add light emission - avoid double-counting with NEE
         if (material.EmitsLight()) {
-            // Add emission if: primary ray OR previous bounce was specular/refractive
-            if ((ray.GetDepth() == 0 || previousInteraction != Material::InteractionType::DIFFUSE)) {
+            // Add emission only if we've never had a diffuse bounce (no NEE sampling yet)
+            if (!hadDiffuseInteraction) {
                 ray.AddRadiance(ray.GetThroughput() * material.GetEmission());
             }
             break;
@@ -30,8 +30,8 @@ Color RendererPathTracerNEE::TraceRay(Ray ray, const Scene& scene) {
         auto interactionType = material.Interact(ray, intersection.value());
         if (interactionType == Material::InteractionType::DIFFUSE) {
             CollectDirectLighting(ray, scene, intersection.value(), throughputBefore, kNumLightSamples);
+            hadDiffuseInteraction = true;
         }
-        previousInteraction = interactionType;
 
         // Russian roulette after a few bounces
         if (ray.GetDepth() >= 3) {

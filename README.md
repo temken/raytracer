@@ -8,7 +8,7 @@
 ## To do
 
 - [ ] Test and compare filters
-  - [ ] Remove hot pixels only from non reflective/refractive surfaces?
+  - [x] Remove hot pixels only from non reflective/refractive surfaces? -> No
   - [ ] Depth scaling linear maybe not optimal? The image looks very white at least.
 - [ ] Joint Bilateral filters do not work for reflective/refractive surfaces (constant albedo).
   - [ ] Find a way to mitigate. Do not apply to those surfaces? Find a way to guide? Test this with Globe scene + mirror
@@ -29,7 +29,7 @@
   - [ ] Split AABB into two boxes along the longest side
 - [ ] Optimization: Precompute the pixel range for each object in a pre-processing scan. Needs to be re-done for each image, but not sample. Add a safety margin for antialiasing
 - [ ] Add a new interaction: Transparency where teh light passes through unaffected (I need this for windows in walls + transparency textures)
-- [ ] Do I implement NEE correctly? (Reflections/refractions). I feel like this keeping track of the previous interaction type is not right.
+- [x] Do I implement NEE correctly? (Reflections/refractions). I feel like this keeping track of the previous interaction type is not right. -> It was indeed false. It's not important if the PREVIOUS interaction was a diffusion. Just that there has been diffusion at all along the path. So no need to track the previous interaction.
 - [ ] Maybe textures should not get stretched. How to have unstretched textures on cylinders, boxes, etc.
   - [ ] Textures for cubes/other composite objects. (Use only some of the texture? Special textures (t shaped) for cubes for example) Or each object uses its own texture.
 - [ ] Find a better title and make an ascii art header
