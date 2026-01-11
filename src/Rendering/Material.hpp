@@ -53,6 +53,7 @@ public:
     bool UsesFresnel() const;
     void SetUseFresnel(bool useFresnel);
 
+    std::map<InteractionType, double> GetInteractionProbabilities() const;
     void SetInteractionProbabilities(const std::map<InteractionType, double>& probs);
     InteractionType MostLikelyInteraction() const;
 

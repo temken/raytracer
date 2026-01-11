@@ -226,6 +226,10 @@ void Material::SetUseFresnel(bool useFresnel) {
     mUseFresnel = useFresnel;
 }
 
+std::map<Material::InteractionType, double> Material::GetInteractionProbabilities() const {
+    return mInteractionProbabilities;
+}
+
 void Material::SetInteractionProbabilities(const std::map<InteractionType, double>& probs) {
     mInteractionProbabilities = probs;
     NormalizeProbabilities();
