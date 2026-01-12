@@ -7,18 +7,21 @@
 
 ## To do
 
-- [ ] Test and compare filters
+- [x] Test and compare filters
   - [x] Remove hot pixels only from non reflective/refractive surfaces? -> No
-  - [ ] Depth scaling linear maybe not optimal? The image looks very white at least.
-- [ ] Joint Bilateral filters do not work for reflective/refractive surfaces (constant albedo).
-  - [ ] Find a way to mitigate. Do not apply to those surfaces? Find a way to guide? Test this with Globe scene + mirror
-      - Adjust the albedo guide by including reflections/refractions?
-- [ ] Blog post or bluesky post on denoising
+  - [x] Depth scaling linear maybe not optimal? The image looks very white at least.
+- [ ] Ray tracing blog
+  - [ ] Set up the github pages blog
+  - [ ] Get a dark theme
+  - [ ] Introduction post
+  - [ ] Denoising post
 - [ ] Composite object: Glass
   - [ ] Implement simple glass shape (round edge on the top?)
   - [ ] Option to fill it with a colored "liquid"
   - [ ] Implement normal textures to give the glass some structure. (Normal textures especially for glass surfaces, but not just (who owns the normal texture? -> The shape))
-- [ ] Composite objects:
+- [ ] Composite object: Newton's cradle
+  - [ ] Dynamic with sin()?
+- [ ] Other composite objects:
   - [ ] Desk lamp
   - [ ] Pencil
   - [ ] Desk
@@ -29,7 +32,6 @@
   - [ ] Split AABB into two boxes along the longest side
 - [ ] Optimization: Precompute the pixel range for each object in a pre-processing scan. Needs to be re-done for each image, but not sample. Add a safety margin for antialiasing
 - [ ] Add a new interaction: Transparency where teh light passes through unaffected (I need this for windows in walls + transparency textures)
-- [x] Do I implement NEE correctly? (Reflections/refractions). I feel like this keeping track of the previous interaction type is not right. -> It was indeed false. It's not important if the PREVIOUS interaction was a diffusion. Just that there has been diffusion at all along the path. So no need to track the previous interaction.
 - [ ] Maybe textures should not get stretched. How to have unstretched textures on cylinders, boxes, etc.
   - [ ] Textures for cubes/other composite objects. (Use only some of the texture? Special textures (t shaped) for cubes for example) Or each object uses its own texture.
 - [ ] Find a better title and make an ascii art header
@@ -56,6 +58,9 @@
   - [ ] Exact solution
   - [x] Approximative: Durand–Kerner method
   - [ ] Compare performance of quartic solvers on the Torus.
+- [ ] Joint Bilateral filters do not work for reflective/refractive surfaces (constant albedo).
+  - [ ] Find a way to mitigate. Do not apply to those surfaces? Find a way to guide? Test this with Globe scene + mirror
+      - Adjust the albedo guide by including reflections/refractions?
 
 ### Open questions
 - [ ] Reflections inside the glass sphere? Should I ony reflect from the outside? 
@@ -213,6 +218,7 @@
     - [x] Use normal, depth, and albedo in the filter.
     - [x] Compare to bilateral filter.
   - [x] Integrate denoising functionality in rendering pipeline.
+- [x] Do I implement NEE correctly? (Reflections/refractions). I feel like this keeping track of the previous interaction type is not right. -> It was indeed false. It's not important if the PREVIOUS interaction was a diffusion. Just that there has been diffusion at all along the path. So no need to track the previous interaction.
 
 
 ## General notes

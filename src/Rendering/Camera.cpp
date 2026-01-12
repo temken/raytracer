@@ -234,8 +234,7 @@ void Camera::ProcessImage(Image& image, std::optional<GBuffer>& gBuffer) const {
         image = Denoiser::RemoveHotPixels(image);
     }
     // 2. Denoise in linear space for Monte Carlo renderers
-    Renderer::Type rendererType = mRenderer->GetType();
-    if (rendererType != Renderer::Type::SIMPLE && rendererType != Renderer::Type::DETERMINISTIC) {
+    if (!mRenderer->IsDeterministic()) {
         Denoiser::ApplyDenoising(image, mDenoisingMethod, gBuffer, mDenoisingIterations);
     }
     // 3. Exposure adjustment
