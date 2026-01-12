@@ -1,0 +1,41 @@
+# Site settings
+title: Raytracing from Scratch
+description: >-
+  A blog about building a physically-based renderer in C++
+baseurl: "/raytracer"
+url: "https://temken.github.io"
+author: "Timon Emken Christensen"
+
+# Build settings
+theme: minima
+minima:
+  skin: dark
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /blog/:year/:month/:day/:title/
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor/
+  - .gitignore
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Navigation
+header_pages:
+  - blog.md
+
+# Show excerpts on homepage
+show_excerpts: true
