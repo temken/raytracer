@@ -224,7 +224,7 @@ Scene Configuration::ConstructScene() const {
                 scene.AddObject(std::make_shared<ObjectPrimitive>(ParseBoxAxisAligned(obj)));
             } else {
                 // Check if it's a composite object type
-                static const std::vector<std::string> compositeTypes = {"Globus"};
+                static const std::vector<std::string> compositeTypes = {"Glass", "Globus"};
                 auto it = std::find(compositeTypes.begin(), compositeTypes.end(), type);
                 if (it != compositeTypes.end()) {
                     scene.AddObject(std::make_shared<ObjectComposite>(ParseCompositeObject(obj, type)));
@@ -709,9 +709,16 @@ ObjectComposite Configuration::ParseCompositeObject(const YAML::Node& obj, const
         globus.SetSpin(props.spin);
         globus.SetVisible(props.visible);
         return globus;
-    } else {
-        throw std::runtime_error("Unknown composite object type: " + type);
+    } else if (type == "Glass") {
+        ObjectComposite glass = Items::CreateGlass(referenceLength, props.position, props.normal, props.referenceDirection);
+        glass.SetVelocity(props.velocity);
+        glass.SetAcceleration(props.acceleration);
+        glass.SetAngularVelocity(props.angularVelocity);
+        glass.SetSpin(props.spin);
+        glass.SetVisible(props.visible);
+        return glass;
     }
+    throw std::runtime_error("Unknown composite object type: " + type);
 }
 
 std::string Configuration::CreateRunID() const {

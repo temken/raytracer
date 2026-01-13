@@ -11,8 +11,9 @@
   - [x] Remove hot pixels only from non reflective/refractive surfaces? -> No
   - [x] Depth scaling linear maybe not optimal? The image looks very white at least.
 - [ ] Ray tracing blog
-  - [ ] Set up the github pages blog
-  - [ ] Get a dark theme
+  - [x] Set up the github pages blog
+  - [ ] Set up the Home page with link to repo and minimal info
+  - [ ] Switch to a dark theme
   - [ ] Introduction post
   - [ ] Denoising post
 - [ ] Composite object: Glass
